@@ -97,21 +97,19 @@ of the methods used in this project.
 ---
 
 ## 其他相关理论（预留）| Other Related Theories (Reserved)  
-## Other Related Theories (Reserved)
+### 参考文献 | References
 
-- ### 参考文献 | References
+- Authors, Title, Journal, volume num.(issue num.) (year) page num.
 
-  - Authors, Title, Journal, volume num.(issue num.) (year) page num.
+### 相关学术方向 | Related Academic Topics
 
-  ### 相关学术方向 | Related Academic Topics
+- 待更新  
+- to be updated
 
-  - 待更新  
-  - to be updated
+### PeriSci 中的关联（概念性） | Association in PeriSci (Conceptual)
 
-  ### PeriSci 中的关联（概念性） | Association in PeriSci (Conceptual)
-
-  - 待更新  
-  - to be updated
+- 待更新  
+- to be updated
 
 ---
 

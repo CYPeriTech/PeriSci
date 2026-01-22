@@ -9,8 +9,6 @@ PeriSci 采用 **维护者主导（Maintainer-led）** 的治理模式。
 - 数值与物理的正确性
 - 长期可维护性
 
----
-
 PeriSci follows a **maintainer-led governance model**.
 
 At the current stage, the project prioritizes:
@@ -53,10 +51,8 @@ At the current stage, the project prioritizes:
 - 日常改进通过 Pull Request 与代码审查完成  
 - 核心数值方法、架构与接口相关变更由维护者最终决策  
 - 对于有争议的问题，将优先通过技术讨论达成共识  
-
----
-
 - Routine improvements are handled via Pull Requests and code reviews  
+
 - Changes affecting core numerics, architecture, or APIs require maintainer approval  
 - For controversial issues, technical discussion is preferred to reach consensus  
 
@@ -72,8 +68,6 @@ At the current stage, the project prioritizes:
 - 在特定模块中具备公认的技术责任感  
 
 维护者的增加将由现有维护者提议并确认。
-
----
 
 As the project evolves, the maintainer group may expand.
 
@@ -91,8 +85,6 @@ New maintainers are proposed and confirmed by existing maintainers.
 PeriSci 的治理结构将随着项目规模与社区成熟度逐步演进。
 
 在早期阶段，**保持清晰的技术方向与决策效率** 比形式上的复杂治理更为重要。
-
----
 
 PeriSci’s governance structure will evolve as the project and community grow.
 
