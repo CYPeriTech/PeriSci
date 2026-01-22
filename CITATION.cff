@@ -1,0 +1,76 @@
+# CITATION.cff
+# This file describes how to cite the PeriSci software in academic publications.
+# 本文件用于说明在学术出版物中如何引用 PeriSci 软件。
+
+# 注意：以下有三处版本号需修改一致："cff-version:", "version:", "preferred-citation:".
+# Note: There are three version numbers below that need to be modified to be consistent："cff-version:", "version:", "preferred-citation:".
+cff-version: 0.1.1
+
+title: "PeriSci: PeriFEM Based Open-Source CAE Software for Science"
+# 软件正式标题（用于学术引用）
+# Official title of the software for citation purposes
+
+message: >
+  If you use PeriSci in your research, please cite it using the information below.
+# 如果您在科研工作中使用了 PeriSci，请使用以下信息进行引用。
+
+type: software
+
+authors:
+  - family-names: "Fei"
+    given-names: "Han"
+    email: "hanfei8172@126.com"
+    # orcid: "https://orcid.org/0000-0002-8050-3657"
+
+  - family-names: "xxx"
+    given-names: "xxx"
+    email: "xxx@xxx"
+    # ORCID (Optional)
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+
+# 注意：目前阶段，PeriSci 主要由韩非负责编写和维护。
+# 未来作者名单的更新将采取谨慎的方式进行，并予以记录。
+# Note: At the current stage, PeriSci is primarily authored and maintained by Han Fei.
+# Future updates to the author list will be handled conservatively and documented.
+
+# 项目发起年份（首次公开或首次可用）
+year: 2026
+
+# 项目版本号（建议与 git tag 保持一致）
+version: "0.1.1"
+
+# 项目发布日期（可选，ISO 8601 格式）
+# date-released: "2026-xx-xx"
+
+# 项目仓库地址
+repository-code (main): "https://gitee.com/cyperitech/perisci"
+repository-code (mirror): "https://github.com/cyperitech/perisci"
+
+# 项目主页（可选）
+# url: "https://perisci.xxx"
+
+# 许可证（应与 LICENSE 文件一致）
+license: "MulanPSL-2.0"
+
+# 关键词（有助于索引与检索）
+keywords:
+  - "computational mechanics"
+  - "peridynamics"
+  - "finite element method"
+  - "CAE"
+  - "scientific computing"
+  - "PeriFEM"
+  - "physics-based simulation"
+  - "open-source software"
+
+# 建议的引用方式（如果你希望给出 BibTeX）
+preferred-citation:
+  type: software
+  title: "PeriSci: PeriFEM Based Open-Source CAE Software for Science"
+  authors:
+    - family-names: "Fei"
+      given-names: "Han"
+  year: 2026
+  version: "0.1.1"
+  repository-code: "https://gitee.com/cyperitech/perisci"
+
