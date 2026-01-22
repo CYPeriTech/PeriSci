@@ -4,7 +4,7 @@
 
 # 注意：以下有三处版本号需修改一致："cff-version:", "version:", "preferred-citation:".
 # Note: There are three version numbers below that need to be modified to be consistent："cff-version:", "version:", "preferred-citation:".
-cff-version: 0.1.1
+cff-version: 0.1.x
 
 title: "PeriSci: PeriFEM Based Open-Source CAE Software for Science"
 # 软件正式标题（用于学术引用）
@@ -37,7 +37,7 @@ authors:
 year: 2026
 
 # 项目版本号（建议与 git tag 保持一致）
-version: "0.1.1"
+version: "0.1.x"
 
 # 项目发布日期（可选，ISO 8601 格式）
 # date-released: "2026-xx-xx"
@@ -71,6 +71,6 @@ preferred-citation:
     - family-names: "Fei"
       given-names: "Han"
   year: 2026
-  version: "0.1.1"
+  version: "0.1.x"
   repository-code: "https://gitee.com/cyperitech/perisci"
 
