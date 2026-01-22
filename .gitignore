@@ -146,7 +146,6 @@ cmake.local
 # Temp directories / core dumps
 # ==============================
 *_tempdir_*
-core
 core.*
 
 # ==============================
