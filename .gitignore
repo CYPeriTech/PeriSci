@@ -1,0 +1,167 @@
+# ==============================
+# Build artifacts (CMake / C++)
+# ==============================
+build/
+build-*/
+build*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+*.o
+*.o.tmp
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+
+# ==============================
+# IDEs and editors
+# ==============================
+.vscode/
+.idea/
+qtcreator/
+CMakeLists.txt.user
+.cproject
+.project
+
+*.swp
+*.swo
+*~
+*#
+
+# ==============================
+# Python
+# ==============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+
+# ==============================
+# Test & coverage
+# ==============================
+Testing/
+CTestTestfile.cmake
+coverage/
+*.gcda
+*.gcno
+
+# ==============================
+# Temporary files created by tests / runs
+# ==============================
+*.stderr
+
+# ==============================
+# Simulation outputs / datasets
+# ==============================
+output/
+outputs/
+results/
+logs/
+datasets/
+data/
+
+# ==============================
+# OS-specific
+# ==============================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.dSYM
+
+# ==============================
+# Compile-commands / clang tools
+# ==============================
+compile_commands.json
+.clangd
+.clang_complete
+.cache/
+*.cache*
+
+# ==============================
+# Tooling / editor artifacts
+# ==============================
+.ipynb_checkpoints/
+TAGS
+
+# Totalview breakpoint files
+*.TVD.*breakpoints
+
+# ==============================
+# Additional generic ignores (from dolfinx patterns)
+# ==============================
+# More compiled/library artifacts
+*.Plo
+*.Po
+*.lo
+*.la
+*.os
+*.so.*
+*.pc
+*.def
+*.nbi
+*.nbc
+
+# Logs
+*.log
+
+# ==============================
+# CMake uninstall/install manifests
+# ==============================
+cmake_uninstall.cmake
+install_manifest.txt
+
+# ==============================
+# Packaging / test caches
+# ==============================
+dist/
+*.egg-info
+.pytest_cache/
+
+# ==============================
+# Eclipse
+# ==============================
+.settings/
+
+# ==============================
+# Local CMake overrides
+# ==============================
+cmake.local
+
+# ==============================
+# Temp directories / core dumps
+# ==============================
+*_tempdir_*
+core
+core.*
+
+# ==============================
+# Compressed outputs
+# ==============================
+*.xz
+*.gz
+
+# ==============================
+# Common scientific data outputs
+# ==============================
+*.pvd
+*.pvtu
+*.vtu
+*.h5
+*.xdmf
+*.bin
+*.bp
