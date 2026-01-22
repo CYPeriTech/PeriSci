@@ -71,9 +71,7 @@ rather than feature accumulation or application breadth.
 
 ---
 
-### v0.x → v1.0（方向性，不作承诺）  
-### v0.x → v1.0 (Directional, Non-Commitment)
-
+### v0.x → v1.0（方向性，不作承诺）| (Directional, Non-Commitment)
 以下内容属于**长期方向**，不构成阶段性承诺：
 
 - 工程级算例与规模化计算  

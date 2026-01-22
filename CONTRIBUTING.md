@@ -6,8 +6,6 @@ PeriSci 是一个以 **近场有限元法（PeriFEM）** 为核心的
 开源科学计算与工程仿真平台，  
 我们欢迎来自学术界、工程界以及开源社区的理性、长期、建设性参与。
 
----
-
 Thank you for your interest in contributing to **PeriSci**!
 
 PeriSci is an open-source scientific computing and engineering simulation
@@ -30,8 +28,6 @@ PeriSci 当前处于 **早期开发阶段（v0.x）**。
 **并非所有 Pull Request 都会被立即合并**，
 但每一份合理的贡献都会被认真评审。
 
----
-
 PeriSci is currently in an **early development stage (v0.x)**.
 
 At this stage:
@@ -45,50 +41,38 @@ but every reasonable contribution will be carefully reviewed.
 
 ---
 
-## 我们欢迎的贡献类型 | Types of Contributions
+## 贡献类型 | Types of Contributions
 
-我们欢迎以下类型的贡献：
+我们欢迎以下类型的贡献：|  We welcome the following types of contributions:
 
-### 🧮 数值方法与物理模型
+### 🧮 数值方法与物理模型 | Numerical Methods and Physical Models
 - 近场有限元（PeriFEM）相关算法
 - 损伤、断裂、多物理场耦合模型
 - 数值稳定性与计算收敛性改进
-
-### 📚 教学与示例
-- 教学算例与最小工作示例（MVP）
-- 可复现的基准问题
-- 面向学生的教程与说明
-
-### 🧪 测试与验证
-- 单元测试与回归测试
-- 数值结果一致性验证
-- 性能与稳定性测试
-
-### 🛠 工程化改进
-- 构建系统（CMake）
-- CI / 自动化测试
-- 代码可读性与可维护性提升
-
----
-
-We welcome the following types of contributions:
-
-### 🧮 Numerical Methods and Physical Models
 - Algorithms related to PeriFEM
 - Damage, fracture, and multiphysics coupling models
 - Improvements in numerical stability and energy consistency
 
-### 📚 Education and Examples
+### 📚 教学与示例 | Education and Examples
+- 教学算例与最小工作示例（MVP）
+- 可复现的基准问题
+- 面向学生的教程与说明
 - Educational examples and minimal working cases
 - Reproducible benchmark problems
 - Tutorials and documentation for students
 
-### 🧪 Testing and Validation
+### 🧪 测试与验证 | Testing and Validation
+- 单元测试与回归测试
+- 数值结果一致性验证
+- 性能与稳定性测试
 - Unit and regression tests
 - Verification of numerical consistency
 - Performance and stability tests
 
-### 🛠 Engineering Improvements
+### 🛠 工程化改进 | Engineering Improvements
+- 构建系统（CMake）
+- CI / 自动化测试
+- 代码可读性与可维护性提升
 - Build system (CMake)
 - CI and automated testing
 - Code readability and maintainability
@@ -106,8 +90,6 @@ We welcome the following types of contributions:
 
 如果你不确定某项工作是否合适，**请先提交 Issue 进行讨论**。
 
----
-
 At the current stage, the following are generally out of scope:
 
 - Large-scale refactoring without prior design discussion
@@ -121,44 +103,34 @@ If in doubt, **please open an Issue for discussion first**.
 
 ## 贡献流程 | Contribution Workflow
 
-### 1) 提交 Issue（推荐）
+### 1) 提交 Issue（推荐）| Open an Issue (Recommended)
 - 描述问题、想法或改进建议
 - 尽量说明动机、背景和预期目标
+- Describe the problem, idea, or proposed improvement
+- Provide motivation, background, and expected outcomes
 
-### 2) Fork 与分支
+### 2) Fork 与分支 | Fork and Branch
 - Fork 本仓库
 - 从 `master` 分支创建功能分支，例如：
   - `feat/xxx`
   - `fix/xxx`
   - `docs/xxx`
-
-### 3) 开发与提交
-- 保持提交信息清晰、聚焦
-- 确保代码能够通过本地构建与测试
-
-### 4) 提交 Pull Request
-- 清晰描述改动内容与动机
-- 说明是否涉及数值行为或物理意义变化
-- 必要时提供最小示例或验证结果
-
----
-
-### 1) Open an Issue (Recommended)
-- Describe the problem, idea, or proposed improvement
-- Provide motivation, background, and expected outcomes
-
-### 2) Fork and Branch
 - Fork the repository
 - Create a feature branch from `master`, e.g.:
   - `feat/xxx`
   - `fix/xxx`
   - `docs/xxx`
 
-### 3) Develop and Commit
+### 3) 开发与提交 | Develop and Commit
+- 保持提交信息清晰、聚焦
+- 确保代码能够通过本地构建与测试
 - Keep commits focused and well-described
 - Ensure the code builds and tests pass locally
 
-### 4) Submit a Pull Request
+### 4) 提交 Pull Request | Submit a Pull Request
+- 清晰描述改动内容与动机
+- 说明是否涉及数值行为或物理意义变化
+- 必要时提供最小示例或验证结果
 - Clearly describe what was changed and why
 - State whether numerical behavior or physical meaning is affected
 - Provide minimal examples or validation results when appropriate
@@ -173,8 +145,6 @@ If in doubt, **please open an Issue for discussion first**.
 - **可复现性优先于复杂技巧**
 - **核心计算逻辑与用户接口分离**
 - **明确区分实验性代码与稳定代码**
-
----
 
 All contributions should follow these principles:
 
@@ -191,10 +161,8 @@ All contributions should follow these principles:
 - 核心数值与架构相关修改将由维护者重点评估
 - 合并策略以 **Squash and Merge** 为主
 - 维护者有权请求修改或暂缓合并
-
----
-
 - All Pull Requests are subject to review
+
 - Changes affecting core numerics or architecture receive extra scrutiny
 - **Squash and Merge** is the preferred merge strategy
 - Maintainers may request revisions or defer merging
@@ -210,8 +178,6 @@ All contributions should follow these principles:
 - 理性
 
 PeriSci 致力于构建一个 **友好、理性、以科学与工程为导向的开源社区**。
-
----
 
 Please maintain:
 
@@ -230,8 +196,6 @@ science- and engineering-driven community**.
 
 - GitHub / Gitee Issues
 - Pull Request 讨论区
-
----
 
 For questions or collaboration inquiries, please contact us via:
 

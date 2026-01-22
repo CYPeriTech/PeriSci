@@ -8,8 +8,6 @@ PeriSci 是一个以 **科学严谨性、工程可靠性与长期合作** 为目
 我们致力于构建一个 **尊重、理性、以科学研究与工程技术为导向** 的社区环境，
 确保所有参与者都能在专业与友好的氛围中进行交流与合作。
 
----
-
 PeriSci is an open-source scientific computing and engineering simulation project
 committed to **scientific rigor, engineering reliability, and long-term collaboration**.
 
@@ -27,8 +25,6 @@ community environment for all participants.
 - 接受不同观点，并进行理性、专业的交流  
 - 在提出批评时，关注问题本身，而非个人  
 - 尊重项目的设计原则与维护者的技术决策  
-
----
 
 All participants (including maintainers, contributors, and users) are expected to:
 
@@ -50,8 +46,6 @@ All participants (including maintainers, contributors, and users) are expected t
 - 明显偏离科学与工程主题的讨论  
 - 对维护者或贡献者施加不当压力  
 
----
-
 The following behaviors are not tolerated in the PeriSci community:
 
 - Personal attacks, harassment, or abusive language  
@@ -71,8 +65,6 @@ The following behaviors are not tolerated in the PeriSci community:
 - 项目文档与讨论区  
 - 邮件讨论列表
 
----
-
 This Code of Conduct applies to all PeriSci-related public spaces, including but not limited to:
 
 - GitHub / Gitee Issues  
@@ -91,8 +83,6 @@ This Code of Conduct applies to all PeriSci-related public spaces, including but
 - 关闭或锁定讨论线程  
 - 在必要情况下拒绝进一步参与  
 
----
-
 Maintainers are responsible for enforcing this Code of Conduct and may take actions such as:
 
 - Issuing warnings or reminders  
@@ -107,8 +97,6 @@ Maintainers are responsible for enforcing this Code of Conduct and may take acti
 本行为准则旨在 **保障建设性合作**，而非限制技术讨论的深度与严肃性。
 
 PeriSci 鼓励 **严谨、直接但尊重的学术与技术讨论**。
-
----
 
 This Code of Conduct is intended to **enable constructive collaboration**,
 not to limit serious technical debate.

@@ -454,51 +454,68 @@ Together, they serve one core purpose:
 
 ### 2.4 分层稳定性等级 | Layer Stability Levels
 
-- **core/**：最高稳定性  
-  - 修改成本最高  
-  - 任何破坏性修改都必须极其慎重  
-  - 主要通过长期设计演进与严格评审推进  
-
-- **core/**: Highest stability  
-  - Highest cost of change  
-  - Any breaking change must be treated with extreme caution  
-  - Evolves slowly through careful design and strict review  
+- Tests are a safety net for architectural evolution, not auxiliary tools
 
 ---
 
-- **api/**：高稳定性（对外承诺层）  
-  - 面向所有上层（python/apps/未来服务）的统一契约  
-  - 破坏性修改必须通过明确的版本策略（MAJOR bump）  
-  - 必须提供迁移说明或兼容方案  
+##### **core/**：最高稳定性 | Highest stability
 
-- **api/**: High stability (public contract layer)  
-  - Unified contract for all upper layers (python/apps/future services)  
-  - Breaking changes require explicit versioning (MAJOR bump)  
-  - Migration notes or compatibility strategies are required  
-
----
-
-- **apps/**：中等稳定性（工程入口层）  
-  - CLI 接口应保持相对稳定，以支持工程与批处理脚本  
-  - 允许新增选项与改进用户体验  
-  - 不应频繁破坏已有命令语义或调用方式  
-
-- **apps/**: Medium stability (engineering entry layer)  
-  - CLI interfaces should remain relatively stable to support engineering and batch scripts  
-  - New options and UX improvements are allowed  
-  - Existing command semantics and invocation patterns should not be broken frequently  
+- 修改成本最高
+- 任何破坏性修改都必须极其慎重
+- 主要通过长期设计演进与严格评审推进
+- Highest cost of change
+- Any breaking change must be treated with extreme caution
+- Evolves slowly through careful design and strict review
 
 ---
 
-- **python/**：低稳定性（快速演进层）  
-  - 作为教学、科研与 AI 工作流的实验与创新空间  
-  - 允许频繁重构、接口调整与新工具尝试  
-  - 不对外承诺长期 API 稳定性  
+##### **api/**：高稳定性（对外承诺层）| High stability (public contract layer)  
 
-- **python/**: Low stability (fast-evolving layer)  
-  - Serves as an experimentation and innovation space for teaching, research, and AI workflows  
-  - Frequent refactoring, interface changes, and new tools are allowed  
-  - Long-term API stability is not guaranteed  
+- 面向所有上层（python/apps/未来服务）的统一契约
+
+- 破坏性修改必须通过明确的版本策略（MAJOR bump）
+
+- 必须提供迁移说明或兼容方案
+
+- Unified contract for all upper layers (python/apps/future services) 
+
+- Breaking changes require explicit versioning (MAJOR bump)  
+
+- Migration notes or compatibility strategies are required  
+
+
+---
+
+##### **apps/**：中等稳定性（工程入口层）| Medium stability (engineering entry layer)
+
+- CLI 接口应保持相对稳定，以支持工程与批处理脚本
+
+- 允许新增选项与改进用户体验
+
+- 不应频繁破坏已有命令语义或调用方式  
+
+- CLI interfaces should remain relatively stable to support engineering and batch scripts
+
+- New options and UX improvements are allowed
+
+- Existing command semantics and invocation patterns should not be broken frequently  
+
+---
+
+##### **python/**：低稳定性（快速演进层）| Low stability (fast-evolving layer)  
+
+- 作为教学、科研与 AI 工作流的实验与创新空间
+
+- 允许频繁重构、接口调整与新工具尝试
+
+- 不对外承诺长期 API 稳定性
+
+- Serves as an experimentation and innovation space for teaching, research, and AI workflows
+
+- Frequent refactoring, interface changes, and new tools are allowed
+
+- Long-term API stability is not guaranteed  
+
 
 ---
 
@@ -1031,9 +1048,9 @@ Any change touching these boundaries must include:
 **Rationale:**
  This prevents system fragmentation and avoids exponential growth in maintenance cost.
 
----
+------
 
-#### 总结性原则 | Summary Principle
+### 总结 | Summary
 
 > **这些设计边界定义了 PeriSci 的“不可退让区域”，
 >  它们不是实现细节，而是系统长期可信性的基石。**
@@ -1199,7 +1216,7 @@ and CHANGELOG.md.
 
 ---
 
-#### 总结 | Summary
+### 总结 | Summary
 
 > **第 4 节定义了什么是“不可轻易改动的”，  
 > 本节定义了“如果必须改动，应该如何被记录、讨论与承担后果”。**
@@ -1350,7 +1367,7 @@ the core architectural contracts of the system**.
 
 ---
 
-#### 总结 | Summary
+### 总结 | Summary
 
 > **软边界定义了 PeriSci “如何生长”，  
 > 硬边界定义了 PeriSci “不能越界”。**
@@ -1360,7 +1377,7 @@ the core architectural contracts of the system**.
 
 ---
 
-<a id="appendix-common-anti-patternss"></a>
+<a id="appendix-common-anti-patterns"></a>
 
 ## 7. 附：常见反模式（必须避免） | Appendix: Common Anti-Patterns (Must Be Avoided)  
 
@@ -1530,7 +1547,7 @@ local optimizations, or inappropriate transfer of prior experience.
 
 ---
 
-#### 总结 | Summary
+### 总结 | Summary 
 
 > **反模式并非“做不到”，  
 > 而是“做了之后系统会慢慢失控”。**

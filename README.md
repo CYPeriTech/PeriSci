@@ -145,13 +145,15 @@ PeriSci/
 ├── examples/      		 # 教学与参考算例（最小示例、教程、benchmark）
 ├── tests/         		 # 单测/回归（保证核心与契约层不退化）
 ├── docs/          		 # 文档（含 specs/ 规范、架构说明、路线图）
-├── README.md            # 项目对外门面（中英双语）
-├── LICENSE              # 开源协议（法律文件）
+├── README.md            # PeriSci 开源软件项目介绍（中英双语）
+├── VERSIONING.md        # 版本与承诺规则
+├── CHANGELOG.md         # 版本变更历史
 ├── CONTRIBUTING.md      # 参与贡献规则
 ├── CODE_OF_CONDUCT.md   # 行为准则
 ├── MAINTAINERS.md       # 项目治理与责任
-├── VERSIONING.md        # 版本与承诺规则
-├── CHANGELOG.md         # 版本变更历史
+├── AUTHORS.md   		 # 作者与贡献者信息
+├── CITATION.cff       	 # 说明学术出版物中如何引用 PeriSci 软件
+├── LICENSE              # 开源协议（法律文件）
 ├── CMakeLists.txt		 # 跨平台编译和管理
 └── .gitignore		 	 # 版本控制规避文件清单
 ```
@@ -395,8 +397,6 @@ You may contact us via:
 - Code contributions and discussions: Pull Requests and Reviews  
 - Academic and collaboration inquiries: via the contact information
   provided on the repository homepage
-
-All breaking changes will be explicitly documented.
 
 ------
 

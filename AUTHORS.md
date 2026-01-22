@@ -1,4 +1,4 @@
-# AUTHORS
+# 作者与贡献者 | AUTHORS
 
 本文件记录 PeriSci 项目的作者与贡献者信息，  
 用于明确学术与工程成果的归属，并与 CITATION.cff、MAINTAINERS.md 等文件形成互补。
