@@ -111,15 +111,21 @@ If in doubt, **please open an Issue for discussion first**.
 
 ### 2) Fork 与分支 | Fork and Branch
 - Fork 本仓库
-- 从 `master` 分支创建功能分支，例如：
-  - `feat/xxx`
-  - `fix/xxx`
-  - `docs/xxx`
+- 从 `master` 主分支创建各种特色分支，例如：
+  - `feat/xxx`	功能分支
+  - `fix/xxx`          修复分支
+  - `docs/xxx`        文档/示例分支
+  - `refactor/xxx`  重构分支
+  - `exp/xxx`           实验分支
+  - `release/xxx`   发布分支
 - Fork the repository
-- Create a feature branch from `master`, e.g.:
-  - `feat/xxx`
-  - `fix/xxx`
-  - `docs/xxx`
+- Create various specialized branches from `master`, e.g.:
+  - `feat/xxx`	feature branch
+  - `fix/xxx`          bugfix branch
+  - `docs/xxx`        docs branch
+  - `refactor/xxx`  refactor branch
+  - `exp/xxx`           experimental branch  (discardable any time)
+  - `release/xxx`   release branch
 
 ### 3) 开发与提交 | Develop and Commit
 - 保持提交信息清晰、聚焦

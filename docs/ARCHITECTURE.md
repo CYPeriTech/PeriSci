@@ -140,6 +140,7 @@ reproducibility, and ecosystem consistency.
 
 #### 架构分层总览 | Layer Overview
 
+```text
 +====================================================================+
 | Users | 用户 
 | - Students / Teachers (learning & teaching) |
@@ -153,32 +154,32 @@ v							v
 +======================================+
 | python/ —— 工作流与生态层 || apps/ —— 工程入口层 |
 | Workflow & Ecosystem Layer || Engineering Entry Layer |
-|                                                      ||                                            |
-| - Tutorials / notebooks / scripts（教程 / 笔记 / 脚本） || - perisci-run / perisci-export |
-| - Param sweep / automation （参数扫描/自动化）|| - Batch jobs / HPC integration（批处理作业 / 高性能计算集成） |
-| - AI dataset generation helpers （数据集生成工具）|| - Diagnostics / logging knobs（诊断/日志调节旋钮） |
-| - AI framework adapters （与 AI 框架的接口适配（TensorFlow / MindSpore / PyTorch）） |||
+|                            ||                                            |
+|-Tutorials/notebooks/scripts（教程/笔记/脚本）||-perisci-run/perisci-export|
+|-Param sweep/automation（参数扫描/自动化）||-Batch jobs/HPC integration（批处理作业/高性能计算集成）|
+|-AI dataset generation helpers（数据集生成工具）||-Diagnostics/logging knobs（诊断/日志调节旋钮）|
+|-AI framework adapters（与AI框架的接口适配（TensorFlow/MindSpore/PyTorch））|||
 | |
-| * 快速演进层（Fast-evolving layer） |
-| * 不承诺长期稳定 API || 不定义新的配置语义或物理语义（Must NOT define new configuration semantics or physics semantics）|
+| * 快速演进层（Fast-evolving layer）|
+| * 不承诺长期稳定API||不定义新的配置语义或物理语义（Must NOT define new configuration semantics or physics semantics）|
 +====================================================================+
 |
-| （稳定的功能调用）
-| (stable function calls)
+|（稳定的功能调用）
+|(stable function calls)
 v
 +====================================================================+
 | api/ —— 稳定对外契约层 | Stable Public Contract Layer |
 | |
-| - config_schema（版本化、可校验） | 作用：对外声明一个 case 的输入 config 必须长什么样、有哪些字段、字段类型与含义是什么、默认值是什么、哪些是必填的。
-| - run_case(config) -> results | 作用：给定一个完整描述“物理实验”的输入（config），调用仿真内核，返回一个“结果对象（results）。
-| - export_dataset(results, spec) -> dataset_dir | 作用：把 results 中的网格、场、时间序列、诊断信息等，按照一个明确的规范（spec），导出成一个标准化的数据集目录（dataset_dir）。
+|-config_schema（版本化、可校验）|作用：对外声明一个case的输入config必须长什么样、有哪些字段、字段类型与含义是什么、默认值是什么、哪些是必填的。
+|-run_case(config) -> results|作用：给定一个完整描述“物理实验”的输入（config），调用仿真内核，返回一个“结果对象（results）。
+|-export_dataset(results, spec)->dataset_dir|作用：把 results 中的网格、场、时间序列、诊断信息等，按照一个明确的规范（spec），导出成一个标准化的数据集目录（dataset_dir）。
 | |
-| * 对外“承诺层”（Contract layer） |
-| * 教学 / 工程 / AI 的共同入口 |
+| * 对外“承诺层”（Contract layer）|
+| * 教学/工程/AI的共同入口|
 +====================================================================+
 |
-| （结构化数据与控制流程）
-| (structured data & control flow)
+|（结构化数据与控制流程）
+|(structured data & control flow)
 v
 +====================================================================+
 | core/ —— 数值计算内核 | Numerical Kernel Layer |
@@ -191,6 +192,7 @@ v
 | * 物理与数值“真理源头” |
 | * 最慢演进、最稳定的层 |
 +====================================================================+
+```
 
 ---
 
