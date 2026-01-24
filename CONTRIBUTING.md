@@ -2,14 +2,12 @@
 
 感谢你对 **PeriSci** 项目的关注与贡献意愿！
 
-PeriSci 是一个以 **近场有限元法（PeriFEM）** 为核心的
-开源科学计算与工程仿真平台，  
+PeriSci 是一个以 **近场有限元法（PeriFEM）** 为核心的开源科学计算与工程仿真平台。  
 我们欢迎来自学术界、工程界以及开源社区的理性、长期、建设性参与。
 
 Thank you for your interest in contributing to **PeriSci**!
 
-PeriSci is an open-source scientific computing and engineering simulation
-platform centered on the **PeriFEM (Peridynamics-based Finite Element Method)**.  
+PeriSci is an open-source scientific computing and engineering simulation platform centered on the **PeriFEM (Peridynamics-based Finite Element Method)**.  
 We welcome rational, long-term, and constructive contributions from
 academia, industry, and the open-source community.
 
