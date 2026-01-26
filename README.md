@@ -8,7 +8,7 @@
 
 ## 项目简介 | Overview
 
-**PeriSci** 是一款面向科学研究与工程分析的开源 CAE 软件，  
+**PeriSci** 是一款面向科学计算与工程仿真的开源 CAE 软件，  
 以 **近场有限元法（PeriFEM, Peridynamics-based Finite Element Method）** 为核心数值框架，  
 用于模拟 **多物理场耦合及极端条件下结构变形与破坏行为**。
 
@@ -17,7 +17,7 @@ PeriSci 是近场有限元软件生态体系**PERISOFT**中的开源软件品牌
 
 ---
 
-**PeriSci** is an open-source CAE software platform designed for scientific research and engineering analysis.  
+**PeriSci** is an open-source CAE software platform designed for scientific computing and engineering simulation.  
 It is built upon the **PeriFEM (Peridynamics-based Finite Element Method)** framework,  
 aiming to simulate **structural deformation and failure behavior under coupled multiphysics and extreme conditions**.
 
@@ -138,24 +138,26 @@ education, research, engineering applications, and AI-driven modeling.
 
 ```text
 PeriSci/
-├── core/          		 # PeriFEM 数值内核（算子、装配、材料/损伤、求解驱动等）
-├── api/           		 # 稳定对外契约层：run_case / export_dataset / config入口
-├── python/        		 # Python 绑定与工作流层（教学、AI数据生产、脚本接口）
-├── apps/          		 # 可执行程序/CLI（工程入口、批处理、校验、工具）
-├── examples/      		 # 教学与参考算例（最小示例、教程、benchmark）
-├── tests/         		 # 单测/回归（保证核心与契约层不退化）
-├── docs/          		 # 文档（含 specs/ 规范、架构说明、路线图）
-├── README.md            # PeriSci 开源软件项目介绍（中英双语）
-├── VERSIONING.md        # 版本与承诺规则
-├── CHANGELOG.md         # 版本变更历史
-├── CONTRIBUTING.md      # 参与贡献规则
-├── CODE_OF_CONDUCT.md   # 行为准则
-├── MAINTAINERS.md       # 项目治理与责任
-├── AUTHORS.md   		 # 作者与贡献者信息
-├── CITATION.cff       	 # 说明学术出版物中如何引用 PeriSci 软件
-├── LICENSE              # 开源协议（法律文件）
-├── CMakeLists.txt		 # 跨平台编译和管理
-└── .gitignore		 	 # 版本控制规避文件清单
+├── core/          		 # PeriFEM 数值内核（算子、装配、材料/损伤、求解驱动等）| Numerical kernel
+├── api/           		 # 稳定对外契约层：run_case / export_dataset / config入口 | External contract layer
+├── python/        		 # Python 绑定与工作流层（教学、AI数据生产、脚本接口）| Workflow layer 
+├── apps/          		 # 可执行程序/CLI（工程入口、批处理、校验、工具）| Executable program layer
+├── examples/      		 # 教学与参考算例（hello/最小示例、教程、benchmark）| Examples layer
+├── tests/         		 # 单测/回归（保证核心与契约层不退化）| Testing layer
+├── docs/          		 # 文档（含specs/规范、adr/架构决策记录等、架构说明、路线图等）| Documents
+├── README.md            # PeriSci 开源软件项目介绍（中英双语）| Project introduction
+├── VERSIONING.md        # 版本与承诺规则 | Version rules
+├── CHANGELOG.md         # 版本变更历史 | Version change history
+├── CONTRIBUTING.md      # 参与贡献规则 | Contribution rules
+├── CODE_OF_CONDUCT.md   # 行为准则 | Code of conduct
+├── MAINTAINERS.md       # 项目治理与责任 | Project maintenance rules
+├── AUTHORS.md   		 # 作者与贡献者信息 | Contributor information
+├── CITATION.cff       	 # 说明学术出版物中如何引用 PeriSci 软件 | Citation information
+├── LICENSE              # 开源协议（法律文件）| Open-source license
+├── CMakeLists.txt		 # 跨平台编译和管理 | Compilation rules
+├── .clang-format        # 代码格式化 | Code formatting
+├── .editorconfig		 # 非代码文件格式化 | Non-code file formatting
+└── .gitignore		 	 # 版本控制规避文件清单 ignoring files checklist
 ```
 
 ---
@@ -176,6 +178,32 @@ PeriSci/
 > 当前处于早期开发阶段（v0.x）。以下命令以 **CMake + C++** 的最小构建为例。  
 > 如你使用的是 Windows 或特定 HPC 环境，请根据实际编译器与依赖调整。
 
+### 0) 环境准备 | Prerequisites
+
+PeriSci v0.1.5 采用 **CMake + C++17** 的最小工程骨架。建议使用 **out-of-source build**，
+并优先使用 **Ninja（单配置生成器）** 以获得更一致的构建/测试体验（尤其在 Windows 下）。
+
+#### Windows（推荐：Ninja 单配置）
+
+你需要以下工具，并将其加入系统环境变量的`PATH`：
+
+- **GCC / G++（MinGW-w64）**  
+  例如：`x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev0`
+- **CMake**  
+  例如：`cmake-4.2.2-windows-x86_64`
+- **Ninja**  
+  例如：`v1.13.2`
+
+安装完成后可用以下命令检查：
+
+```bash
+g++ --version
+cmake --version
+ninja --version
+```
+
+---
+
 ### 1) 获取代码 | Clone
 
 选择一个远端仓库克隆（Gitee 为主仓，GitHub 可作为镜像）：
@@ -194,44 +222,58 @@ git clone https://github.com/CYPeriTech/PeriSci
 **进入仓库目录：**
 
 ```bash
-cd PeriSci
+cd perisci
 ```
 
 ### 2) 配置与编译 | Configure & Build (CMake)
 
-建议使用 out-of-source 构建（保持仓库根目录干净）：
+建议使用 out-of-source 构建（保持仓库根目录干净）。
+
+#### 方式 A（推荐）：Ninja 单配置（Debug）
 
 ```bash
-mkdir -p build
-cmake -S . -B build
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
 cmake --build build -j
 ```
 
+#### 方式 B：Ninja 单配置（Release）
+
+```
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
+```
+
+> 若你使用 Visual Studio / Xcode 等 **多配置生成器**，构建与测试需要显式指定配置：
+>  `cmake --build build --config Debug`，以及 `ctest --test-dir build -C Debug`。
+
+---
+
 ### 3) 运行最小示例 | Run the Minimal Example
 
-v0.1.0 提供一个最小示例用于验证“能编译、能运行、能产出结果文件”。
+v0.1.5 提供一个最小示例用于验证“能编译、能链接、能运行”。
 
-方式 A（推荐）：直接运行 build 目录生成的可执行文件（具体名称以实际为准）：
+在使用上述 Ninja 单配置构建后，可执行文件通常位于：
 
-```
-./build/examples/hello/hello_example
-```
-
-方式 B：进入示例目录运行（若你的构建脚本把可执行文件放在该目录）：
-
-```
-cd examples/hello
-./hello_example
+```bash
+./build/bin/perisci-hello
 ```
 
-运行成功后，应该能看到终端输出，并在指定位置生成输出文件（例如 `output/hello.txt`）。
+预期输出类似：
 
-### 4) 运行测试 | Run Tests (Optional but Recommended)
+```bash
+Hello, PeriSci!
+Version: 0.1.5
+Build: PeriSci (api) v0.1.5
+```
 
-如果已配置测试：
+---
+
+### 4) 运行测试 | Run Tests
+
+在 Ninja 单配置（single-config）下测试命令如下：
 
 ```
-ctest --test-dir build
+ctest --test-dir build --output-on-failure
 ```
 
 ------
@@ -247,12 +289,13 @@ ctest --test-dir build
 
   然后运行对应的可执行文件。
 
-- **Q: CMake 配置失败？**
+- **Q: CMake 、GCC或者Ninja配置失败？**
    A: 请确认 CMake 版本与编译器可用：
 
   ```
   cmake --version
   g++ --version
+  ninja --version
   ```
 
 ---
@@ -307,7 +350,9 @@ For detailed rules and conventions, please refer to:
 3. 提交代码并保证本地测试通过  
 4. 创建 Pull Request 并说明修改内容与动机  
 
-详细说明请参阅：[CONTRIBUTING.md](CONTRIBUTING.md)
+更详细的内容，如开发环境配置、代码格式规范（如 `.clang-format`、`.editorconfig`）以及其他贡献约定，请参阅：[CONTRIBUTING.md](CONTRIBUTING.md)
+
+For more detailed information, such as development environment setup, code formatting rules (e.g. `.clang-format`, `.editorconfig`), and other contribution guidelines, please refer to: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 

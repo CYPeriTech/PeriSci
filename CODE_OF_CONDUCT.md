@@ -52,7 +52,7 @@ The following behaviors are not tolerated in the PeriSci community:
 - Discriminatory, hateful, or hostile remarks  
 - Persistent, unconstructive arguing or spamming  
 - Discussions clearly unrelated to science or engineering  
-- Inappropriate pressure on maintainers or contributors  
+- Inappropriate pressure on maintainers or contributors 
 
 ---
 

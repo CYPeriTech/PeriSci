@@ -7,8 +7,6 @@ This file records the authors and contributors of the PeriSci project.
 It clarifies attribution of academic and engineering contributions and complements
 CITATION.cff and MAINTAINERS.md.
 
-
-
 ---
 
 ## 项目发起人与首席维护者 | Project Founder and Lead Maintainer
@@ -16,8 +14,6 @@ CITATION.cff and MAINTAINERS.md.
   - 角色：项目发起人 / 首席维护者  
   - Role: Project Founder / Lead Maintainer  
   - 邮箱（Email）： hanfei8172@126.com
-
-
 
 ---
 
@@ -40,8 +36,6 @@ Names are listed in order of confirmed contribution.
   - Role: Core Contributor  
   - 邮箱（Email）：xxx@xxx  
 
-
-
 ---
 
 ## 其他贡献者 | Additional Contributors
@@ -56,8 +50,6 @@ through release notes and credits.
 - **xxx**（示例 / Example）  
   - 邮箱（Email）：xxx@xxx  
 
-
-
 ---
 
 ## 更新策略 | Update Policy
@@ -68,8 +60,6 @@ through release notes and credits.
 - Updates to AUTHORS.md should be made cautiously  
 - Addition of new authors should be based on consensus and recorded through formal changes  
 - Changes to this file should remain traceable  
-
-
 
 ---
 

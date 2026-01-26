@@ -1,0 +1,57 @@
+# PeriSci C++ code style
+# Based on LLVM style with minimal, explicit overrides
+# This file is authoritative for formatting .cpp/.hpp files.
+
+BasedOnStyle: LLVM
+Language: Cpp
+
+# ---- Indentation ----
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# ---- Line length ----
+ColumnLimit: 100
+
+# ---- Braces ----
+BreakBeforeBraces: Allman
+AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: Empty
+
+# ---- Spaces & alignment ----
+SpaceBeforeParens: ControlStatements
+SpacesInAngles: Never
+SpacesInParentheses: false
+SpaceAfterCStyleCast: false
+
+PointerAlignment: Left   # int* p;
+ReferenceAlignment: Left # int& r;
+
+AlignAfterOpenBracket: Align
+AlignOperands: true
+AlignTrailingComments: true
+
+# ---- Function / argument breaking ----
+BinPackArguments: false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+
+# ---- Includes ----
+SortIncludes: true
+IncludeBlocks: Regroup
+
+# ---- Comments ----
+ReflowComments: true
+CommentPragmas: '^ IWYU pragma:'
+
+# ---- Namespaces ----
+NamespaceIndentation: All
+FixNamespaceComments: true
+
+# ---- Preprocessor ----
+IndentPPDirectives: AfterHash
+
+# ---- Misc ----
+DeriveLineEnding: true
+DerivePointerAlignment: false
