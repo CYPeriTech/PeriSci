@@ -138,24 +138,26 @@ education, research, engineering applications, and AI-driven modeling.
 
 ```text
 PeriSci/
-├── core/          		 # PeriFEM 数值内核（算子、装配、材料/损伤、求解驱动等）
-├── api/           		 # 稳定对外契约层：run_case / export_dataset / config入口
-├── python/        		 # Python 绑定与工作流层（教学、AI数据生产、脚本接口）
-├── apps/          		 # 可执行程序/CLI（工程入口、批处理、校验、工具）
-├── examples/      		 # 教学与参考算例（hello/最小示例、教程、benchmark）
-├── tests/         		 # 单测/回归（保证核心与契约层不退化）
-├── docs/          		 # 文档（含 specs/规范、adr/架构级决策、架构说明、路线图）
-├── README.md            # PeriSci 开源软件项目介绍（中英双语）
-├── VERSIONING.md        # 版本与承诺规则
-├── CHANGELOG.md         # 版本变更历史
-├── CONTRIBUTING.md      # 参与贡献规则
-├── CODE_OF_CONDUCT.md   # 行为准则
-├── MAINTAINERS.md       # 项目治理与责任
-├── AUTHORS.md   		 # 作者与贡献者信息
-├── CITATION.cff       	 # 说明学术出版物中如何引用 PeriSci 软件
-├── LICENSE              # 开源协议（法律文件）
-├── CMakeLists.txt		 # 跨平台编译和管理
-└── .gitignore		 	 # 版本控制规避文件清单
+├── core/          		 # PeriFEM 数值内核（算子、装配、材料/损伤、求解驱动等）| Numerical kernel
+├── api/           		 # 稳定对外契约层：run_case / export_dataset / config入口 | External contract layer
+├── python/        		 # Python 绑定与工作流层（教学、AI数据生产、脚本接口）| Workflow layer 
+├── apps/          		 # 可执行程序/CLI（工程入口、批处理、校验、工具）| Executable program layer
+├── examples/      		 # 教学与参考算例（hello/最小示例、教程、benchmark）| Examples layer
+├── tests/         		 # 单测/回归（保证核心与契约层不退化）| Testing layer
+├── docs/          		 # 文档（含specs/规范、adr/架构决策记录等、架构说明、路线图等）| Documents
+├── README.md            # PeriSci 开源软件项目介绍（中英双语）| Project introduction
+├── VERSIONING.md        # 版本与承诺规则 | Version rules
+├── CHANGELOG.md         # 版本变更历史 | Version change history
+├── CONTRIBUTING.md      # 参与贡献规则 | Contribution rules
+├── CODE_OF_CONDUCT.md   # 行为准则 | Code of conduct
+├── MAINTAINERS.md       # 项目治理与责任 | Project maintenance rules
+├── AUTHORS.md   		 # 作者与贡献者信息 | Contributor information
+├── CITATION.cff       	 # 说明学术出版物中如何引用 PeriSci 软件 | Citation information
+├── LICENSE              # 开源协议（法律文件）| Open-source license
+├── CMakeLists.txt		 # 跨平台编译和管理 | Compilation rules
+├── .clang-format        # 代码格式化 | Code formatting
+├── .editorconfig		 # 非代码文件格式化 | Non-code file formatting
+└── .gitignore		 	 # 版本控制规避文件清单 ignoring files checklist
 ```
 
 ---
@@ -348,7 +350,9 @@ For detailed rules and conventions, please refer to:
 3. 提交代码并保证本地测试通过  
 4. 创建 Pull Request 并说明修改内容与动机  
 
-详细说明请参阅：[CONTRIBUTING.md](CONTRIBUTING.md)
+更详细的内容，如开发环境配置、代码格式规范（如 `.clang-format`、`.editorconfig`）以及其他贡献约定，请参阅：[CONTRIBUTING.md](CONTRIBUTING.md)
+
+For more detailed information, such as development environment setup, code formatting rules (e.g. `.clang-format`, `.editorconfig`), and other contribution guidelines, please refer to: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 

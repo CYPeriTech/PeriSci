@@ -1,13 +1,14 @@
-#include <perisci/api/api.hpp>
-
 #include <iostream>
+#include <perisci/api/api.hpp>
 #include <string>
 
-int main() {
+int main()
+{
   // 目标：验证头文件可 include、符号可链接、可运行
   const std::string v = perisci::api::version_string();
 
-  if (v.empty()) {
+  if (v.empty())
+  {
     std::cerr << "PeriSci version_string() returned empty string.\n";
     return 1;
   }

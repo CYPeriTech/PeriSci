@@ -1,0 +1,53 @@
+# PeriSci EditorConfig
+# https://editorconfig.org
+# This file is authoritative for basic text formatting across editors.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Keep Markdown trailing spaces (used for line breaks) if needed:
+[*.md]
+trim_trailing_whitespace = false
+
+# C/C++ files: indentation is handled by clang-format, but keep spaces consistent.
+[*.{c,cc,cpp,cxx,h,hh,hpp,hxx}]
+indent_style = space
+indent_size = 2
+
+# CMake files
+[*.{cmake}]
+indent_style = space
+indent_size = 2
+
+[CMakeLists.txt]
+indent_style = space
+indent_size = 2
+
+# Shell scripts
+[*.{sh,bash,zsh}]
+end_of_line = lf
+indent_style = space
+indent_size = 2
+
+# Windows batch / PowerShell scripts
+[*.{bat,cmd}]
+end_of_line = crlf
+indent_style = space
+indent_size = 2
+
+[*.ps1]
+end_of_line = crlf
+indent_style = space
+indent_size = 2
+
+# JSON / YAML
+[*.{json,yml,yaml}]
+indent_style = space
+indent_size = 2
