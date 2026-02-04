@@ -28,7 +28,7 @@
 - 它为：
   - `run_case`
   - `export_dataset`
-  - provenance / 可复现性
+  - 溯源 / 可复现性
   
   提供共同、稳定、可验证的语义基础
 
@@ -243,11 +243,49 @@ config
 
 ------
 
-## 5. hash / diff / provenance 规则 | Hash / Diff / Provenance Rules
+## 5. 哈希 / 语义差异比较 / 溯源 规则 | Hash / Diff / Provenance Rules
 
-### 5.1 必须可 hash / diff 的字段 | Fields Required to Support Hash / Diff
+### 5.1 规范表示与输入格式 | Canonical Representation & Input Format
 
-以下字段集合 **必须** 支持稳定的 hash / diff：
+本节**继承并落实**《DESIGN_CONTRACT》中定义的规范表示规则；以下内容仅规定 `config_schema` 在校验、语义差异比较 与 `config_hash` 计算中的**执行细则**。
+
+**规则（冻结）**：
+
+- 在 v0.2.x 阶段，`config_schema` 的权威输入文件与其规范化表示**统一采用 JSON**。
+- 所有用于 语义差异比较、`config_hash` 计算、溯源 绑定与缓存键生成的表示，**必须基于确定性的 canonical JSON 结构化对象**，而非原始文本内容。
+- canonical JSON 的生成必须消除非语义差异（例如对象键顺序、无关格式差异），以保证等价配置产生等值 哈希。
+
+**未来演进预留**：
+
+- 未来版本可支持 YAML 等人类友好输入格式；但其输出必须被确定性转换为 canonical JSON；**也只有 canonical JSON 表示的对象，才允许作为权威输入参与 语义差异比较、哈希 计算、溯源 关联以及治理与冻结判定**。
+
+**禁止事项（治理红线）**：
+
+- ❌ 基于原始配置文件文本直接计算 哈希值
+- ❌ 同时将多种格式视为同等权威输入
+- ❌ 允许隐式类型推断导致同一配置语义出现多种等价表示
+
+This section **inherits and operationalizes** the **Canonical Representation Rule** defined in the *DESIGN_CONTRACT*. The following content specifies only the **execution details** for `config_schema` in validation, diff, and `config_hash` computation.
+
+**Rules (Frozen):**
+
+- During the v0.2.x phase, the authoritative input files for `config_schema` and their canonical representations **must use JSON exclusively**.
+- All representations used for diff, `config_hash` computation, provenance binding, and cache key generation **must be based on deterministic canonical JSON structured objects**, rather than raw textual file content.
+- Canonical JSON generation must eliminate non-semantic differences (e.g., object key ordering, irrelevant formatting differences) to ensure that equivalent configurations yield equivalent hashes.
+
+**Future Evolution (Reserved):**
+
+- Future versions may support human-friendly input formats such as YAML; however, their outputs must be deterministically converted into canonical JSON; and **only objects represented in canonical JSON are permitted to serve as authoritative inputs for diff, hash computation, provenance association, and governance and freeze determination**.
+
+**Prohibited Practices (Governance Red Lines):**
+
+- ❌ Computing hashes directly from raw configuration file text
+- ❌ Treating multiple formats as equally authoritative inputs
+- ❌ Allowing implicit type inference that results in multiple equivalent representations of the same configuration semantics
+
+### 5.2 必须可 哈希 / 语义差异比较 的字段 | Fields Required to Support Hash / Diff
+
+以下字段集合 **必须** 支持稳定的 哈希 / 语义差异比较：
 
 - problem
 - geometry
@@ -255,10 +293,10 @@ config
 - discretization
 - solver
 
-其 hash 值构成：
+其 哈希 值构成：
 
 - 结果可复现性的核心判据
-- dataset provenance 的关键索引
+- dataset 溯源 的关键索引
 
 The following sections **must** support stable hash / diff behavior:
 
@@ -273,11 +311,11 @@ Their hash values constitute:
 - The core criterion for result reproducibility
 - The key index for dataset provenance
 
-### 5.2 provenance 强制字段 | Mandatory Provenance Fields
+### 5.3 溯源 强制字段 | Mandatory Provenance Fields
 
-以下信息 **必须进入 provenance**：
+以下信息 **必须进入 溯源**：
 
-- 完整 `config_schema` 内容（或其 hash）
+- 完整 `config_schema` 内容（或其 哈希）
 - schema_version
 - PeriSci 版本
 
@@ -311,6 +349,7 @@ The following information **must** enter provenance records:
 >
 > - 必须提升 schema_version
 > - 必须伴随 ADR
+> - 本规范仅定义 A 梁（输入契约）的版本演进规则；**涉及 C 梁输出资产的破坏性变更，其版本处理必须遵循 `dataset-spec` 中定义的 Versioning Red Line（C 梁）**。
 >
 > 新增顶层分区一律视为破坏性变更，需要 ADR + schema_version 提升
 
@@ -324,6 +363,7 @@ The following information **must** enter provenance records:
 >
 > - Must increment `schema_version`
 > - Must be accompanied by an ADR
+> - This specification defines version evolution only for Beam A (input contracts); **version handling for breaking changes affecting Beam C output assets MUST follow the Versioning Red Line (Beam C) defined in the dataset-spec**.
 >
 > Adding a new top-level section is always considered a breaking change and requires both an ADR and a schema_version increment.
 
@@ -424,7 +464,7 @@ config_schema **不承担**、也**永远不应承担**以下职责：
 **允许的例外 | Allowed exceptions**：
 
 - 与物理结果无关的显示或日志级别
-- 已在 spec 中明确声明、且不影响 hash / provenance 的元信息
+- 已在 spec 中明确声明、且不影响 哈希 / 溯源 的元信息
 - Display or logging options unrelated to physical results
 - Metadata explicitly documented in the spec and not affecting hash / provenance
 
@@ -443,9 +483,9 @@ config_schema **不承担**、也**永远不应承担**以下职责：
 
 - config_schema 是“意图声明”，不是“状态快照”
 - 执行期状态必须通过：
-  - results
-  - dataset
-  - provenance
+  - 结果
+  - 数据集
+  - 溯源
   
   进行表达
 
@@ -463,7 +503,7 @@ config_schema **不承担**、也**永远不应承担**以下职责：
 - 新需求优先通过以下方式在既有分区内表达：
   - 在既有分区内新增字段
   - 使用枚举扩展
-  - 增加可选子对象（必须同时明确其 hash / provenance 规则）
+  - 增加可选子对象（必须同时明确其 哈希 / 溯源 规则）
 
 - During v0.x → v1.0, adding new top-level logical sections is **prohibited by default**
 - New requirements should be expressed within existing sections via:
@@ -564,7 +604,7 @@ To ensure long-term effectiveness of the above non-goals and prohibitions, the s
 
 - 新字段引入时，必须明确：
   - 它是否影响物理语义
-  - 它是否进入 hash / provenance
+  - 它是否进入 哈希 / 溯源
 - 若无法明确回答上述问题：
   - 该字段 **不得进入 schema**
 - When introducing a new field, it must be clear:
