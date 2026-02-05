@@ -112,14 +112,14 @@ PeriSci 采用分层架构，核心思想是：
 - **稳定 API（api）** 是项目“对外承诺”，上层一切以其为入口；
 - **Python（python）** 是工作流层与生态层，用于教学与 AI；
 - **工程应用（apps）** 提供工程化命令行入口；
-- **examples/tests/docs** 承担教学、验证与规范的职责。
+- **examples/tests/docs** 承担教学、验证与规范的职责（采用算例驱动生长模式，参见 README的核心理念）。
 
 PeriSci uses a layered architecture:
 - **core**: numerical kernel independent of workflows and language bindings;
 - **api**: stable public contracts — the only supported entry for upper layers;
 - **python**: workflow and ecosystem layer for teaching and AI;
 - **apps**: engineering-grade CLI entry points;
-- **examples/tests/docs**: education, verification, and specifications.
+- **examples/tests/docs**: education, verification, and specifications (Adopt "case-driven growth model", refer to README - Core Philosophy).
 
 ---
 

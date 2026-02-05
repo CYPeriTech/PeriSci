@@ -53,10 +53,10 @@ but every reasonable contribution will be carefully reviewed.
 
 ### 📚 2.2 教学与示例 | Education and Examples
 - 教学算例与最小工作示例（MVP）
-- 可复现的基准问题
+- 可复现的基准算例（新增算例遵循 README的核心理念 中 算例驱动的生长模式）
 - 面向学生的教程与说明
 - Educational examples and minimal working cases
-- Reproducible benchmark problems
+- Reproducible benchmark cases (The new cases follow the "case-driven growth model" as described in the README - Core Philosophy)
 - Tutorials and documentation for students
 
 ### 🧪 2.3 测试与验证 | Testing and Validation
@@ -74,6 +74,62 @@ but every reasonable contribution will be carefully reviewed.
 - Build system (CMake)
 - CI and automated testing
 - Code readability and maintainability
+
+
+
+> ### 算例命名与组织规范 | Case Naming and Organization
+>
+> 算例遵循 README的核心理念 中 算例驱动的生长模式
+> The new cases follow the "case-driven growth model" as described in the README - Core Philosophy
+>
+> #### 命名规则 | Naming Convention
+> 所有算例应放置在 `examples/` 目录下的同名文件夹中，并遵循统一的命名格式：
+>
+> case-XX-short-description
+>
+> 其中：
+> - `case` 表示该目录为一项正式算例资产；
+> - `XX` 为两位或三位数字，用于表示**推荐的学习顺序**（并非强制依赖顺序）；
+> - `short-description` 为简要、稳定的算例语义描述，使用小写字母与连字符（kebab-case）。
+>
+> 示例：
+> - `case-01-poisson`
+> - `case-02-elasticity-uniform`
+> - `case-03-perifem-poisson`
+>
+> 
+>
+> All cases are placed under the `examples/` directory and follow the naming convention:
+> 
+> case-XX-short-description
+> 
+> where:
+> - `case` indicates a first-class numerical example;
+> - `XX` denotes the recommended learning order (not a dependency order);
+> - `short-description` provides a concise and stable semantic description.
+> 
+> Examples include:
+> - `case-01-poisson`
+> - `case-02-elasticity-uniform`
+> - `case-03-perifem-poisson`
+> 
+>
+>
+> #### 组织原则 | Organizational Principles
+>
+> - 每个算例应作为**独立、自包含的资产**存在；
+> - 算例目录中应包含清晰的输入文件、说明文档以及可用于回归测试的预期结果；
+> - 算例本身**不应引入特例化数值实现**，所有通用能力应抽象并合入核心库；
+> - 新增算例应扩展系统的通用能力，而不仅仅是增加示例数量。
+>
+> - Each case should exist as an **independent and self-contained asset**;
+> - Each case directory should include clear input files, documentation, and expected results that can be used for regression testing;
+> - A case itself **should not introduce case-specific numerical implementations**; all general-purpose capabilities should be abstracted and incorporated into the core library;
+> - Adding a new case should extend the system’s general capabilities, rather than merely increasing the number of examples.
+> 
+>
+> 详细的设计理念请参阅仓库根目录 `README.md` 中的 *Project Philosophy*。
+> For detailed design philosophy, please refer to the *Project Philosophy* section in the repository root `README.md`
 
 ---
 

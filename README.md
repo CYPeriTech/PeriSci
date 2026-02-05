@@ -54,6 +54,7 @@ education, research, engineering applications, and AI-driven modeling.
 - **复杂性由系统承担，而非用户承担**  
 - **长期可复现性与可追溯性（Reproducibility-by-design）**  
 - **面向未来 AI–CAE 融合的开放接口**
+- **采用算例驱动的生长模式：**每一个算例均被视为一等资产，并同时承担教学示例、回归基准与数据生成单元的功能。
 
 ---
 
@@ -62,6 +63,7 @@ education, research, engineering applications, and AI-driven modeling.
 - **System-level complexity hidden from end users**
 - **Reproducibility and traceability by design**
 - **Open interfaces for future AI–CAE integration**
+- **Case-driven growth model: **each case is regarded as a first-class asset and serves simultaneously as a tutorial, a regression benchmark, and a data-generation unit.
 
 ---
 
