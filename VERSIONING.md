@@ -193,6 +193,200 @@ In datasets and AI workflows, **the version tag must be recorded instead of a mo
 
 ---
 
+## 版本层级体系 | Versioning Layers
+
+为避免在长期演进过程中产生版本语义混淆，本项目采用**分层版本体系**。
+不同层级的版本号具有不同治理职责，彼此之间不可混用。
+To prevent semantic confusion during long-term evolution, this project adopts a layered versioning system.
+Each version layer carries a distinct governance responsibility and SHALL NOT be used interchangeably.
+
+本规范在 v0.2 起正式冻结以下版本层级关系。
+As of v0.2, the following version layer relationships are formally frozen.
+
+------
+
+### 1. 仓库版本 | Repository Version
+
+即 Git Tag（`vMAJOR.MINOR.PATCH`）。
+The Repository Version refers to the Git Tag (vMAJOR.MINOR.PATCH).
+
+其职责：
+
+- 标识源代码的整体状态
+- 对应一个可长期复现的代码快照
+- 用于论文、报告与工程系统引用
+
+Its responsibilities are:
+
+- To identify the overall state of the source code
+- To represent a long-term reproducible code snapshot
+- To serve as a citation reference in academic publications, reports, and engineering systems
+
+仓库版本遵循本文件前述的 SemVer 规则。
+The Repository Version follows the SemVer rules defined earlier in this document.
+
+仓库版本**不等同于**数据集版本或 schema 版本。
+The Repository Version SHALL NOT be considered equivalent to the Schema Version or the Dataset Version.
+
+------
+
+### 2. Schema 版本 | Schema Version
+
+指 `config_schema` 的版本标识。
+The Schema Version refers to the version identifier of `config_schema`.
+
+其职责：
+
+- 定义输入契约结构
+- 约束物理意图的合法表达方式
+- 决定配置文件的结构合法性
+
+Its responsibilities are:
+
+- To define the input contract structure
+- To constrain the valid expression of physical intent
+- To determine the structural validity of configuration files
+
+规则：
+
+- 不兼容修改必须提升主版本号
+- 向后兼容新增字段可提升次版本号
+- 不得通过默认值隐式修改语义
+
+Rules:
+
+- Incompatible modifications MUST result in a MAJOR version increment
+- Backward-compatible additions MAY increment the MINOR version
+- Semantic changes SHALL NOT be introduced implicitly via default values
+
+Schema 版本用于判定配置文件是否可被当前执行边界接受。
+The Schema Version is used to determine whether a configuration file can be accepted by the execution boundary.
+
+Schema 版本**不得由仓库版本隐式承担**。
+The Schema Version SHALL NOT be implicitly substituted by the Repository Version.
+
+------
+
+### 3. 数据集版本 | Dataset Version
+
+定义于 `manifest.json` 中的 `dataset_version` 字段。
+The Dataset Version is defined by the dataset_version field in manifest.json.
+
+其职责：
+
+- 表示数据资产的结构与治理语义状态
+- 控制冻结语义与版本红线
+- 作为 AI 训练与论文引用的核心标识
+
+Its responsibilities are:
+
+- To represent the structural and governance semantic state of the data asset
+- To control freeze semantics and version red-line enforcement
+- To serve as the core identifier for AI training workflows and academic citation
+
+规则：
+
+- 任何破坏性结构修改必须提升主版本号
+- 不得通过 `tool_version` 替代 dataset_version
+- dataset_version 的变更必须符合 dataset-spec 中的红线规则
+
+Rules:
+
+- Any breaking structural modification MUST increment the MAJOR version
+- `tool_version` SHALL NOT substitute for `dataset_version`
+- Changes to `dataset_version` MUST comply with the red-line rules defined in dataset-spec
+
+数据集版本与仓库版本可以不同步，但必须在 provenance 中建立明确绑定关系。
+The Dataset Version and the Repository Version MAY evolve independently, but a clear binding relationship MUST be established in provenance.
+
+------
+
+### 4. 层级关系约束 | Layered Relationship Constraints
+
+以下约束在 v0.2 起生效：
+
+1. 仓库版本、Schema 版本、数据集版本必须在语义上相互一致；
+2. 任何破坏性 schema 修改，若影响 C 梁输出结构，必须同步提升 dataset_version 主版本号；
+3. 数据集生成时必须记录：
+   - 仓库版本（Git Tag）
+   - Schema 版本
+   - Dataset 版本
+4. 禁止仅通过仓库版本推断数据资产语义。
+
+#### 4.1 Freeze 层级桥接规则（规范性澄清） | Freeze Layer Bridging Rule (Normative Clarification)
+
+仓库版本 Tag 的创建 **不自动等同于** 数据集的冻结资格。
+A Repository Version Tag **does NOT automatically imply** dataset freeze eligibility.
+
+数据集是否可被冻结，仅由 `dataset-spec` 中定义的：
+
+- 结构验证（L1）
+- 溯源验证（L2）
+- 一致性验证（L3）
+- 冻结验证（L4）
+- 以及版本红线规则
+
+共同判定。
+
+Dataset freeze eligibility is governed exclusively by the validation levels (L1–L4) and red-line rules defined in `dataset-spec`.
+
+仓库版本 Tag 仅表示代码状态可引用；数据集冻结表示资产状态可治理。
+A repository Tag indicates that the code state is citable; Dataset freeze indicates that the asset state is governance-eligible.
+
+两者属于不同层级，不得混用或替代。
+They belong to different governance layers and SHALL NOT be used interchangeably or as substitutes.
+
+------
+
+### 5. 强制引用规则 | Mandatory Citation Rules
+
+在以下场景中，必须显式记录版本层级：
+
+- 数据集发布
+- AI 模型训练
+- 学术论文引用
+- 工程报告归档
+
+The following scenarios REQUIRE explicit recording of version layers:
+
+- Dataset publication
+- AI model training
+- Academic citation
+- Engineering report archiving
+
+最低引用要求为：
+
+- 仓库版本（Git Tag）
+- 数据集版本（dataset_version）
+
+The minimum citation requirements are:
+
+- Repository Version (Git Tag)
+- Dataset Version (`dataset_version`)
+
+当涉及配置结构或模型演进时，必须同时记录：
+
+- Schema 版本
+
+When configuration structure or model evolution is involved, the Schema Version MUST also be recorded.
+
+禁止使用：
+
+- 移动分支名（如 master）
+- 未打 Tag 的提交哈希
+- 省略 dataset_version 的引用
+
+The following practices are prohibited:
+
+- Referencing a moving branch name (e.g., `master`)
+- Referencing an untagged commit hash
+- Omitting `dataset_version`
+
+版本引用不完整视为不可复现状态。
+Incomplete version citation SHALL be considered a non-reproducible state.
+
+---
+
 ## v1.0.0 之前的版本说明 | Pre-1.0 Versions
 
 在 v1.0.0 之前：

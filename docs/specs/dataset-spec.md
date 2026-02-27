@@ -1613,13 +1613,36 @@ Any of the following changes **MUST increment the Major version number of `datas
 - Changes to provenance association mechanisms
 
 任何未升级版本号的结构性变更，均视为 **违反 Data Contract（数据契约）**。
-
 Any structural change without a version increment is considered a **violation of the Data Contract**.
 
-**版本红线（C 梁）：凡涉及数据集输出结构、权威元数据入口的语义、溯源绑定或 规范化治理规则的任何破坏性变更，必须提升 `dataset_version` 的主版本号**
-
+**版本红线（C 梁）：凡涉及数据集输出结构、manifest的语义、溯源绑定或 规范化治理规则的任何破坏性变更，必须提升 `dataset_version` 的主版本号**
 **Version Red Line (C Beam): Any breaking change involving dataset output structure, manifest semantics, provenance binding, or canonical governance rules MUST increment the Major version of `dataset_version`**
 
+> **Schema–Dataset Major 联动规则**
+> 
+> 若 `config_schema` 发生主版本级（MAJOR）破坏性变更，且该变更影响：
+>
+> - 数据集输出结构，
+> - manifest 中的字段语义，
+> - 溯源绑定逻辑，
+> - 或冻结判定规则，
+>
+> 则 **`dataset_version` 的主版本号 MUST 同步提升**。
+>
+> 不得仅提升 Schema 版本而保持 `dataset_version` 主版本不变
+
+> **Schema–Dataset Major Coupling Rule (Normative)**
+> 
+> If the `config_schema` undergoes a MAJOR breaking change that affects:
+> 
+> - dataset output structure,
+> - manifest field semantics,
+> - provenance binding logic,
+> - or freeze determination rules,
+>
+> then the **Major version of `dataset_version` MUST be incremented accordingly**.
+>
+> It is NOT permitted to increment the Schema version alone while keeping the `dataset_version` Major unchanged.
 ------
 
 ### 9.3 冻结范围说明 | Freeze Scope Clarification
@@ -2013,6 +2036,17 @@ Provenance information MUST remain consistent with version rules:
 4. Identical `dataset_version` MUST NOT correspond to different `config_hash`. If detected, the Major version MUST be incremented or the dataset MUST be republished.
 
 Violation of these relationships constitutes version governance violation.
+
+> **仓库版本非替代规则 | Repository Version Non-Substitution Rule**
+> 
+> dataset_version 是资产结构与治理语义的唯一判定标识。
+> The dataset_version is the sole determinant of asset structural and governance semantics.
+> 
+> 仓库版本（Git Tag）不得被用来推断或替代数据集结构语义。
+> The Repository Version (Git Tag) SHALL NOT be used to infer or substitute dataset structural semantics.
+> 
+> 即使仓库版本未变化，若数据集结构或治理语义发生破坏性变更，仍必须提升 dataset_version 主版本号。
+> Even if the Repository Version remains unchanged, any destructive change in dataset structure or governance semantics MUST increment the Major version of dataset_version.
 
 ------
 
