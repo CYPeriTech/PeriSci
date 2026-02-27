@@ -32,6 +32,7 @@ education, research, engineering applications, and AI-driven modeling.
 ## 目录 | Table of Contents
 
 - [核心理念 | Core Philosophy](#core-philosophy)
+- [架构宪法 | Architecture Constitution](#archi-const)
 - [主要功能 | Key Capabilities](#capabilities)
 - [面向用户 | Target Users](#target-users)
 - [项目结构 | Repository Structure](#repository-structure)
@@ -64,6 +65,53 @@ education, research, engineering applications, and AI-driven modeling.
 - **Reproducibility and traceability by design**
 - **Open interfaces for future AI–CAE integration**
 - **Case-driven growth model: **each case is regarded as a first-class asset and serves simultaneously as a tutorial, a regression benchmark, and a data-generation unit.
+
+---
+
+<a id="archi-const"></a>
+
+## 架构宪法 | Architecture Constitution
+
+PeriSci 采用 **三梁契约架构（Three-Beam Contract Architecture）** 与 **四核数值骨架（Four-Core Numerical Skeleton）** 作为系统的长期治理基础。
+PeriSci adopts a **Three-Beam Contract Architecture** and a **Four-Core Numerical Skeleton** as the long-term governance foundation of the system.
+
+三梁不是目录划分，也不是“前处理 / 求解器 / 后处理”的命名替代，而是面向可治理计算资产的最小执行契约结构：
+
+- **A 梁：`config_schema`**
+   唯一合法的物理意图与执行声明载体（输入契约）
+- **B 梁：`run_case`**
+   纯执行边界（schema in → structured results out），无隐式状态
+- **C 梁：`export_dataset`**
+   唯一资产级结果出口（固化、溯源、冻结、版本化）
+
+The Three-Beam structure is neither a directory layout nor a renaming of “pre-processing / solver / post-processing”, but the minimal execution contract structure for governable computational assets:
+
+- **Beam A: `config_schema`**
+   The sole legitimate carrier of physical intent and execution declaration (input contract)
+- **Beam B: `run_case`**
+   A pure execution boundary (schema in → structured results out), with no implicit state
+- **Beam C: `export_dataset`**
+   The only asset-level result outlet (solidification, provenance, freeze determination, and versioning)
+
+四核结构定义数值内核的最小稳定骨架，包括离散对象、局部相互作用、贡献汇总与状态推进。
+The Four-Core structure defines the minimal stable skeleton of the numerical kernel, including discrete objects, local interactions, accumulation (assembly), and state advancement.
+
+上述架构为 PeriSci 的宪法级约束，其完整定义见：
+
+> ```
+> docs/DESIGN_CONTRACT.md
+> ```
+
+该文档构成架构与治理层面的权威来源。
+
+The above architecture constitutes a constitutional-level constraint of PeriSci.
+ Its complete definition is provided in:
+
+> ```
+> docs/DESIGN_CONTRACT.md
+> ```
+
+This document serves as the authoritative source for architectural and governance-level definitions.
 
 ---
 

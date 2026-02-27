@@ -40,19 +40,82 @@
 
 ---
 
-## [v0.2.0] - YYYY-MM-DD
+## [v0.2.0] - 2026-02-XX
+
+本版本为“契约冻结与治理体系确立版本”。  
+本次更新不以数值能力扩展为目标，而以三梁执行契约、数据集资产规范与版本红线体系冻结为核心。
+
+---
 
 ### Added | 新增
-- 配置文件规范（config_schema v1.0）
-- 仿真统一入口 `run_case(config)`
-- 数据集导出接口与目录规范
-- 元数据与可追溯信息记录
+
+#### 三梁执行契约正式确立
+
+- A 梁：`config_schema` 权威输入契约结构冻结
+- B 梁：`run_case(config)` 纯执行接口确立
+- C 梁：`export_dataset(results)` 资产级输出接口确立
+- 明确三梁职责边界与不可绕过规则
+
+#### 数据集规范（dataset-spec）冻结
+
+- 冻结数据集顶层目录结构
+- 冻结 `manifest.json` 唯一权威元数据入口结构
+- 冻结 `provenance` 最小字段集合
+- 冻结失败 / partial 运行强制记录规则
+- 冻结 Canonical JSON 最低规范要求
+- 冻结 L1–L4 合规验证层级模型
+- 冻结 Version Red Line（C 梁主版本触发规则）
+
+#### 版本分层治理体系确立
+
+- 引入 Repository Version / Schema Version / Dataset Version 三层体系
+- 明确三层职责不可替代规则
+- 明确 Schema 主版本 → Dataset 主版本联动规则
+- 明确 Repository Tag ≠ Dataset Freeze
+- 建立版本引用最小要求（Git Tag + dataset_version）
+
+#### 冻结语义与资产级定义确立
+
+- 明确 Freeze 为治理状态，而非文件系统操作
+- 明确 Freeze 判定仅基于 canonical 元数据
+- 明确资产级（Asset-Level）治理定位
+- 明确 dataset_version 为资产结构与语义唯一判定标识
+
+---
 
 ### Changed | 变更
-- 
+
+- 将 examples 语义升级为资产导向结构（为后续 cases 演进做准备）
+- 明确禁止隐式语义、默认值绕过与结构复用
+- 统一所有规范性条款为 MUST / SHALL 级表达
+- 统一中英文对照版本
+
+---
 
 ### Fixed | 修复
-- 
+
+- 修正 Schema 与 Dataset 主版本触发边界的双向映射
+- 修正 Freeze 在 VERSIONING 与 dataset-spec 中的层级桥接语
+- 修复版本红线与溯源规则间的潜在语义不对称
+- 消除 Repository Version 与 Dataset Version 的替代风险
+
+---
+
+### Governance Impact | 治理影响说明
+
+- 本版本确立 C 梁为资产级输出边界
+- 自 v0.2.0 起，任何数据集结构破坏性修改必须提升 `dataset_version` 主版本号
+- 自 v0.2.0 起，版本引用不完整视为不可复现状态
+- 自 v0.2.0 起，三梁契约进入冻结阶段
+
+---
+
+### Breaking Changes | 破坏性变更说明
+
+本版本为规范级冻结版本。
+
+若与 v0.1.x 期间产生的临时结构或隐式行为存在差异，应以 v0.2.0 的规范为准。
+旧版本数据集如不符合本规范，不具备冻结资格。
 
 ---
 
