@@ -12,7 +12,7 @@ namespace perisci::api
 
   std::string build_info()
   {
-    // v0.1.5 只做占位：未来可以加入编译器、构建类型、git hash 等
+    // v0.2.0 只做占位：未来可以加入编译器、构建类型、git hash 等
     return "PeriSci (api) v" + version_string();
   }
 

@@ -1,0 +1,50 @@
+{
+  "schema_version": "v0.2.x",
+
+  "case_metadata": {
+    "case_id": "{{case-xx-name}}",
+    "description": "{{一句话说明}}"
+  },
+
+  "problem": {
+    "type": "{{elliptic | parabolic | hyperbolic | custom}}",
+    "dimension": {{2}},
+    "equation": "{{简要描述或引用}}"
+  },
+
+  "geometry": {
+    "domain": "{{单位方形 | 单位区间 | 自定义}}"
+  },
+
+  "boundary_conditions": [
+    {
+      "type": "{{Dirichlet}}",
+      "location": "{{boundary identifier}}",
+      "value": "{{expression or constant}}"
+    }
+  ],
+
+  "material": {
+    "parameters": {
+      "{{parameter_name}}": {{value}}
+    }
+  },
+
+  "discretization": {
+    "mesh": {
+      "type": "{{structured | unstructured}}",
+      "resolution": {{16}}
+    },
+    "basis_order": {{1}}
+  },
+
+  "solver": {
+    "type": "{{direct | iterative}}",
+    "tolerance": 1e-8,
+    "max_iterations": 1000
+  },
+
+  "output_control": {
+    "export_dataset": true
+  }
+}
