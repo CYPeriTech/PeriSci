@@ -2,6 +2,11 @@
 **An Open-source PeriFEM-based CAE Platform for Scientific Computing and Engineering Simulation**  
 **开源近场有限元（PeriFEM）科学计算与工程仿真平台**
 
+> **当前开发状态 | Development Status**
+>
+> PeriSci 当前处于 **v0.2.x 稳定化阶段**，重点在于架构边界稳定与契约体系确立。详细阶段说明请参阅 `docs/ROADMAP.md`。
+> PeriSci is currently in the **v0.2.x stabilization stage**, focusing on architectural boundary stabilization and contract enforcement. See `docs/ROADMAP.md` for detailed evolution plans.
+
 ---
 
 <a id="overview"></a>

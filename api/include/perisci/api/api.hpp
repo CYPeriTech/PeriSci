@@ -1,14 +1,16 @@
 #pragma once
 
+#include <perisci/api/config_schema.hpp>
+#include <perisci/api/export_dataset.hpp>
+#include <perisci/api/run_case.hpp>
+#include <perisci/api/types.hpp>
 #include <string>
 
 namespace perisci::api
 {
 
-  // v0.1.5：对外最小 API（示例/测试只 include 这一层）
+  // Keep version/build-info symbols at facade level.
   std::string version_string();
-
-  // 可选：一个小的自检函数，后续可扩展为打印 build/provenance 信息
   std::string build_info();
 
 } // namespace perisci::api

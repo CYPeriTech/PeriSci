@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "expected_spec_version": "0.1",
+    "case_id": "{{case-xx-name}}",
+    "notes": "Case-specific expectations for regression gates. This file does not redefine global specs; it binds expectations to this case."
+  },
+
+  "mapping_rules": {
+    "readme_tag_policy": "Every expectation item MUST reference README tags via ref.readme_tag (and optionally ref.readme_item).",
+    "tag_to_sections": {
+      "M1": "invariants[]",
+      "M2": "metrics[]",
+      "M3": "artifacts[]",
+      "D": "dataset_semantics (optional)",
+      "S": "sensitivity (optional)"
+    },
+    "order_convention": {
+      "invariants[0]": "README [M1] first bullet (or [M1.1])",
+      "metrics[0]": "README [M2] first row (or [M2.1])",
+      "artifacts[0]": "README [M3] first bullet (or [M3.1])"
+    }
+  },
+
+  "invariants": [
+    {
+      "id": "m1.run_status_not_failed",
+      "ref": {
+        "readme_tag": "M1",
+        "readme_item": "M1.1"
+      },
+      "severity": "error",
+      "source": {
+        "kind": "bundle",
+        "path": "results.status"
+      },
+      "assert": {
+        "op": "!=",
+        "value": "failed"
+      },
+      "notes": "Execution must not fail. This is a governance-level gate."
+    }
+  ],
+
+  "metrics": [
+    {
+      "id": "m2.placeholder_metric",
+      "ref": {
+        "readme_tag": "M2",
+        "readme_item": "M2.1"
+      },
+      "severity": "warning",
+      "source": {
+        "kind": "dataset",
+        "path": "TBD"
+      },
+      "assert": {
+        "op": "<=",
+        "value": 0.0
+      },
+      "notes": "Replace with real numeric metrics in v0.3+ (e.g., L2 error, energy norm, residual). Template keeps structure only."
+    }
+  ],
+
+  "artifacts": [
+    {
+      "id": "m3.dataset_dir_exists",
+      "ref": {
+        "readme_tag": "M3",
+        "readme_item": "M3.1"
+      },
+      "severity": "error",
+      "source": {
+        "kind": "filesystem",
+        "path": "dataset"
+      },
+      "assert": {
+        "must_exist": true,
+        "type": "directory"
+      },
+      "notes": "Dataset must be produced only via export step. This checks the exported output directory structure."
+    }
+  ],
+
+  "dataset_semantics": {
+    "enabled": false,
+    "ref": {
+      "readme_tag": "D"
+    },
+    "fields": [],
+    "notes": "Optional: machine-readable description of dataset fields/units. Keep empty unless needed."
+  },
+
+  "sensitivity": {
+    "enabled": false,
+    "ref": {
+      "readme_tag": "S"
+    },
+    "expectations": [],
+    "notes": "Optional: expected sensitivity trends (mesh refinement, timestep, parameter perturbation). Usually not a hard gate."
+  }
+}
