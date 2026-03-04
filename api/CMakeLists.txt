@@ -3,6 +3,8 @@ add_library(perisci_api STATIC
   src/config_schema_stub.cpp
   src/run_case_stub.cpp
   src/export_dataset_stub.cpp
+  src/validate_case_stub.cpp
+  src/run_report_stub.cpp
 )
 
 target_compile_features(perisci_api PUBLIC cxx_std_17)

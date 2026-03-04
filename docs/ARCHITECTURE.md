@@ -164,6 +164,17 @@ v							v
 | * 不承诺长期稳定API||不定义新的配置语义或物理语义（Must NOT define new configuration semantics or physics semantics）|
 +====================================================================+
 |
+|
+|
+v
++====================================================================+
+| cases/ —— 标准算例库                   |
+| Standard Case Definitions            |
+| - reproducible config inputs         |
+| - canonical simulation cases         |
+
++====================================================================+
+|
 |（稳定的功能调用）
 |(stable function calls)
 v
@@ -211,8 +222,13 @@ This model is fundamental to long-term maintainability and ecosystem scalability
 #### 允许的依赖方向 | Allowed Dependency Direction
 
 ```
-python/  --->  api/  --->  core/
-apps/    --->  api/
+python / apps
+       ↓
+      cases
+       ↓
+      api
+       ↓
+      core
 ```
 
 - `python/` 与 `apps/` 是 **并列的上层入口**
@@ -368,6 +384,31 @@ These are architectural boundaries, not stylistic suggestions.
 - Access `core/` directly
 - Depend on Python workflows or interpreters
 - Serve as the mandatory path for teaching or AI workflows
+
+------
+
+#### cases/ —— 标准算例与数据生产入口 | Standard Case Definitions
+
+**职责（Must / Should）：**
+
+- 定义标准化的仿真算例（standard simulation cases）
+- 提供 **可复现的 config 输入**
+- 作为 examples / tests / dataset generation 的统一来源
+- 每个 case 必须包含完整、可运行的 `input.json`
+
+**非职责（Must NOT）：**
+
+- 不包含工作流脚本
+- 不包含数据后处理逻辑
+- 不定义新的物理语义
+- 不绕过 `api` 直接调用 `core`
+
+------
+
+**中文说明补充：**
+
+- `cases/` 是 **系统级算例库**
+- 它保证 **examples / tests / AI dataset 使用相同物理输入**
 
 ---
 
@@ -667,7 +708,7 @@ instead, we emphasize **organizational boundaries and engineering constraints**.
 
 <a id="quality-gates"></a>
 
-### 3.5 examples / tests / docs —— 质量门禁 | Quality Gates
+### 3.5 cases / examples / tests / docs —— 质量门禁 | Quality Gates
 
 `examples/`、`tests/` 与 `docs/` 共同构成 PeriSci 的**质量门禁体系**，
 用于确保架构承诺在演进过程中持续成立。

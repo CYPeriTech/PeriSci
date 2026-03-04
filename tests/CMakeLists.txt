@@ -46,9 +46,29 @@ target_link_libraries(perisci_test_dataset_manifest PRIVATE perisci_api)
 add_test(NAME perisci.dataset_manifest COMMAND perisci_test_dataset_manifest)
 set_tests_properties(perisci.dataset_manifest PROPERTIES TIMEOUT 30)
 
+# ------------------------------------------------------------
+# (2.2) v0.2.x: case-00 regression gate (run -> export -> validate)
+add_executable(perisci_test_case_00_regression
+  test_case_00_regression.cpp
+)
+target_compile_features(perisci_test_case_00_regression PRIVATE cxx_std_17)
+
+add_test(NAME perisci.case_00_regression COMMAND perisci_test_case_00_regression)
+
+# 让测试稳定拿到 CLI 可执行文件所在目录（跨生成器/跨Debug/Release）
+set_tests_properties(perisci.case_00_regression PROPERTIES
+  ENVIRONMENT
+    "PERISCI_RUN=$<TARGET_FILE:perisci-run>;PERISCI_EXPORT=$<TARGET_FILE:perisci-export>;PERISCI_VALIDATE=$<TARGET_FILE:perisci-validate>"
+)
+
+# 确保 CLI targets 都先构建（add_test 不保证构建顺序）
+add_dependencies(perisci_test_case_00_regression perisci-run perisci-export perisci-validate)
+
+set_tests_properties(perisci.case_00_regression PROPERTIES TIMEOUT 60)
+
 
 # ------------------------------------------------------------
-# (2.2) v0.2.x: CLI boundary gate
+# (2.3) v0.2.x: CLI boundary gate
 #     perisci-run must NOT create dataset/ (no filesystem side effects)
 #     perisci-export is the ONLY entry allowed to write dataset under --out
 add_executable(perisci_test_cli_boundaries
