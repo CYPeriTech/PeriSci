@@ -11,6 +11,24 @@
 
 ---
 
+## 0. 当前仓库中的最小算例资产
+
+当前仓库已包含一个最小算例资产，用于平台闭环门禁：
+
+```
+cases/case-00-minimal
+```
+
+该算例资产的定位是：
+
+- **平台闭环 smoke gate**
+- 不追求物理正确性与数值精度
+- 主要用于验证 run / export / validate 三梁链路是否可用
+
+因此，在 v0.2.x 阶段，`case-00-minimal` 的 `expected.json` 可以保持为“结构/状态类门禁”（例如 status 不得失败），并逐步演进为更强的结构校验与可观测性字段校验。
+
+---
+
 ## 1. input 与 expected 的职责划分
 
 ### 1.1 input.json —— 问题定义层
@@ -26,6 +44,10 @@
 - 必须符合 config_schema 规范
 - 参与 canonical 表示与 config_hash 计算
 - 修改 input 等价于改变“问题定义”
+
+>v0.2.x 阶段为了支持平台 smoke gate（如 `case-00-minimal`），允许最小配置仅包含 `meta` 分区。  
+> `meta` 用于标识与追踪（如 `schema_version`、`config_id`），不得影响数值行为。  
+> 当未来引入严格 schema 校验时，必须确保该最小输入仍然合法（详见 config-schema 的 v0.2.x 最小配置条款）。
 
 ---
 
@@ -45,6 +67,10 @@
 - 仅用于回归验证
 
 修改 expected 等价于改变“通过标准”。
+
+>expected 的校验对象可以逐步扩展：  
+> - v0.2.x：以“结构/状态/必备字段存在性”为主（平台 smoke gate）  
+> - v0.3.x+：逐步加入数值阈值、不变量、收敛行为等（能力基准）
 
 ---
 
@@ -97,24 +123,33 @@ README 内容应保持稳定、结构化、可长期引用。
 标准流程：
 
 ```
-input.json  ──▶  run_case  ──▶  results
-                                   │
-                                   ▼
-                             export_dataset
-                                   │
-                                   ▼
-                                dataset
+input.json  ──▶  run_case  ──▶  results(bundle)
+ │
+ ▼
+ export_dataset
+ │
+ ▼
+ dataset
+ │
+ ▼
+ validate_case
 ```
 
 然后：
 
 ```
-(results + dataset)  ──▶  expected.json 校验
+validate_case  ──▶  expected.json 判据（回归门禁）
 ```
 
-expected 不参与执行，只参与验证。
+说明：
 
->因此，可以认为：input 产生结果；expected 约束结果
+- **run_case**：执行计算，产出 results/bundle（内存态）
+- **export_dataset**：唯一允许落盘的边界，产出 dataset（资产态）
+- **validate_case**：结构与门禁检查的入口（可对 bundle / dataset manifest 做校验）
+- **expected.json**：只定义“通过标准”，不参与执行
+
+>因此，可以认为：input 产生结果；expected 约束结果  
+>并且：validate 是“校验的程序入口”，expected 是“校验的判据配置”。
 
 ---
 

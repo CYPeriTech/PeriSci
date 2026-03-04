@@ -31,7 +31,8 @@ add_subdirectory(api)
 add_subdirectory(apps)
 
 if(PERISCI_BUILD_EXAMPLES)
-  add_subdirectory(examples/hello)
+  add_subdirectory(examples/ex-00-hello)
+  add_subdirectory(examples/ex-01-minimal-run)
 endif()
 
 if(PERISCI_BUILD_TESTS)

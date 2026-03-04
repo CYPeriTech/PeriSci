@@ -121,6 +121,31 @@ config
 - Fields in `meta` **must not affect numerical results**
 - Used only for tracking, identification, and auditing
 
+#### v0.2.x 最小配置（platform smoke / case-00-minimal）| v0.2.x Minimal Configuration
+
+在 v0.2.x 阶段，为支持平台闭环的最小门禁（例如 `cases/case-00-minimal`）：
+
+- 允许配置仅包含 `meta` 分区；
+- `problem / geometry / material / discretization / solver / output` 等分区在 v0.2.x 中 **不得作为必填要求**；
+- 若未来引入严格 schema 校验（例如 JSON Schema 的 `required` 机制），则 v0.2.x 的最小合法配置必须保持为：
+  - `meta.schema_version` 必须存在；
+  - `meta.config_id`（或 `meta.name`）建议存在；
+  - 其他分区可缺省或为空对象。
+
+该条款用于冻结“最小可运行输入”的合法性，避免未来 strict 校验破坏平台 smoke gate。
+
+In the v0.2.x stage, to support the minimal platform gate (e.g., `cases/case-00-minimal`):
+
+- The configuration is allowed to contain **only the `meta` section**.
+- Sections such as `problem / geometry / material / discretization / solver / output` **must not be treated as required** in v0.2.x.
+- If strict schema validation is introduced in the future (e.g., via JSON Schema `required` rules), the minimal valid configuration for v0.2.x must remain:
+
+  - `meta.schema_version` **must exist**;
+  - `meta.config_id` (or `meta.name`) is **recommended**;
+  - All other sections may be omitted or provided as empty objects.
+
+This clause freezes the validity of the **minimal runnable configuration**, preventing future strict validation rules from breaking the platform smoke gate.
+
 ------
 
 ### 3.2 problem（问题定义）| (Problem Definition)
