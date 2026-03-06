@@ -193,14 +193,23 @@ This document serves as the authoritative source for architectural and governanc
 
 ```text
 PeriSci/
+
+# Runtime Architecture | 运行时架构
 ├── core/          		 # PeriFEM 数值内核（算子、装配、材料/损伤、求解驱动等）| Numerical kernel
 ├── api/           		 # 稳定对外契约层：run_case / export_dataset / config入口 | External contract layer
-├── python/        		 # Python 绑定与工作流层（教学、AI数据生产、脚本接口）| Workflow layer 
+├── python/        		 # Python 绑定与工作流层（教学、AI数据生产、脚本接口）| Workflow layer
 ├── apps/          		 # 可执行程序/CLI（工程入口、批处理、校验、工具）| Executable program layer
+
+# Experiment Asset System | 实验体系
 ├── examples/      		 # 教学与参考算例（hello/最小示例、教程、benchmark）| Examples layer
+├── cases/         		 # 标准算例资产（稳定的可复现实验，用于回归测试与数据生产）| Canonical case assets
 ├── tests/         		 # 单测/回归（保证核心与契约层不退化）| Testing layer
-├── docs/          		 # 文档（含specs/规范、adr/架构决策记录等、架构说明、路线图等）| Documents
+
+# Documentation and Design Records | 文档与设计记录
+├── docs/          		 # 技术文档（含specs/规范、adr/架构决策记录等、架构说明、路线图等）| Technical Documents
 ├── README.md            # PeriSci 开源软件项目介绍（中英双语）| Project introduction
+
+# Governance Framework | 治理框架
 ├── VERSIONING.md        # 版本与承诺规则 | Version rules
 ├── CHANGELOG.md         # 版本变更历史 | Version change history
 ├── CONTRIBUTING.md      # 参与贡献规则 | Contribution rules
@@ -209,6 +218,8 @@ PeriSci/
 ├── AUTHORS.md   		 # 作者与贡献者信息 | Contributor information
 ├── CITATION.cff       	 # 说明学术出版物中如何引用 PeriSci 软件 | Citation information
 ├── LICENSE              # 开源协议（法律文件）| Open-source license
+
+# Build and Repository Configuration | 构建与仓库配置
 ├── CMakeLists.txt		 # 跨平台编译和管理 | Compilation rules
 ├── .clang-format        # 代码格式化 | Code formatting
 ├── .editorconfig		 # 非代码文件格式化 | Non-code file formatting
