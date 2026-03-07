@@ -6,7 +6,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 namespace fs = std::filesystem;
 
 namespace
@@ -100,24 +99,32 @@ namespace perisci::api
 
       std::ostringstream manifest;
       manifest << "{\n"
-               << "  \"manifest_version\": \"0.2\",\n"
-               << "  \"dataset_id\": \"perisci_dataset_stub\",\n"
-               << "  \"dataset_version\": \"" << dataset_version << "\",\n"
-               << "  \"status\": \"" << to_string(results.status) << "\",\n"
-               << "  \"provenance\": {\n"
-               << "    \"generator\": {\"tool\": \"export_dataset\", \"tool_version\": \""
-               << tool_version << "\"},\n"
-               << "    \"created_at\": \"" << created_at << "\",\n"
-               << "    \"config_hash\": \"" << config_hash << "\",\n"
-               << "    \"inputs\": {\"config_path\": \"config/\", \"code_ref\": \"code/\"}\n"
-               << "  },\n"
-               << "  \"code\": {\n"
-               << "    \"code_version\": \"unknown\",\n"
-               << "    \"dirty\": true\n"
-               << "  },\n"
-               << "  \"results\": {\n"
-               << "    \"path\": \"results/\",\n"
-               << "    \"files\": []\n"
+               << "  \"manifest\": {\n"
+               << "    \"manifest_version\": \"0.2\",\n"
+               << "    \"schema_version\": \"1.0.0\",\n"
+               << "    \"dataset_id\": \"perisci_dataset_stub\",\n"
+               << "    \"dataset_version\": \"" << dataset_version << "\",\n"
+               << "    \"status\": \"" << to_string(results.status) << "\",\n"
+               << "    \"provenance\": {\n"
+               << "      \"generator\": {\n"
+               << "        \"tool\": \"export_dataset\",\n"
+               << "        \"tool_version\": \"" << tool_version << "\"\n"
+               << "      },\n"
+               << "      \"created_at\": \"" << created_at << "\",\n"
+               << "      \"config_hash\": \"" << config_hash << "\",\n"
+               << "      \"inputs\": {\n"
+               << "        \"config_path\": \"config/config.json\",\n"
+               << "        \"code_ref\": \"code/\"\n"
+               << "      }\n"
+               << "    },\n"
+               << "    \"code\": {\n"
+               << "      \"code_version\": \"unknown\",\n"
+               << "      \"dirty\": true\n"
+               << "    },\n"
+               << "    \"results\": {\n"
+               << "      \"path\": \"results/\",\n"
+               << "      \"files\": []\n"
+               << "    }\n"
                << "  }\n"
                << "}\n";
 
