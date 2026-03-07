@@ -975,6 +975,9 @@ Allowed values:
 
 Indicates the generation status of the dataset. `partial` and `failed` MUST NOT be ignored or implicitly inferred.
 
+该字段表示数据集生成状态，并且是唯一合法的状态字段。provenance 对象不得再定义 status 字段。
+This field represents the dataset generation status and is the only valid status field. The provenance object MUST NOT define a separate `status` field.
+
 ------
 
 #### 7.3.5 provenance
@@ -1485,8 +1488,8 @@ If any condition is not satisfied:
 
 ### 8.7.1 验证工具 | Validation Tool
 
-必须存在自动化验证机制（例如 `validate_dataset` 工具）。
-An automated validation mechanism MUST exist (e.g., the validate_dataset tool).
+必须存在自动化验证机制（例如 `validate_dataset` 工具，对应 CLI 命令 `perisci-validate`）。
+An automated validation mechanism MUST exist (e.g., the `validate_dataset` tool, exposed via the CLI command `perisci-validate`).
 
 该工具至少应：
 
@@ -1754,35 +1757,17 @@ Constraints:
 ```
 "provenance": {
   "created_at": "2026-01-27T10:32:11Z",
-  "status": "success"
 }
 ```
 
-其中 `status` 取值限定为：
-
-- `success`：完整成功生成
-- `partial`：部分生成（见 §10.4）
-- `failed`：失败但留下记录
-
-Where `status` SHALL be restricted to:
-
-- `success`: fully successful generation
-- `partial`: partially generated (see §10.4)
-- `failed`: failed but recorded
-
-约束：
+约束 | Constraints：
 
 - `created_at` 必须使用 ISO 8601 格式
-- `status` 不得被省略
-- 不得将失败运行标记为 `success`
-- 不得通过删除字段掩盖失败状态
-
-Constraints:
-
 - `created_at` MUST use ISO 8601 format
-- `status` MUST NOT be omitted
-- Failed runs MUST NOT be mislabelled as `success`
-- Fields MUST NOT be removed to conceal failure status
+
+注意 | Note：
+数据集的执行状态由 manifest 顶层字段 `status` 表示，`provenance` 不再包含 `status` 字段。
+The dataset execution status is represented by the top-level `status` field of the manifest. The `provenance` object does not contain a `status` field.
 
 ------
 

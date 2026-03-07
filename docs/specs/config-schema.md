@@ -100,6 +100,23 @@ config
 └─ output
 ```
 
+说明（v0.2.x 阶段约束）：
+`solver` 分区在 v0.2.x 中仅作为 schema 结构预留，用于表达未来求解策略或求解控制参数。
+
+在当前阶段：
+- 该分区不是必需字段
+- 系统实现不保证解释或执行 solver 参数
+- v0.2.x 的平台最小闭环（如 case-00-minimal）可以完全不包含 solver 分区
+
+Note (v0.2.x stage constraint):
+The `solver` section is reserved in the schema structure for future solver strategies or execution control parameters.
+
+In the current stage:
+- The section is NOT required
+- The system does not guarantee interpretation or execution of solver parameters
+- Minimal platform cases (e.g., case-00-minimal) may omit it entirely.
+
+------
 ### 3.1 meta 元信息 | Metadata
 
 **职责 | Responsibility**：

@@ -1,22 +1,12 @@
-#include <cassert>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
-
-#if defined(_WIN32)
-#  include <cstdio>
-#  define POPEN _popen
-#  define PCLOSE _pclose
-#else
-#  include <cstdio>
-#  include <sys/wait.h>
-#  define POPEN popen
-#  define PCLOSE pclose
-#endif
 
 namespace fs = std::filesystem;
 
@@ -26,6 +16,10 @@ namespace fs = std::filesystem;
 static std::string read_all_text(const fs::path& p)
 {
   std::ifstream ifs(p, std::ios::in | std::ios::binary);
+  if (!ifs)
+  {
+    throw std::runtime_error("cannot open file for reading: " + p.string());
+  }
   std::ostringstream ss;
   ss << ifs.rdbuf();
   return ss.str();
@@ -34,6 +28,10 @@ static std::string read_all_text(const fs::path& p)
 static void write_all_text(const fs::path& p, const std::string& s)
 {
   std::ofstream ofs(p, std::ios::out | std::ios::binary);
+  if (!ofs)
+  {
+    throw std::runtime_error("cannot open file for writing: " + p.string());
+  }
   ofs << s;
 }
 
@@ -42,60 +40,101 @@ static bool contains(const std::string& s, const std::string& needle)
   return s.find(needle) != std::string::npos;
 }
 
-/**
- * Run a command and capture stdout. Optionally feed stdin.
- * Returns {exit_code, stdout_text}.
- *
- * Note:
- * - uses popen; stderr is redirected to stdout for debugging.
- */
-static std::pair<int, std::string> run_capture(const std::string& cmd,
-                                               const std::string& stdin_text = "")
+static std::string trim(const std::string& s)
 {
-  fs::path tmp_in;
-  std::string final_cmd = cmd;
+  const char* ws = " \t\r\n";
+  const auto begin = s.find_first_not_of(ws);
+  if (begin == std::string::npos)
+    return {};
+  const auto end = s.find_last_not_of(ws);
+  return s.substr(begin, end - begin + 1);
+}
 
-  if (!stdin_text.empty())
-  {
-    tmp_in =
-        fs::temp_directory_path() / ("perisci_test_stdin_" + std::to_string(std::rand()) + ".txt");
-    write_all_text(tmp_in, stdin_text);
-
-#if defined(_WIN32)
-    final_cmd = "type \"" + tmp_in.string() + "\" | " + cmd;
-#else
-    final_cmd = "cat \"" + tmp_in.string() + "\" | " + cmd;
-#endif
-  }
-
-  // Redirect stderr to stdout
-  final_cmd += " 2>&1";
-
+static std::string json_unescape(const std::string& s)
+{
   std::string out;
-  FILE* pipe = POPEN(final_cmd.c_str(), "r");
-  if (!pipe)
+  out.reserve(s.size());
+
+  for (std::size_t i = 0; i < s.size(); ++i)
   {
-    if (!tmp_in.empty())
-      fs::remove(tmp_in);
-    return {127, "popen failed"};
+    char c = s[i];
+    if (c == '\\' && i + 1 < s.size())
+    {
+      const char n = s[i + 1];
+      switch (n)
+      {
+      case '\\':
+        out.push_back('\\');
+        ++i;
+        break;
+      case '"':
+        out.push_back('"');
+        ++i;
+        break;
+      case '/':
+        out.push_back('/');
+        ++i;
+        break;
+      case 'b':
+        out.push_back('\b');
+        ++i;
+        break;
+      case 'f':
+        out.push_back('\f');
+        ++i;
+        break;
+      case 'n':
+        out.push_back('\n');
+        ++i;
+        break;
+      case 'r':
+        out.push_back('\r');
+        ++i;
+        break;
+      case 't':
+        out.push_back('\t');
+        ++i;
+        break;
+      default:
+        out.push_back(c);
+        break;
+      }
+    }
+    else
+    {
+      out.push_back(c);
+    }
   }
 
-  char buffer[4096];
-  while (std::fgets(buffer, sizeof(buffer), pipe))
-  {
-    out += buffer;
-  }
+  return out;
+}
 
-  int rc = PCLOSE(pipe);
+/**
+ * Extremely small JSON string extractor for flat/simple cases.
+ * Assumes `"key": "value"` shape somewhere in the text.
+ * Returns empty string if not found.
+ */
+static std::string extract_json_string_field(const std::string& json, const std::string& key)
+{
+  const std::string needle = "\"" + key + "\"";
+  const auto key_pos = json.find(needle);
+  if (key_pos == std::string::npos)
+    return {};
 
-#if !defined(_WIN32)
-  if (WIFEXITED(rc))
-    rc = WEXITSTATUS(rc);
-#endif
+  const auto colon_pos = json.find(':', key_pos + needle.size());
+  if (colon_pos == std::string::npos)
+    return {};
 
-  if (!tmp_in.empty())
-    fs::remove(tmp_in);
-  return {rc, out};
+  const auto first_quote = json.find('"', colon_pos + 1);
+  if (first_quote == std::string::npos)
+    return {};
+
+  const auto second_quote = json.find('"', first_quote + 1);
+  if (second_quote == std::string::npos)
+    return {};
+
+  const std::string value = json.substr(first_quote + 1, second_quote - first_quote - 1);
+  return json_unescape(value);
 }
 
 static std::string get_env_or_empty(const char* key)
@@ -120,31 +159,81 @@ static std::string require_env_exe(const char* key)
 }
 
 /**
- * Find a JSON file under dir that likely contains a dataset manifest.
- * Heuristic: file extension .json and contains substring "\"manifest\"".
- *
- * (If later you freeze manifest path, replace this by direct path check.)
+ * Walk upward from current_path() until repository root is found.
+ * Criterion: cases/case-00-minimal/input.json exists.
  */
-static fs::path find_manifest_json(const fs::path& dir)
+static fs::path find_repo_root()
 {
-  if (!fs::exists(dir))
-    return {};
+  fs::path p = fs::current_path();
 
-  for (auto const& entry : fs::recursive_directory_iterator(dir))
+  for (;;)
   {
-    if (!entry.is_regular_file())
-      continue;
-    auto p = entry.path();
-    if (p.extension() != ".json")
-      continue;
-
-    std::string txt = read_all_text(p);
-    if (contains(txt, "\"manifest\""))
+    const fs::path input = p / "cases" / "case-00-minimal" / "input.json";
+    const fs::path expected = p / "cases" / "case-00-minimal" / "expected.json";
+    if (fs::exists(input) && fs::exists(expected))
     {
       return p;
     }
+
+    if (!p.has_parent_path() || p.parent_path() == p)
+      break;
+    p = p.parent_path();
   }
+
   return {};
+}
+
+/**
+ * Cross-platform command runner aligned with tests/test_cli_boundaries.cpp.
+ * Uses temp files for stdin/stdout/stderr.
+ */
+static std::pair<int, std::string> run_capture(const std::vector<std::string>& args,
+                                               const fs::path& workdir,
+                                               const std::string* stdin_text)
+{
+  const fs::path in_file = workdir / "__stdin.txt";
+  const fs::path out_file = workdir / "__stdout.txt";
+
+  if (stdin_text)
+    write_all_text(in_file, *stdin_text);
+
+  std::ostringstream cmd;
+#ifdef _WIN32
+  cmd << "cmd /c \"";
+  for (std::size_t i = 0; i < args.size(); ++i)
+  {
+    if (i)
+      cmd << " ";
+    cmd << args[i];
+  }
+  if (stdin_text)
+    cmd << " < \"" << in_file.string() << "\"";
+  cmd << " > \"" << out_file.string() << "\" 2>&1";
+  cmd << "\"";
+#else
+  cmd << "cd \"" << workdir.string() << "\" && ";
+  for (std::size_t i = 0; i < args.size(); ++i)
+  {
+    if (i)
+      cmd << " ";
+    cmd << args[i];
+  }
+  if (stdin_text)
+    cmd << " < \"" << in_file.filename().string() << "\"";
+  cmd << " > \"" << out_file.filename().string() << "\" 2>&1";
+#endif
+
+  const int rc = std::system(cmd.str().c_str());
+
+  std::string out;
+  if (fs::exists(out_file))
+    out = read_all_text(out_file);
+
+  std::error_code ec;
+  fs::remove(in_file, ec);
+  fs::remove(out_file, ec);
+
+  return {rc, out};
 }
 
 // -----------------------------
@@ -152,136 +241,192 @@ static fs::path find_manifest_json(const fs::path& dir)
 // -----------------------------
 int main()
 {
-  // Minimal v0.2.x config: only meta (schema frozen rule).
-  const std::string config_json = R"json(
-{
-  "meta": {
-    "schema_version": "1.0.0",
-    "config_id": "case-00-minimal"
-  }
-}
-)json";
-
-  // Governance mode: CTest must provide the ONLY authoritative paths.
-  const std::string perisci_run = require_env_exe("PERISCI_RUN");
-  const std::string perisci_export = require_env_exe("PERISCI_EXPORT");
-  const std::string perisci_validate = require_env_exe("PERISCI_VALIDATE");
-
-  // Temp output directory for export
-  const fs::path out_dir =
-      fs::temp_directory_path() / ("perisci_case_00_export_" + std::to_string(std::rand()));
-  fs::create_directories(out_dir);
-
-  // -----------------------------
-  // Step 1: run_case (CLI)
-  // -----------------------------
+  try
   {
-    const std::string cmd = "\"" + perisci_run + "\" --config -";
-    auto [rc, out] = run_capture(cmd, config_json);
+    const std::string perisci_run = require_env_exe("PERISCI_RUN");
+    const std::string perisci_export = require_env_exe("PERISCI_EXPORT");
+    const std::string perisci_validate = require_env_exe("PERISCI_VALIDATE");
 
-    if (rc != 0)
+    const fs::path repo_root = find_repo_root();
+    if (repo_root.empty())
     {
-      std::cerr << "[case-00] perisci-run failed (rc=" << rc << ")\n";
-      std::cerr << out << "\n";
-      return 1;
+      std::cerr << "[case-00] could not locate repository root containing "
+                   "cases/case-00-minimal/{input.json,expected.json}\n";
+      std::cerr << "Current working directory: " << fs::current_path().string() << "\n";
+      return 2;
     }
 
-    // Smoke: output should be JSON-ish.
-    if (!contains(out, "{") || !contains(out, "}"))
+    const fs::path case_dir = repo_root / "cases" / "case-00-minimal";
+    const fs::path input_path = case_dir / "input.json";
+    const fs::path expected_path = case_dir / "expected.json";
+
+    if (!fs::exists(input_path))
     {
-      std::cerr << "[case-00] perisci-run output not JSON-like.\n";
-      std::cerr << out << "\n";
-      return 1;
+      std::cerr << "[case-00] missing input file: " << input_path.string() << "\n";
+      return 2;
+    }
+    if (!fs::exists(expected_path))
+    {
+      std::cerr << "[case-00] missing expected file: " << expected_path.string() << "\n";
+      return 2;
     }
 
-    // Gate: must not be a failed run.
-    // (Once you freeze the bundle schema, tighten to exact field check.)
-    if (contains(out, "\"status\":\"failed\""))
+    const std::string config_json = read_all_text(input_path);
+    const std::string expected_json = read_all_text(expected_path);
+    const std::string status_must_not_be =
+        extract_json_string_field(expected_json, "status_must_not_be");
+
+    const fs::path out_dir =
+        fs::temp_directory_path() / ("perisci_case_00_export_" + std::to_string(std::rand()));
+    fs::remove_all(out_dir);
+    fs::create_directories(out_dir);
+
+    // -----------------------------
+    // Step 1: run_case (CLI)
+    // -----------------------------
     {
-      std::cerr << "[case-00] perisci-run returned failed status.\n";
-      std::cerr << out << "\n";
-      return 1;
+      std::vector<std::string> cmd = {"\"" + fs::path(perisci_run).string() + "\"",
+                                      "--config",
+                                      "-"};
+
+      auto [rc, out] = run_capture(cmd, out_dir, &config_json);
+
+      if (rc != 0)
+      {
+        std::cerr << "[case-00] perisci-run failed (rc=" << rc << ")\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+
+      if (!contains(out, "{") || !contains(out, "}"))
+      {
+        std::cerr << "[case-00] perisci-run output not JSON-like.\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+
+      if (!status_must_not_be.empty())
+      {
+        const std::string status = extract_json_string_field(out, "status");
+        if (!status.empty() && status == status_must_not_be)
+        {
+          std::cerr << "[case-00] run result violates expected rule: status_must_not_be="
+                    << status_must_not_be << "\n";
+          std::cerr << out << "\n";
+          return 1;
+        }
+
+        const std::string forbidden_fragment = "\"status\":\"" + status_must_not_be + "\"";
+        if (contains(out, forbidden_fragment))
+        {
+          std::cerr << "[case-00] run result violates expected rule: status_must_not_be="
+                    << status_must_not_be << "\n";
+          std::cerr << out << "\n";
+          return 1;
+        }
+      }
+
+      write_all_text(out_dir / "run_bundle.json", out);
     }
 
-    write_all_text(out_dir / "run_bundle.json", out);
+    // -----------------------------
+    // Step 2: export_dataset (CLI)
+    // -----------------------------
+    fs::path dataset_root;
+    {
+      const std::string bundle = read_all_text(out_dir / "run_bundle.json");
+
+      std::vector<std::string> cmd = {"\"" + fs::path(perisci_export).string() + "\"",
+                                      "--bundle",
+                                      "-",
+                                      "--out",
+                                      "\"" + out_dir.string() + "\""};
+
+      auto [rc, out] = run_capture(cmd, out_dir, &bundle);
+
+      if (rc != 0)
+      {
+        std::cerr << "[case-00] perisci-export failed (rc=" << rc << ")\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+
+      if (!contains(out, "{") || !contains(out, "\"ok\":"))
+      {
+        std::cerr << "[case-00] perisci-export output not recognized as JSON report.\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+      if (contains(out, "\"ok\":false"))
+      {
+        std::cerr << "[case-00] perisci-export reported ok=false.\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+
+      write_all_text(out_dir / "export_report.json", out);
+
+      const std::string dataset_root_str = trim(extract_json_string_field(out, "dataset_root"));
+      if (dataset_root_str.empty())
+      {
+        std::cerr << "[case-00] perisci-export did not report dataset_root.\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+
+      dataset_root = fs::path(dataset_root_str);
+      if (!fs::exists(dataset_root))
+      {
+        std::cerr << "[case-00] reported dataset_root does not exist:\n";
+        std::cerr << "  " << dataset_root.string() << "\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+    }
+
+    // -----------------------------
+    // Step 3: validate (CLI)
+    // -----------------------------
+    {
+      const fs::path manifest = dataset_root / "manifest.json";
+      if (!fs::exists(manifest))
+      {
+        std::cerr << "[case-00] expected manifest file not found:\n";
+        std::cerr << "  " << manifest.string() << "\n";
+        std::cerr << "dataset_root reported by export: " << dataset_root.string() << "\n";
+        return 1;
+      }
+
+      std::vector<std::string> cmd = {"\"" + fs::path(perisci_validate).string() + "\"",
+                                      "\"" + manifest.string() + "\""};
+
+      auto [rc, out] = run_capture(cmd, out_dir, nullptr);
+
+      if (rc != 0)
+      {
+        std::cerr << "[case-00] perisci-validate failed (rc=" << rc << ")\n";
+        std::cerr << "Manifest: " << manifest.string() << "\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+
+      if (!contains(out, "\"ok\":true"))
+      {
+        std::cerr << "[case-00] perisci-validate did not report ok=true.\n";
+        std::cerr << out << "\n";
+        return 1;
+      }
+    }
+
+    std::error_code ec;
+    fs::remove_all(out_dir, ec);
+
+    std::cout << "[case-00] regression gate PASSED\n";
+    return 0;
   }
-
-  // -----------------------------
-  // Step 2: export_dataset (CLI)
-  //   ONLY legal calling pattern per apps/perisci_export_main.cpp:
-  //     perisci-export --bundle - --out <output_dir>
-  // -----------------------------
+  catch (const std::exception& e)
   {
-    const std::string bundle = read_all_text(out_dir / "run_bundle.json");
-
-    const std::string cmd =
-        "\"" + perisci_export + "\" --bundle - --out \"" + out_dir.string() + "\"";
-
-    auto [rc, out] = run_capture(cmd, bundle);
-    if (rc != 0)
-    {
-      std::cerr << "[case-00] perisci-export failed (rc=" << rc << ")\n";
-      std::cerr << out << "\n";
-      std::cerr << "Expected the ONLY supported usage: perisci-export --bundle - --out <dir>\n";
-      return 1;
-    }
-
-    // Export prints a small JSON: {"ok":true/false,"dataset_root":"...","message":"..."}
-    if (!contains(out, "{") || !contains(out, "\"ok\":"))
-    {
-      std::cerr << "[case-00] perisci-export output not recognized as JSON report.\n";
-      std::cerr << out << "\n";
-      return 1;
-    }
-    if (contains(out, "\"ok\":false"))
-    {
-      std::cerr << "[case-00] perisci-export reported ok=false.\n";
-      std::cerr << out << "\n";
-      return 1;
-    }
-
-    write_all_text(out_dir / "export_report.json", out);
+    std::cerr << "[case-00] unexpected exception: " << e.what() << "\n";
+    return 2;
   }
-
-  // -----------------------------
-  // Step 3: validate (CLI)
-  // -----------------------------
-  {
-    // Locate a manifest-like json file produced by export.
-    fs::path manifest = find_manifest_json(out_dir);
-    if (manifest.empty())
-    {
-      std::cerr << "[case-00] could not locate a dataset manifest json under export output dir:\n";
-      std::cerr << "  " << out_dir.string() << "\n";
-      std::cerr
-          << "Hint: ensure export_dataset writes a manifest json containing key \"manifest\".\n";
-      return 1;
-    }
-
-    const std::string cmd = "\"" + perisci_validate + "\" \"" + manifest.string() + "\"";
-    auto [rc, out] = run_capture(cmd);
-
-    if (rc != 0)
-    {
-      std::cerr << "[case-00] perisci-validate failed (rc=" << rc << ")\n";
-      std::cerr << "Manifest: " << manifest.string() << "\n";
-      std::cerr << out << "\n";
-      return 1;
-    }
-
-    // Expect ok=true in validation report (align with your validate/report style).
-    if (!contains(out, "\"ok\":true"))
-    {
-      std::cerr << "[case-00] perisci-validate did not report ok=true.\n";
-      std::cerr << out << "\n";
-      return 1;
-    }
-  }
-
-  // Cleanup (best effort)
-  std::error_code ec;
-  fs::remove_all(out_dir, ec);
-
-  std::cout << "[case-00] regression gate PASSED\n";
-  return 0;
 }
