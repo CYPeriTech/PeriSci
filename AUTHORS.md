@@ -10,10 +10,10 @@ CITATION.cff and MAINTAINERS.md.
 ---
 
 ## 项目发起人与首席维护者 | Project Founder and Lead Maintainer
-- **韩非（Han Fei）**  
+- **韩非（Fei Han）**  
   - 角色：项目发起人 / 首席维护者  
-  - Role: Project Founder / Lead Maintainer  
-  - 邮箱（Email）： hanfei8172@126.com
+  - Role:  Project Founder / Lead Maintainer  
+  - Email:  hanfei8172@126.com
 
 ---
 
@@ -26,15 +26,7 @@ The following individuals have made significant contributions to the design,
 implementation, documentation, or ecosystem of PeriSci.
 Names are listed in order of confirmed contribution.
 
-- **xxx** （示例 / Example）  
-  - 角色：核心贡献者  
-  - Role: Core Contributor  
-  - 邮箱（Email）：xxx@xxx  
-
-- **xxx**  
-  - 角色：核心贡献者  
-  - Role: Core Contributor  
-  - 邮箱（Email）：xxx@xxx  
+（当前暂无其他核心贡献者 | Currently no additional core contributors）
 
 ---
 
@@ -47,8 +39,7 @@ Contributors who have submitted code, documentation, tests, examples,
 or provided valuable feedback may be listed here or acknowledged
 through release notes and credits.
 
-- **xxx**（示例 / Example）  
-  - 邮箱（Email）：xxx@xxx  
+（当前暂无记录 | Currently none recorded）
 
 ---
 

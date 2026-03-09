@@ -1,32 +1,29 @@
 # 更新日志 | Changelog
 
+本文件遵循 Keep a Changelog 规范，并与项目的 Semantic Versioning 版本策略保持一致。
+This file follows the Keep a Changelog format and adheres to Semantic Versioning.
+
 本文件记录项目中所有 **对用户、物理模型或数值方法有影响的重要变更**。
+This file records all **significant changes that affect users, physical models, or numerical methods**.
 
 更新日志遵循以下原则：
 - 语义化版本管理
 - 面向科学计算的可复现性
 - 对物理模型与数值方法变化保持透明
 
+The changelog follows these principles:
+- Semantic versioning
+- Reproducibility for scientific computing
+- Transparency regarding changes to physical models and numerical methods
+
 ---
 
-## [v0.1.4] - 2026-01-23
+## [v0.1.5] - 2026-01-26
 
 ### Added | 新增
+
 - 初始仓库结构
 - 贡献规范与版本管理文档
-
-### Changed | 变更
-- 
-
-### Fixed | 修复
-- 
-
----
-
-## [v0.1.5] - 2026-01-23
-
-### Added | 新增
-
 - 最小构建系统与 CI 流水线
 - 第一个可运行示例（`examples/hello`）
 
@@ -40,7 +37,7 @@
 
 ---
 
-## [v0.2.0] - 2026-02-XX
+## [v0.2.0] - 2026-03-XX
 
 本版本为“契约冻结与治理体系确立版本”。  
 本次更新不以数值能力扩展为目标，而以三梁执行契约、数据集资产规范与版本红线体系冻结为核心。
@@ -54,7 +51,7 @@
 - A 梁：`config_schema` 权威输入契约结构冻结
 - B 梁：`run_case(config)` 纯执行接口确立
 - C 梁：`export_dataset(results)` 资产级输出接口确立
-- 明确三梁职责边界与不可绕过规则
+- 明确三梁职责边界与调用路径约束
 
 #### 数据集规范（dataset-spec）冻结
 
@@ -76,7 +73,7 @@
 
 #### 冻结语义与资产级定义确立
 
-- 明确 Freeze 为治理状态，而非文件系统操作
+- 明确 Freeze 为数据集治理状态，而非文件系统操作
 - 明确 Freeze 判定仅基于 canonical 元数据
 - 明确资产级（Asset-Level）治理定位
 - 明确 dataset_version 为资产结构与语义唯一判定标识
@@ -85,7 +82,7 @@
 
 ### Changed | 变更
 
-- 将 examples 语义升级为资产导向结构（为后续 cases 演进做准备）
+- 将 examples 语义升级为资产导向结构，为未来 cases 资产体系演进做准备
 - 明确禁止隐式语义、默认值绕过与结构复用
 - 统一所有规范性条款为 MUST / SHALL 级表达
 - 统一中英文对照版本
@@ -104,7 +101,7 @@
 ### Governance Impact | 治理影响说明
 
 - 本版本确立 C 梁为资产级输出边界
-- 自 v0.2.0 起，任何数据集结构破坏性修改必须提升 `dataset_version` 主版本号
+- 自 v0.2.0 起，任何数据集结构破坏性修改必须提升 `dataset_version` 主版本 (major version)
 - 自 v0.2.0 起，版本引用不完整视为不可复现状态
 - 自 v0.2.0 起，三梁契约进入冻结阶段
 
@@ -122,9 +119,7 @@
 ## [v0.3.0] - YYYY-MM-DD
 
 ### Added | 新增
-- 面向学生用户的教学入口（MVP）
-- PeriFEM 静态损伤仿真能力
-- 教学示例与可视化输出
+- 
 
 ### Changed | 变更
 - 
@@ -137,9 +132,7 @@
 ## [v0.4.0] - YYYY-MM-DD
 
 ### Added | 新增
-- 面向工程用户的 CLI 工作流
-- 批量计算与诊断指标输出
-- 输出与数据集稳定性增强
+- 
 
 ### Changed | 变更
 - 
@@ -152,9 +145,7 @@
 ## [v0.5.0] - YYYY-MM-DD
 
 ### Added | 新增
-- 面向 AI 的数据集生成工具
-- 参数扫描与数据集清单（manifest）
-- AI 代理模型（baseline）示例
+- 
 
 ### Changed | 变更
 - 
@@ -167,9 +158,7 @@
 ## [v1.0.0] - YYYY-MM-DD
 
 ### Added | 新增
-- 稳定的配置与数据集规范
-- 长期可复现性保证
-- 正式公共 API 定义
+- 
 
 ### Changed | 变更
 - 
@@ -184,3 +173,6 @@
 - 仅记录 **对用户可见或对物理模型/数值方法有影响的变更**
 - 纯内部重构可不记录
 - 所有破坏性变更必须明确说明
+- Only changes that are **visible to users or affect physical models or numerical methods** are recorded
+- Pure internal refactoring may be omitted
+- All breaking changes must be explicitly documented
