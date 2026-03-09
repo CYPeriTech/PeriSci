@@ -15,27 +15,25 @@ academia, industry, and the open-source community.
 
 ## 1. 项目阶段说明 | Project Stage
 
-PeriSci 当前处于 **早期开发阶段（v0.x）**。
+PeriSci 当前处于 **v0.2.x 阶段（接口冻结 / 架构稳定化阶段）**。
 
 在这一阶段：
-- 软件架构仍在逐步完善
-- 接口与实现可能发生演进
-- 对贡献的重点是 **正确性、可复现性与设计一致性**
 
-请在贡献前理解：  
-**并非所有 Pull Request 都会被立即合并**，
-但每一份合理的贡献都会被认真评审。
+- 系统主架构与分层边界已基本确立
+- 公共契约正在冻结，并以可复现、可验证为优先目标
+- 接口与实现仍可能演进，但任何变更都应服从 **正确性、可复现性与设计一致性**
 
-PeriSci is currently in an **early development stage (v0.x)**.
+请在贡献前理解：**并非所有 Pull Request 都会被立即合并**，但每一份合理的贡献都会被认真评审。
+
+PeriSci is currently in the **v0.2.x stage (interface-freeze / architectural stabilization stage)**.
 
 At this stage:
-- The software architecture is still evolving
-- APIs and implementations may change
-- Contributions are evaluated primarily for **correctness,
-  reproducibility, and architectural consistency**
 
-Please note that **not all Pull Requests will be merged immediately**,  
-but every reasonable contribution will be carefully reviewed.
+- The system’s main architecture and layer boundaries have largely been established
+- Public contracts are being frozen, with reproducibility and verifiability as the primary goals
+- APIs and implementations may still evolve, but any change must remain consistent with **correctness, reproducibility, and architectural consistency**
+
+Please note that **not all Pull Requests will be merged immediately**, but every reasonable contribution will be carefully reviewed.
 
 ---
 
@@ -77,59 +75,112 @@ but every reasonable contribution will be carefully reviewed.
 
 
 
-> ### 算例命名与组织规范 | Case Naming and Organization
+> ### 示例与算例的命名与组织规范 | Naming and Organization of Examples and Cases
 >
-> 算例遵循 README的核心理念 中 算例驱动的生长模式
-> The new cases follow the "case-driven growth model" as described in the README - Core Philosophy
+> PeriSci 采用 `examples/` 与 `cases/` 分离的组织方式：
 >
-> #### 命名规则 | Naming Convention
-> 所有算例应放置在 `examples/` 目录下的同名文件夹中，并遵循统一的命名格式：
+> - `examples/`：用于教学、演示、探索与孵化；
+> - `cases/`：用于标准化、可复现、可回归的标准算例资产（canonical case assets）。
 >
-> case-XX-short-description
+> PeriSci uses a split organization between `examples/` and `cases/`:
+>
+> - `examples/`: for teaching, demonstration, exploration, and incubation;
+> - `cases/`: for standardized, reproducible, regression-ready canonical case assets.
+>
+> #### `examples/` 的命名规则 | Naming Convention for `examples/`
+>
+> `examples/` 下的目录应体现“示例 / 教学用途”，推荐使用：
+>
+> ```text
+> ex-XX-short-description
+> ```
 >
 > 其中：
-> - `case` 表示该目录为一项正式算例资产；
-> - `XX` 为两位或三位数字，用于表示**推荐的学习顺序**（并非强制依赖顺序）；
+>
+> - `ex` 表示 example；
+> - `XX` 为两位或三位数字，用于表示推荐学习顺序；
+> - `short-description` 为简要、稳定的语义描述，使用小写字母与连字符（kebab-case）。
+>
+> 示例：
+>
+> - `ex-00-hello`
+> - `ex-01-minimal-run`
+> - `ex-02-linear-elasticity-demo`
+>
+> Directories under `examples/` should reflect their teaching / demonstration role and are recommended to use:
+>
+> ```text
+> ex-XX-short-description
+> ```
+>
+> where:
+>
+> - `ex` denotes an example;
+> - `XX` indicates the recommended learning order;
+> - `short-description` provides a concise and stable semantic description.
+>
+> Examples include:
+>
+> - `ex-00-hello`
+> - `ex-01-minimal-run`
+> - `ex-02-linear-elasticity-demo`
+>
+> #### `cases/` 的命名规则 | Naming Convention for `cases/`
+>
+> `cases/` 下的目录表示正式 canonical case assets，推荐使用：
+>
+> ```text
+> case-XX-short-description
+> ```
+>
+> 其中：
+>
+> - `case` 表示正式标准算例资产；
+> - `XX` 为两位或三位数字，用于表示推荐学习或扩展顺序；
 > - `short-description` 为简要、稳定的算例语义描述，使用小写字母与连字符（kebab-case）。
 >
 > 示例：
+>
+> - `case-00-minimal`
 > - `case-01-poisson`
 > - `case-02-elasticity-uniform`
-> - `case-03-perifem-poisson`
 >
-> 
+> Directories under `cases/` represent canonical case assets and are recommended to use:
 >
-> All cases are placed under the `examples/` directory and follow the naming convention:
-> 
+> ```text
 > case-XX-short-description
-> 
+> ```
+>
 > where:
-> - `case` indicates a first-class numerical example;
-> - `XX` denotes the recommended learning order (not a dependency order);
-> - `short-description` provides a concise and stable semantic description.
-> 
+>
+> - `case` denotes a canonical standardized case asset;
+> - `XX` indicates the recommended learning or extension order;
+> - `short-description` provides a concise and stable case description.
+>
 > Examples include:
+>
+> - `case-00-minimal`
 > - `case-01-poisson`
 > - `case-02-elasticity-uniform`
-> - `case-03-perifem-poisson`
-> 
->
 >
 > #### 组织原则 | Organizational Principles
 >
-> - 每个算例应作为**独立、自包含的资产**存在；
-> - 算例目录中应包含清晰的输入文件、说明文档以及可用于回归测试的预期结果；
-> - 算例本身**不应引入特例化数值实现**，所有通用能力应抽象并合入核心库；
-> - 新增算例应扩展系统的通用能力，而不仅仅是增加示例数量。
+> - `examples/` 侧重“如何使用系统”的教学表达，不应被视为正式资产库；
+> - `cases/` 侧重标注化的、可复现、可比较、可回归的标准算例资产；
+> - 每个 `case` 应作为**独立、自包含、可治理的资产**存在；
+> - `case` 目录中应包含清晰的输入文件、说明文档以及可用于回归测试的预期结果；
+> - `case` 本身**不应引入特例化数值实现**，所有通用能力应抽象并合入核心库；
+> - 新增 `case` 应扩展系统的通用能力，而不仅仅是增加目录数量。
 >
-> - Each case should exist as an **independent and self-contained asset**;
-> - Each case directory should include clear input files, documentation, and expected results that can be used for regression testing;
+> - `examples/` focus on the learnable expression of how the system is intended to be used, and should not be treated as the formal asset repository;
+> - `cases/` focus on standardized, reproducible, comparable, and regression-ready canonical case assets;
+> - Each `case` should exist as an **independent, self-contained, and governable asset**;
+> - Each case directory should include clear input files, documentation, and expected results suitable for regression testing;
 > - A case itself **should not introduce case-specific numerical implementations**; all general-purpose capabilities should be abstracted and incorporated into the core library;
-> - Adding a new case should extend the system’s general capabilities, rather than merely increasing the number of examples.
-> 
+> - Adding a new `case` should extend the system’s general capabilities, rather than merely increasing the number of directories.
 >
-> 详细的设计理念请参阅仓库根目录 `README.md` 中的 *Project Philosophy*。
-> For detailed design philosophy, please refer to the *Project Philosophy* section in the repository root `README.md`
+> 详细设计理念请参阅仓库根目录 `README.md` 中的相关说明。
+> For detailed design philosophy, please refer to the relevant sections of the repository root `README.md`.
 
 ---
 
@@ -234,14 +285,14 @@ This stack has been verified to work reliably for:
 
 ### 5.2 构建系统说明 | Build Configuration
 
-PeriSci 在 v0.1.x 阶段推荐使用 **Ninja 单配置构建模式**：
+PeriSci 当前推荐使用 **Ninja 单配置构建模式**：
 
-In the v0.1.x version, PeriSci recommends using the **Ninja single configuration build mode**:
+PeriSci currently recommends **single-config Ninja builds**：
 
 ```powershell
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
-cmake --build build -j
-ctest --test-dir build
+cmake --build build
+ctest --test-dir build --output-on-failure
 ```
 
 项目已在顶层 `CMakeLists.txt` 中启用：
@@ -254,10 +305,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ```
 
-其中生成的 `compile_commands.json` 是 clangd 获取真实编译信息的关键，且为构建过程中自动生成的编译数据库文件，应由 build 目录生成并使用，不应提交到版本控制仓库中。
+其中生成的 `compile_commands.json` 是 clangd 获取真实编译信息的关键，且为构建过程中自动生成的编译数据库文件，应由`build/`目录生成并使用，不应提交到版本控制仓库中。
 
 PeriSci uses **single-config Ninja builds** during the v0.1.x phase.
-The generated `compile_commands.json` serves as the authoritative source of compilation flags for clangd，and it is an automatically generated compilation database produced during the build process and should be generated from the build directory; it must not be committed to the version control repository.
+The generated `compile_commands.json` serves as the authoritative source of compilation flags for clangd，and it is an automatically generated compilation database produced during the build process and should be generated from the `build/` directory; it must not be committed to the version control repository.
 
 ---
 
@@ -461,13 +512,13 @@ All contributions should follow these principles:
 
 ### 6.2 命名与编码原则 | Naming and Coding Principles
 
-- 有关目录结构、CMake target、公有头文件路径与 C++ 命名空间之间项目级一致性的约定，请参阅 [docs/specs/consistency_matrix.m](docs/specs/consistency_matrix.m)。
+- 有关目录结构、CMake target、公有头文件路径与 C++ 命名空间之间项目级一致性的约定，请参阅 [docs/specs/consistency_matrix.md](docs/specs/consistency_matrix.md)。
 - 关于 v0.1.x 骨架阶段中 stub 文件的命名、用途与生命周期约定，请参阅 [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md)。
 - 关于 v0.1.x 阶段公共头文件的命名规则与允许范围，以及如何避免通过头文件名称提前承诺未来能力，请参阅 [docs/specs/header_naming.md](docs/specs/header_naming.md)。
-- 有关项目级的 C++ 与 CMake 编码原则与约定，请参阅 [CODING_GUIDE.md](CODING_GUIDE.md)。
-- For project-level consistency across directory structure, CMake targets, public include paths, and C++ namespaces, please refer to [docs/specs/consistency_matrix.m](docs/specs/consistency_matrix.m).
+- 有关项目级的 C++ 与 CMake 编码原则与约定，请参阅 [docs/CODING_GUIDE.md](docs/CODING_GUIDE.md)。
+- For project-level consistency across directory structure, CMake targets, public include paths, and C++ namespaces, please refer to [docs/specs/consistency_matrix.md](docs/specs/consistency_matrix.md).
 - For naming, usage, and lifecycle conventions of stub files during the v0.1.x skeleton phase, see [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md).
-- For project-level C++ and CMake coding principles and conventions, please refer to [CODING_GUIDE.md](CODING_GUIDE.md).
+- For project-level C++ and CMake coding principles and conventions, please refer to [docs/CODING_GUIDE.md](docs/CODING_GUIDE.md).
 - For naming rules and allowed scopes of public header files during v0.1.x, and for avoiding premature capability commitments through header names, see [docs/specs/header_naming.md](docs/specs/header_naming.md).
 
 ---
@@ -520,3 +571,4 @@ For questions or collaboration inquiries, please contact us via:
 
 - GitHub / Gitee Issues
 - Pull Request discussions
+

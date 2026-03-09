@@ -155,7 +155,7 @@ PeriSci
 │ └─ exploration / incubation → cases → tests
 │
 ├─ Governance Framework
-│ └─ VERSIONING / MAINTAINERS / CONTRIBUTING
+│ └─ AUTHORS / CITATION / LICENSE / CODE_OF_CONDUCT / CHANGELOG / VERSIONING / MAINTAINERS / CONTRIBUTING
 │
 └─ Long-term Stability Structure
   └─ core → api → cases
