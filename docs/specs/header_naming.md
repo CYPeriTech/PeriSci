@@ -1,8 +1,10 @@
 # 头文件命名规范 | Header Naming Conventions
 
-> 本文档用于规定 **PeriSci v0.1.x 阶段** 公共头文件的命名规则与允许范围，以防止在骨架阶段过早引入概念性接口或破坏模块边界。
+> 本文档用于规定 **PeriSci v0.2.x 阶段** 公共头文件的命名规则与语义边界，以确保对外接口在演进过程中保持稳定、清晰且可治理。
+> This document defines naming rules and semantic boundaries for public header files in **PeriSci v0.2.x**, ensuring that external interfaces remain stable, clear, and governable during system evolution.
 >
-> This document defines naming rules and allowed scopes for public header files during **PeriSci v0.1.x**, preventing premature introduction of conceptual APIs or erosion of module boundaries.
+> 在 v0.2.x 阶段，系统架构与模块边界已经建立，公共头文件不再只是骨架占位，而是逐步形成稳定接口层。因此，其命名必须反映明确语义，并避免引入模糊或误导性的概念。
+> In the v0.2.x phase, the system architecture and module boundaries have already been established. Public headers are no longer merely skeleton placeholders, but gradually form a stable interface layer. Therefore, their naming must reflect explicit semantics and avoid introducing vague or misleading concepts.
 
 ------
 
@@ -10,12 +12,14 @@
 
 ### 1.1 文档目的 | Purpose
 
-- 明确哪些头文件名称在 v0.1.x 阶段是被允许的
-- 防止 core 模块因头文件命名而隐式承诺未来能力
-- 为后续版本的接口扩展保留足够设计空间
-- Clarify which header names are allowed during v0.1.x
-- Prevent the core module from implicitly committing to future capabilities
-- Preserve sufficient design space for future interface evolution
+- 明确 v0.2.x 阶段公共头文件的命名原则
+- 防止头文件命名破坏既有模块边界
+- 避免通过名称引入未经设计讨论的概念
+- 为接口稳定性与未来版本演进提供清晰约束
+- Define naming principles for public headers in v0.2.x
+- Prevent header naming from eroding established module boundaries
+- Avoid introducing undeclared concepts through header names
+- Provide clear constraints for interface stability and future evolution
 
 ### 1.2 适用范围 | Scope
 
@@ -30,10 +34,20 @@
 
 ### 2.1 最小暴露原则 | Minimal Exposure Principle
 
-- 公共头文件的命名即构成对外语义承诺
-- v0.1.x 阶段应尽量减少此类承诺的数量与范围
-- Public header names constitute semantic commitments
-- During v0.1.x, such commitments should be minimized
+公共头文件的命名即构成对外语义承诺。
+Public header names constitute semantic commitments to external users.
+
+在 v0.2.x 阶段，这些承诺应：
+
+- 与已建立的模块职责保持一致
+- 反映稳定的接口语义
+- 避免泄露内部实现结构
+
+In v0.2.x, these commitments must:
+
+- remain consistent with established module responsibilities
+- reflect stable interface semantics
+- avoid exposing internal implementation structures
 
 ### 2.2 名称即概念 | Names Imply Concepts
 
@@ -53,51 +67,58 @@
 - The core module carries only lowest-level, long-term stable infrastructure
 - It must not express physical, numerical, or solver-level concepts
 
-### 3.2 v0.1.x 阶段允许的头文件名称 | Allowed Header Names in v0.1.x
+### 3.2 v0.2.x 阶段推荐的基础头文件 | Recommended Core Headers in v0.2.x
 
-以下为 **core 模块在 v0.1.x 阶段允许出现的典型头文件名称**：
+在 v0.2.x 阶段，core 模块的公共头文件应仍然保持最小集合，但允许在基础设施层面逐步形成稳定接口。
 
-- `version.hpp`（版本信息）
-- `export.hpp`（符号导出与可见性控制）
-- `platform.hpp`（平台与编译环境相关定义，如需要）
-- `types.hpp`（基础类型别名，如确有必要）
+典型示例包括：
 
-The following are **typical header names allowed in the core module during v0.1.x**:
+- version.hpp（版本信息）
+- export.hpp（符号导出与可见性控制）
+- platform.hpp（平台相关定义）
+- types.hpp（基础类型定义）
+- error.hpp（基础错误类型，如需要）
 
-- `version.hpp` (version information)
-- `export.hpp` (symbol export and visibility control)
-- `platform.hpp` (platform/build environment definitions, if needed)
-- `types.hpp` (basic type aliases, if strictly necessary)
+上述头文件仅用于表达基础设施语义，不得引入领域层或求解层概念。
 
-> 注：上述列表为指导性示例，并非强制穷举；
-> 任何新增名称都应接受严格审视。
->
-> Note: The above list is illustrative, not exhaustive;
-> any additional names require careful scrutiny.
+In v0.2.x, public headers in the core module should still remain minimal, but stable infrastructure interfaces may gradually emerge.
 
-### 3.3 明确禁止的头文件名称 | Explicitly Prohibited Names
+Typical examples include:
 
-在 v0.1.x 阶段，core 模块 **禁止** 出现如下类型的头文件名称：
+- version.hpp (version information)
+- export.hpp (symbol export and visibility control)
+- platform.hpp (platform-related definitions)
+- types.hpp (basic type definitions)
+- error.hpp (basic error types, if necessary)
 
-- `mesh.hpp`
-- `material.hpp`
-- `solver.hpp`
-- `config.hpp`
-- `case.hpp`
-- `results.hpp`
+These headers are limited to infrastructure semantics and must not introduce domain or solver-level concepts.
 
-During v0.1.x, the following categories of header names are **explicitly prohibited** in the core module:
+> 注：上述列表为指导性示例，并非强制穷举；任何新增名称都应接受严格审视。
+> Note: The above list is illustrative, not exhaustive; any additional names require careful scrutiny.
 
-- `mesh.hpp`
-- `material.hpp`
-- `solver.hpp`
-- `config.hpp`
-- `case.hpp`
-- `results.hpp`
+### 3.3 不应出现在 core 模块中的语义 | Concepts Not Belonging to core
 
-这些名称通常意味着高层语义或对未来能力的提前承诺。
+以下类型的语义通常不属于 core 模块职责，因此不应在 core 的公共头文件中出现：
 
-These names typically imply higher-level semantics or premature commitments.
+- mesh.hpp
+- material.hpp
+- solver.hpp
+- config.hpp
+- case.hpp
+- results.hpp
+
+这些名称通常代表更高层语义，应由上层模块（如 api 或 future domain modules）承担。
+
+The following semantic concepts generally do not belong to the responsibility of the core module and therefore should not appear as public headers in core:
+
+- mesh.hpp
+- material.hpp
+- solver.hpp
+- config.hpp
+- case.hpp
+- results.hpp
+
+These names typically represent higher-level semantics and should be owned by upper modules such as api or future domain modules.
 
 ------
 
@@ -105,10 +126,26 @@ These names typically imply higher-level semantics or premature commitments.
 
 ### 4.1 api 模块的语义角色 | Semantic Role
 
-- api 模块用于表达对外可见的执行意图与使用接口
-- 允许出现描述“用例、配置、结果”等语义的头文件
-- The api module expresses user-facing intent and usage interfaces
-- Headers describing cases, configuration, or results are allowed
+- api 模块用于表达系统对外可见的执行意图与使用接口。
+- 在 v0.2.x 阶段，api 模块逐步形成稳定的用户接口层。
+- The api module expresses user-visible execution intent and usage interfaces.
+- In the v0.2.x phase, the api module gradually forms a stable user-facing interface layer.
+
+因此，api 模块的公共头文件允许出现描述以下语义的名称：
+
+- 用例（case）
+- 配置（config）
+- 结果（results）
+
+这些名称表达的是用户可见的接口语义，而不是内部实现结构。
+
+Therefore, public headers in the api module may use names that express the following semantics:
+
+- case
+- configuration
+- results
+
+These names represent user-visible interface semantics rather than internal implementation details.
 
 ### 4.2 命名指导原则 | Naming Guidance
 
@@ -142,12 +179,21 @@ Before introducing a new public header, reviewers should ask:
 - Significant changes to header naming may affect architectural boundaries
 - Such changes should be recorded via ADRs
 
+当头文件命名变化影响 API 稳定性或模块职责划分时，必须通过 ADR 进行显式架构决策记录。
+If a header naming change affects API stability or module responsibility boundaries, it MUST be recorded as an ADR.
+
 ------
 
 ## 6. 结语 | Closing Notes
 
 头文件命名是最早形成“技术承诺”的接口层。
-在 v0.1.x 阶段保持克制，是为未来留下自由度。
+Header naming is one of the earliest layers where technical commitments emerge.
 
-Header naming is the earliest form of technical commitment.
-Restraint during v0.1.x preserves freedom for future evolution.
+一个公共头文件的名称不仅表达其语义职责，也隐含了对外接口的长期稳定性预期。
+The name of a public header not only expresses its semantic responsibility, but also implies expectations of long-term interface stability.
+
+因此，公共头文件名一旦被发布，应视为稳定接口的一部分。
+Therefore, once a public header name is released, it should be treated as part of the stable interface.
+
+对公共头文件的重命名通常属于潜在破坏性变更，必须通过版本策略或 ADR 进行治理与记录。
+Renaming a public header is typically a potentially breaking change and must be governed through versioning policies or recorded via ADRs.

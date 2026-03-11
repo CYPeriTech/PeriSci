@@ -433,6 +433,109 @@ Explicitly prohibited:
 
 ------
 
+### 2.3.1 Results 的契约边界 | Contract Boundary of Results
+
+`run_case` 返回的 `results` 是 **B 梁的权威运行态结果对象**。
+The `results` returned by `run_case` are the **authoritative runtime result object of Beam B**.
+
+它的职责是：
+
+- 作为一次 `run_case` 调用的唯一结构化执行结果；
+- 作为 `export_dataset` 的唯一合法上游结果输入；
+- 作为回归测试与上层调用者可稳定消费的接口产物。
+
+Their role is to:
+
+- serve as the sole structured execution result of a single `run_case` invocation;
+- serve as the sole legitimate upstream result input to `export_dataset`;
+- serve as an interface artifact that can be stably consumed by regression tests and upper-level callers.
+
+在 v0.2.x 阶段，`results` 的契约边界遵循以下规则：
+
+- `results` 必须保持为**结构化、可程序化消费的对象**，而不是松散拼接的临时数据；
+- `results` 中对外稳定暴露并被 `export_dataset`、测试或上层调用方依赖的字段语义，不得被隐式改变；
+- 若 `results` 的稳定字段语义发生破坏性变更，则该变更必须通过显式治理路径处理（如版本升级或 ADR），不得以实现重构名义静默发生；
+- `results` 只表达运行态执行结果，不承担数据集目录结构、文件命名或资产组织职责。
+
+In the v0.2.x phase, the contract boundary of `results` follows these rules:
+
+- `results` MUST remain a **structured, programmatically consumable object**, rather than loosely assembled temporary data;
+- the semantics of fields in `results` that are stably exposed and relied upon by `export_dataset`, tests, or upper-level callers MUST NOT be changed implicitly;
+- if the semantics of stable fields in `results` are changed in a breaking way, such changes MUST be handled through explicit governance paths (such as version upgrades or ADRs), and MUST NOT occur silently under the name of implementation refactoring;
+- `results` express runtime execution outputs only, and do not assume responsibility for dataset directory structure, file naming, or asset organization.
+
+------
+
+### 2.3.2 可序列化性与导出适配要求 | Serializability and Export Adaptation Requirement
+
+`results` **必须能够被稳定地序列化或等价地转换为可导出的结构化表示**，以支持 `export_dataset` 在不依赖隐式运行时状态的前提下完成数据资产固化。
+`results` **MUST be stably serializable, or equivalently transformable into an exportable structured representation**, so that `export_dataset` can solidify them into data assets without relying on implicit runtime state.
+
+
+这意味着：
+
+- `results` 中被 `export_dataset` 消费的内容，必须以显式、可程序化访问的形式存在；
+- `export_dataset` 不得依赖未暴露的内存对象、临时缓存或运行时上下文来“补全” `results`；
+- 若某些执行期对象本身不可直接序列化，则 `run_case` 必须在 `results` 中提供与导出相关的等价结构化表示，而不得将该责任留给 `export_dataset` 在导出阶段隐式推断。
+
+This means that:
+
+- any part of `results` consumed by `export_dataset` MUST exist in an explicit and programmatically accessible form;
+- `export_dataset` MUST NOT rely on hidden in-memory objects, transient caches, or runtime context to “complete” `results`;
+- if certain execution-time objects are not directly serializable, `run_case` MUST provide an equivalent structured representation in `results` for export purposes, rather than leaving `export_dataset` to infer such information implicitly during export.
+
+该要求的目的不是强制规定某一种具体序列化格式，而是确保：
+
+- `results` 可以作为 B 梁到 C 梁之间的**稳定契约对象**；
+- `export_dataset` 只负责资产化与结构组织，而不承担重新解释执行期内部状态的职责。
+
+The purpose of this requirement is not to mandate any specific serialization format, but to ensure that:
+
+- `results` can serve as a **stable contract object** between Beam B and Beam C;
+- `export_dataset` is responsible only for assetization and structural organization, rather than reinterpreting internal execution-time state.
+
+------
+
+### 2.3.3 `run_case` 的 `results` 与 `manifest.results` 的区别 | Distinction Between `run_case` Results and `manifest.results`
+
+需要明确区分以下两个对象：
+
+- **`run_case` 的 `results`**：指 B 梁通过返回值产生的运行态、结构化执行结果对象；
+- **dataset `manifest` 中的 `results` 对象**：指 C 梁数据集规范中用于描述 `results/` 目录结果文件结构索引的元数据对象。
+
+The following two objects must be explicitly distinguished:
+
+- **`run_case` `results`**: the runtime, structured execution result object produced by Beam B via return value;
+- **the `results` object in the dataset `manifest`**: the metadata object defined by the Beam C dataset specification for describing the structural index of result files under the `results/` directory.
+
+二者的关系是：
+
+- 前者属于 **执行结果对象**；
+- 后者属于 **资产级索引元数据**；
+- 后者可以引用、组织、索引或描述由前者导出的结果文件；
+- 后者**不得被视为前者的重新定义**，也不得取代前者作为 `run_case` 的接口结果对象。
+
+换言之：
+
+- `run_case` 的 `results` 用于运行态消费；
+- `manifest.results` 用于导出后数据集的结构化索引；
+- 二者名称相同，但语义层级不同，必须严格区分。
+
+Their relationship is:
+
+- the former is an **execution result object**;
+- the latter is **asset-level indexing metadata**;
+- the latter may reference, organize, index, or describe result files exported from the former;
+- the latter **must not be treated as a redefinition of the former**, nor replace the former as the interface result object of `run_case`.
+
+In other words:
+
+- `run_case` `results` are for runtime consumption;
+- `manifest.results` are for post-export dataset structural indexing;
+- the two share the same name, but belong to different semantic layers and MUST be kept strictly distinct.
+
+------
+
 ### 2.4 生命周期 | Lifecycle Semantics
 
 `run_case` 的执行生命周期被规范为三个逻辑阶段：
