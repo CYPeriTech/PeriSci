@@ -1,11 +1,8 @@
 # 理论与方法参考文献 | References on Theories and Methods 
-本文档列出 PeriSci 所参考的**主要理论文献与专著**，  
-用于帮助用户理解本项目所采用方法的**理论来源、学术脉络与技术定位**。
+本文档列出 PeriSci 所参考的**主要理论文献与专著**，用于帮助用户理解本项目所采用方法的**理论来源、学术脉络与技术定位**。
 
-This document lists the **key academic papers and monographs**
-referenced by PeriSci, aiming to help users understand the
-**theoretical foundations, academic context, and technical positioning**
-of the methods used in this project.
+This document lists the **key academic papers and monographs** referenced by PeriSci, aiming to help users understand the
+**theoretical foundations, academic context, and technical positioning** of the methods used in this project.
 
 ---
 

@@ -1052,6 +1052,7 @@ provenance
 │   ├── tool              （string，必需（required））
 │   └── tool_version      （string，必需（required））
 ├── created_at            （string，必需（required），ISO 8601）
+├── schema_version        （string，必需（required））
 ├── config_hash           （string，必需（required））
 ├── inputs                （object，必需（required））
 │   ├── config_path       （string，必需（required））
@@ -1064,9 +1065,10 @@ provenance
 1. `generator.tool` 必须为 `export_dataset`。
 2. `generator.tool_version` 必须与 `version/export_tool_version.txt` 文件内容逐字一致。
 3. `created_at` 必须使用 ISO 8601 格式。
-4. `config_hash` 必须基于 `config/` 目录下全部配置文件的 canonical 表示计算。
-5. 不得基于子集或派生表示计算 `config_hash`。
-6. `inputs` 必须显式绑定配置与代码来源，不得依赖隐式约定。
+4.  `schema_version` 必须显式记录生成该数据集所使用配置契约（Configuration Schema）的版本。
+5. `config_hash` 必须基于 `config/` 目录下全部配置文件的 canonical 表示计算。
+6. 不得基于子集或派生表示计算 `config_hash`。
+7. `inputs` 必须显式绑定配置与代码来源，不得依赖隐式约定。
 
 本结构为唯一溯源结构定义，其他章节不得重复定义 provenance 顶层结构。
 
@@ -1075,9 +1077,10 @@ Constraints:
 1. `generator.tool` MUST be `export_dataset`.
 2. `generator.tool_version` MUST be exactly identical to the contents of `version/export_tool_version.txt`.
 3. `created_at` MUST use ISO 8601 format.
-4. `config_hash` MUST be computed over the complete canonical representation of all configuration files under the `config/` directory.
-5. `config_hash` MUST NOT be computed from subsets or derived representations.
-6. `inputs` MUST explicitly bind configuration and code sources and MUST NOT rely on implicit conventions.
+4. `schema_version` MUST explicitly record the input-contract version of the configuration used to generate the dataset.
+5. `config_hash` MUST be computed over the complete canonical representation of all configuration files under the `config/` directory.
+6. `config_hash` MUST NOT be computed from subsets or derived representations.
+7. `inputs` MUST explicitly bind configuration and code sources and MUST NOT rely on implicit conventions.
 
 This structure is the only authoritative definition of provenance. No other section may redefine the top-level structure of provenance.
 
@@ -1775,6 +1778,7 @@ The dataset execution status is represented by the top-level `status` field of t
 
 ```
 "provenance": {
+  "schema_version": "0.2.0",
   "config_hash": "abc123...",
   "inputs": {
     "config_path": "config/",
@@ -1787,6 +1791,7 @@ The dataset execution status is represented by the top-level `status` field of t
 
 - 数据集 **必须显式绑定**其输入配置与代码来源
 - 不允许“结果孤立存在”
+- `schema_version` 必须显式记录生成该数据集所使用配置契约（Configuration Schema）的版本
 - `config_hash` 必须基于 `config/` 目录全部参与生成的配置文件的 canonical 表示计算
 - 不得基于配置子集或派生表示计算 hash
 
@@ -1794,6 +1799,7 @@ Meaning:
 
 - The dataset **MUST explicitly bind** to its input configuration and code source.
 - “Orphaned results” are NOT allowed.
+- `schema_version` MUST explicitly record the version of the configuration contract on which the dataset generation is based.
 - `config_hash` MUST be computed over the canonical representation of all configuration files under the `config/` directory that participated in generation.
 - Partial or derived configuration hashing is NOT permitted.
 
@@ -1812,7 +1818,55 @@ If any field is missing, unverifiable, or semantically inconsistent:
 
 ------
 
-#### 10.2.2 可选字段 | Optional, Strongly Recommended
+#### 10.2.2 最小可追溯三元组 | Minimum Traceability Triplet
+
+对于进入资产库或参与冻结判定的数据集，仅有 `provenance` 最小字段集合仍不足以完整表达其最小治理身份。
+The minimum provenance field set alone is not sufficient to fully express the minimum governance identity of a dataset entering the asset repository or participating in freeze determination.
+
+除 `10.2.1` 中定义的最小溯源集合外，数据集还必须能够与 manifest 中的代码身份字段共同形成以下**最小可追溯三元组**：
+
+```
+(provenance.config_hash, provenance.schema_version, code.code_version)
+```
+
+其中：
+
+- `provenance.config_hash` 表示输入配置内容的 canonical 绑定；
+- `provenance.schema_version` 表示生成该数据集时所使用配置契约（Configuration Schema）的版本；
+- `code.code_version` 表示生成代码状态的唯一标识。
+
+In addition to the minimum provenance set defined in `10.2.1`, the dataset MUST also form the following **minimum traceability triplet** together with the code identity field in the manifest:
+
+```
+(provenance.config_hash, provenance.schema_version, code.code_version)
+```
+
+Where:
+
+- `provenance.config_hash` represents the canonical binding of the input configuration content;
+- `provenance.schema_version` represents the input contract version on which the dataset generation is based;
+- `code.code_version` represents the unique identifier of the generating code state.
+
+
+该三元组共同构成数据集最小治理身份的核心锚点，用于同时回答以下三个问题：
+
+- 使用了哪一组输入语义；
+- 使用了哪一个配置契约版本；
+- 使用了哪一个执行实现版本。
+
+若上述三元组中的任一组成部分缺失、不可验证或相互冲突，则数据集不得被视为满足冻结级可追溯性要求。
+
+Together, this triplet forms the core anchor of the dataset’s minimum governance identity, and is used to answer the following three questions simultaneously:
+
+- which input semantics were used;
+- which input contract version was used;
+- which execution implementation version was used.
+
+If any component of the above triplet is missing, unverifiable, or semantically inconsistent, the dataset SHALL NOT be considered to satisfy freeze-level traceability requirements.
+
+------
+
+#### 10.2.3 可选字段 | Optional, Strongly Recommended
 
 以下字段 **不是 v0.2 的硬性要求**，但一旦存在，将显著降低未来 算例资产 演进成本。
 The following fields are not mandatory in v0.2, but once present, significantly reduce future case-asset evolution costs.
@@ -1866,7 +1920,7 @@ Purpose:
 
 ------
 
-#### 10.2.3 结构对齐说明 | Structural Alignment Note
+#### 10.2.4 结构对齐说明 | Structural Alignment Note
 
 本节所示示例仅用于说明字段层级。
 溯源 的完整结构定义以 §7.4 为准。本节不重复定义其 schema。
@@ -1944,7 +1998,7 @@ it **MUST still produce a minimally valid dataset** that satisfies §5 structura
 当 `status ≠ success` ，即，`status = partial 或 failed` 时：
 
 1. `manifest.json` 仍必须存在
-2. `provenance` 最小字段集合必须完整，`provenance.status` 明确
+2. `provenance` 最小字段集合必须完整，且失败或不完整状态必须由 manifest 顶层字段 `status` 明确表示
 3. `config/` 与 `code/` 目录必须存在，且包含生成所使用的配置文件与代码引用元数据
 4. `results/` 可以为空，但必须存在目录
 5. 不得省略 `config_hash`
@@ -1954,7 +2008,7 @@ it **MUST still produce a minimally valid dataset** that satisfies §5 structura
 When `status ≠ success` (i.e., `status = partial` or `failed`):
 
 1. `manifest.json` MUST still exist.
-2. The minimum provenance field set MUST be complete, and `provenance.status` MUST be explicit.
+2. The minimum provenance field set MUST be complete, and the failed or incomplete state MUST be explicitly represented by the top-level manifest field `status`.
 3. The `config/` and `code/` directories MUST exist and contain the configuration files and code reference metadata used in generation.
 4. The `results/` directory MAY be empty but MUST exist.
 5. `config_hash` MUST NOT be omitted.

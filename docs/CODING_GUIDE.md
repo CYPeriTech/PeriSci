@@ -6,7 +6,7 @@
 >
 > 本文档并非穷尽式规范，而是作为“方向性与约束性”的编码指南，细节可随版本演进逐步补充。
 >
-> 除本文档所述的编码原则外，PeriSci 还定义了一份项目级一致性对照表，用于约束目录结构、CMake target、公有头文件路径与 C++ 命名空间之间的对应关系。详见 [docs/specs/consistency_matrix.m](docs/specs/consistency_matrix.m)。
+> 除本文档所述的编码原则外，PeriSci 还定义了一份项目级一致性对照表，用于约束目录结构、CMake target、公有头文件路径与 C++ 命名空间之间的对应关系。详见 [docs/specs/consistency_matrix.md](docs/specs/consistency_matrix.md)。
 >
 > 对于 v0.1.x 骨架阶段中临时 stub 实现的命名规范、内容约束与生命周期管理，项目定义了专门的阶段性规范文档。详见 [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md)。
 >
