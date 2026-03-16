@@ -111,6 +111,7 @@ The guide below helps you quickly identify the most relevant sections.
 ## 2. 架构总览 | High-Level Architecture
 
 PeriSci 采用分层架构，核心思想是：
+
 - **核心数值内核（core）** 不依赖上层工作流与语言绑定；
 - **稳定 API（api）** 是项目“对外承诺”，上层一切以其为入口；
 - **Python（python）** 是工作流层与生态层，用于教学与 AI；
@@ -119,6 +120,7 @@ PeriSci 采用分层架构，核心思想是：
 - **examples/tests/docs** 承担教学、验证与规范的职责（采用算例驱动生长模式，参见 README的核心理念）。
 
 PeriSci uses a layered architecture:
+
 - **core**: numerical kernel independent of workflows and language bindings;
 - **api**: stable public contracts — the only supported entry for upper layers;
 - **python**: workflow and ecosystem layer for teaching and AI;
@@ -140,16 +142,16 @@ Each layer has clearly defined responsibilities, dependency directions, and stab
 
 ---
 
-PeriSci 的整体结构可以从“运行时架构、实验体系与治理层”三个互补层面，以及一个“长期稳定性结构”来理解。下图给出系统的概念总览：
+PeriSci 的整体结构可以从“运行时架构、数值实验体系与治理层”三个互补层面，以及一个“长期稳定性结构”来理解。下图给出系统的概念总览：
 
-The overall structure of PeriSci can be understood through three complementary aspects — the runtime architecture, the experiment system, and the governance layer — together with a long-term stability structure. The following diagram gives a conceptual overview of the system:
+The overall structure of PeriSci can be understood through three complementary aspects — the runtime architecture, the numerical experiment system, and the governance layer — together with a long-term stability structure. The following diagram gives a conceptual overview of the system:
 
 ```
 PeriSci
 ├─ Runtime Architecture
 │ └─ python / apps → api → core
 │
-├─ Experiment System
+├─ Numerical Experiment System
 │ └─ examples
 │ ├─ teaching / demonstration
 │ └─ exploration / incubation → cases → tests
@@ -165,8 +167,8 @@ PeriSci
 
 其中：
 
-- **Runtime Architecture** 描述系统能力如何被调用  
-- **Experiment System** 描述示例、算例与回归测试如何组织学习、实验与可复现资产  
+- **Runtime Architecture** 描述系统能力如何被调用
+- **Numerical Experiment System** 描述示例、算例与回归测试如何组织学习、实验与可复现资产
 - **Governance Framework** 描述项目如何通过版本策略、协作规则与维护责任等治理文件维持长期演进。
 - **Long-term Stability Structure** 描述系统长期稳定性依赖的关键结构：`core`、`api` 与 `cases`
 
@@ -174,8 +176,8 @@ This diagram is not a line-by-line expansion of the repository layout. Instead, 
 
 In particular:
 
-- **Runtime Architecture** describes how system capabilities are invoked  
-- **Experiment System** describes how examples, canonical cases, and tests organize learning, experiments, and reproducible assets  
+- **Runtime Architecture** describes how system capabilities are invoked
+- **Experiment System** describes how examples, canonical cases, and tests organize learning, experiments, and reproducible assets
 - **Governance Framework** describes how the project maintains long-term evolution through governance files such as versioning policies, contribution rules, and maintainer responsibilities.
 - **Long-term Stability Structure** highlights the key elements that anchor long-term stability: `core`, `api`, and `cases`
 
@@ -201,27 +203,27 @@ The following diagram further expands the major runtime layers. The `cases/` dir
             v                                 v
 
 +======================================+  +======================================+
-| python/ —— 工作流与生态层                  | apps/ —— 工程入口层                    
-| Workflow & Ecosystem Layer              | Engineering Entry Layer              
-|                                         |                                      
-| - Tutorials / notebooks / scripts       | - perisci-run / perisci-export       
-|   （教程 / 笔记 / 脚本）                   |                                      
-| - Param sweep / automation              | - Batch jobs / HPC integration       
-|   （参数扫描 / 自动化）                     |   （批处理作业 / 高性能计算集成）          
-|                                         |                                      
-| - AI dataset generation helpers         | - Diagnostics / logging knobs        
-|   （数据集生成工具）                        |   （诊断 / 日志调节旋钮）               
-|                                         |                                      
-| - AI framework adapters                 |                                      
-|   （与 AI 框架的接口适配）                  |                                      
-|   (TensorFlow / MindSpore / PyTorch)    |                                      
-|                                         |                                      
-| * 快速演进层                              | * 工程稳定入口                         
-|   Fast-evolving layer                   |   Engineering-stable entry layer     
-|                                         |                                      
-| * 不承诺长期稳定 API                       | * 不定义新的配置语义或物理语义            
-|   No long-term API stability            |   Must NOT define new configuration  
-|                                         |   or physics semantics               
+| python/ —— 工作流与生态层                  | apps/ —— 工程入口层
+| Workflow & Ecosystem Layer              | Engineering Entry Layer
+|                                         |
+| - Tutorials / notebooks / scripts       | - perisci-run / perisci-export
+|   （教程 / 笔记 / 脚本）                   |
+| - Param sweep / automation              | - Batch jobs / HPC integration
+|   （参数扫描 / 自动化）                     |   （批处理作业 / 高性能计算集成）
+|                                         |
+| - AI dataset generation helpers         | - Diagnostics / logging knobs
+|   （数据集生成工具）                        |   （诊断 / 日志调节旋钮）
+|                                         |
+| - AI framework adapters                 |
+|   （与 AI 框架的接口适配）                  |
+|   (TensorFlow / MindSpore / PyTorch)    |
+|                                         |
+| * 快速演进层                              | * 工程稳定入口
+|   Fast-evolving layer                   |   Engineering-stable entry layer
+|                                         |
+| * 不承诺长期稳定 API                       | * 不定义新的配置语义或物理语义
+|   No long-term API stability            |   Must NOT define new configuration
+|                                         |   or physics semantics
 +======================================+  +======================================+
 
                 |
@@ -229,17 +231,17 @@ The following diagram further expands the major runtime layers. The `cases/` dir
                 v
 
 +====================================================================+
-| cases/ —— 标准算例库                                                 
-| Canonical Simulation Cases                                         
-|                                                                    
-| - reproducible config inputs                                       
-|   （可复现的配置输入）                                                 
-|                                                                    
-| - canonical simulation cases                                       
-|   （标准算例）                                                    
-|                                                                    
-| - canonical cases for tests and dataset workflows 
-|   （tests / 数据生产流程使用的标准算例）                      
+| cases/ —— 标准算例库
+| Canonical Simulation Cases
+|
+| - reproducible config inputs
+|   （可复现的配置输入）
+|
+| - canonical simulation cases
+|   （标准算例）
+|
+| - canonical cases for tests and dataset workflows
+|   （tests / 数据生产流程使用的标准算例）
 +====================================================================+
 
                 |
@@ -247,19 +249,19 @@ The following diagram further expands the major runtime layers. The `cases/` dir
                 v
 
 +====================================================================+
-| api/ —— 稳定对外契约层 | Stable Public Contract Layer                
-|                                                                    
-| - config_schema (versioned & validated)                           
-|   作用：声明 case 输入 config 的结构、字段类型、含义与默认值                
-|                                                                    
-| - run_case(config) -> results                                      
-|   作用：执行一次完整仿真并返回标准化结果对象                              
-|                                                                    
-| - export_dataset(results, spec) -> dataset_dir                     
-|   作用：按照规范导出可复用的数据集目录                                    
-|                                                                    
-| * 对外“承诺层”（Contract layer）                                      
-| * 教学 / 工程 / AI 的共同入口                                          
+| api/ —— 稳定对外契约层 | Stable Public Contract Layer
+|
+| - config_schema (versioned & validated)
+|   作用：声明 case 输入 config 的结构、字段类型、含义与默认值
+|
+| - run_case(config) -> results
+|   作用：执行一次完整仿真并返回标准化结果对象
+|
+| - export_dataset(results, spec) -> dataset_dir
+|   作用：按照规范导出可复用的数据集目录
+|
+| * 对外“承诺层”（Contract layer）
+| * 教学 / 工程 / AI 的共同入口
 +====================================================================+
 
                 |
@@ -267,18 +269,18 @@ The following diagram further expands the major runtime layers. The `cases/` dir
                 v
 
 +====================================================================+
-| core/ —— 数值计算内核 | Numerical Kernel Layer                       
-|                                                                    
-| - 近场有限元（PeriFEM）刚度计算与装配                                   
-| - 材料模型 / 损伤与断裂模型                                            
-| - 时间推进 / 求解驱动                                                
-| - 并行与高性能计算（MPI / OpenMP / GPU，逐步引入）                      
-|                                                                    
-| * 物理与数值“真理源头”                                                 
-|   Source of physical and numerical truth                           
-|                                                                    
-| * 最慢演进、最稳定的层                                                 
-|   Slowest-evolving and most stable layer                           
+| core/ —— 数值计算内核 | Numerical Kernel Layer
+|
+| - 近场有限元（PeriFEM）刚度计算与装配
+| - 材料模型 / 损伤与断裂模型
+| - 时间推进 / 求解驱动
+| - 并行与高性能计算（MPI / OpenMP / GPU，逐步引入）
+|
+| * 物理与数值“真理源头”
+|   Source of physical and numerical truth
+|
+| * 最慢演进、最稳定的层
+|   Slowest-evolving and most stable layer
 +====================================================================+
 ```
 
@@ -294,7 +296,7 @@ PeriSci 采用**严格的单向依赖结构**。
 PeriSci follows a **strict unidirectional dependency model**.
 This model is fundamental to long-term maintainability and ecosystem scalability.
 
-------
+---
 
 #### 允许的依赖方向 | Allowed Dependency Direction
 
@@ -315,7 +317,7 @@ python/apps
 - `api/` is the **only official entry point** to `core/`
 - `cases/` provides canonical simulation inputs (configs), typically used for regression tests, example validation, and dataset generation workflows.
 
-------
+---
 
 #### 明确禁止的依赖 | Explicitly Forbidden Dependencies
 
@@ -335,7 +337,7 @@ The following dependencies are considered **architecture violations**:
 - `apps/` depending on `python/` (or vice versa)
 - `cases/` must not depend on or call implementation code in `python/`, `apps/`, or `core/` (cases exist only as input and reference assets)
 
-------
+---
 
 #### 为什么必须禁止这些依赖 | Rationale for Forbidden Dependencies
 
@@ -350,7 +352,7 @@ The following dependencies are considered **architecture violations**:
 - Ensure all entry points obey the same physics and data contracts
 - Centralizing canonical simulation inputs in `cases/` ensures that different entry points operate under the same physical configurations
 
-------
+---
 
 <a id="responsibilities-vs-non-responsibilities"></a>
 
@@ -362,7 +364,7 @@ The following dependencies are considered **architecture violations**:
 This section defines **what each layer must do and must not do**.
 These are architectural boundaries, not stylistic suggestions.
 
-------
+---
 
 #### core/ —— 数值计算内核 | **Numerical Kernel Layer**
 
@@ -388,7 +390,7 @@ These are architectural boundaries, not stylistic suggestions.
 - Implement CLI, teaching workflows, or AI pipelines
 - Assume the existence of any specific upper-layer entry
 
-------
+---
 
 #### api/ —— 稳定对外契约层 | **Stable Public Contract Layer**
 
@@ -416,13 +418,13 @@ These are architectural boundaries, not stylistic suggestions.
 - Define new physics semantics or configuration meanings
 - Depend on Python ecosystems or specific CLI forms
 
-------
+---
 
 #### python/ —— 工作流与生态层 | **Workflow & Ecosystem Layer**
 
 **职责（Must / Should）：**
 
-- 为学生与研究人员提供友好的教学与实验入口
+- 为学生与研究人员提供友好的教学与研究入口
 - 为 AI 数据生产提供批量化、自动化工具
 - 实现参数扫描、数据清洗、结果解析等工作流
 - 适配主流 AI 框架（不改变物理语义）
@@ -442,7 +444,7 @@ These are architectural boundaries, not stylistic suggestions.
 - Treat core internals as stable APIs
 - Act as the sole entry point for engineering/HPC usage
 
-------
+---
 
 #### apps/ —— 工程入口层 | **Engineering Entry Layer**
 
@@ -466,7 +468,7 @@ These are architectural boundaries, not stylistic suggestions.
 - Depend on Python workflows or interpreters
 - Serve as the mandatory path for teaching or AI workflows
 
-------
+---
 
 #### cases/ —— 标准算例库 | Canonical Case Repository
 
@@ -494,7 +496,7 @@ These are architectural boundaries, not stylistic suggestions.
 - Must not define new physical semantics
 - Must not contain or invoke implementation code
 
-------
+---
 
 **说明 | Notes**
 
@@ -514,6 +516,7 @@ These are architectural boundaries, not stylistic suggestions.
 | AI / 数据   | python → api | Python 组织数据生产，API 保证可追溯   |
 
 **关键原则：**
+
 > 用户体验可以不同，但**物理内核与契约必须相同**。
 
 ---
@@ -536,6 +539,7 @@ Together, they serve one core purpose:
 ---
 
 ##### examples/ —— 架构的“可学习表达” | **Learnable Expression of the Architecture**
+
 - examples 体现 **“如何正确使用系统”**
 - 它们是教学与新用户理解 API 的第一入口
 - examples 必须严格遵守 `api` 契约，而不是绕过它
@@ -547,6 +551,7 @@ Together, they serve one core purpose:
 ---
 
 ##### tests/ —— 架构的“可验证约束” | **Verifiable Constraints of the Architecture**
+
 - tests 用于 **锁住架构承诺**：
   - 数值行为是否退化
   - API 契约是否被破坏
@@ -561,7 +566,8 @@ Together, they serve one core purpose:
 
 ---
 
-##### docs/ —— 架构的“权威说明” |  **Authoritative Description of the Architecture**
+##### docs/ —— 架构的“权威说明” | **Authoritative Description of the Architecture**
+
 - docs 定义 **什么是“正确的设计边界”**
 - docs 是判断变更是否合理的最终依据
 - 当代码与文档冲突时，应优先修正文档或显式记录设计决策（ADR）
@@ -601,14 +607,14 @@ Together, they serve one core purpose:
 
 ---
 
-##### **api/**：高稳定性（对外承诺层）| High stability (public contract layer)  
+##### **api/**：高稳定性（对外承诺层）| High stability (public contract layer)
 
 - 面向所有上层（python/apps/未来服务）的统一契约
 - 破坏性修改必须通过明确的版本策略（MAJOR bump）
 - 必须提供迁移说明或兼容方案
-- Unified contract for all upper layers (python/apps/future services) 
-- Breaking changes require explicit versioning (MAJOR bump)  
-- Migration notes or compatibility strategies are required  
+- Unified contract for all upper layers (python/apps/future services)
+- Breaking changes require explicit versioning (MAJOR bump)
+- Migration notes or compatibility strategies are required
 
 ---
 
@@ -630,21 +636,21 @@ Together, they serve one core purpose:
 
 - CLI 接口应保持相对稳定，以支持工程与批处理脚本
 - 允许新增选项与改进用户体验
-- 不应频繁破坏已有命令语义或调用方式  
+- 不应频繁破坏已有命令语义或调用方式
 - CLI interfaces should remain relatively stable to support engineering and batch scripts
 - New options and UX improvements are allowed
-- Existing command semantics and invocation patterns should not be broken frequently  
+- Existing command semantics and invocation patterns should not be broken frequently
 
 ---
 
-##### **python/**：低稳定性（快速演进层）| Low stability (fast-evolving layer)  
+##### **python/**：低稳定性（快速演进层）| Low stability (fast-evolving layer)
 
 - 作为教学、科研与 AI 工作流的实验与创新空间
 - 允许频繁重构、接口调整与新工具尝试
 - 不对外承诺长期 API 稳定性
 - Serves as an experimentation and innovation space for teaching, research, and AI workflows
 - Frequent refactoring, interface changes, and new tools are allowed
-- Long-term API stability is not guaranteed  
+- Long-term API stability is not guaranteed
 
 ---
 
@@ -659,6 +665,7 @@ Together, they serve one core purpose:
 - 清晰的代码归属与分层边界，降低新贡献者的理解成本
 
 This layered design ensures:
+
 - No divergence between teaching, engineering, and AI versions
 - Reusable and replaceable PeriFEM kernel
 - Physically grounded and traceable AI datasets
@@ -673,11 +680,12 @@ PeriSci 的架构由三个长期稳定性原则支撑：
 
 - 数值内核（core）保证物理与数值的真实性
 - 公共接口（api）保证对外契约的稳定性
-- 标准算例库（cases）保证实验与数据的可复现性
+- 标准算例库（cases）保证数值实验与数据的可复现性
 
 这三层分别稳定物理、接口与实验，从而使系统能够长期演进而不破坏整体结构。
 
 这三条原则构建起清晰的**科学计算系统结构**：
+
 ```
 Physics correctness        → core
 Contract stability         → api
@@ -686,13 +694,14 @@ Experiment reproducibility → cases
 
 PeriSci’s architecture is supported by three long-term stability principles:
 
-- physics correctness in the numerical kernel  (core)
+- physics correctness in the numerical kernel (core)
 - contract stability in the public API (api)
-- experiment reproducibility through canonical cases (cases)
+- numerical experiment reproducibility through canonical cases (cases)
 
-These three layers together ensure that numerical correctness, interface stability, and experimental reproducibility evolve independently without breaking the system.
+These three layers respectively stabilize the physical, interface and experimental aspects, thus enabling the system to evolve over the long term without disrupting the system.
 
 These three principles establish a clear **structural model for scientific computing systems**:
+
 ```
 Physics correctness        → core
 Contract stability         → api
@@ -724,13 +733,13 @@ instead, we emphasize **organizational boundaries and engineering constraints**.
 
 ### 3.1 core/ —— 数值内核的组织边界 | Organizational Boundary of the Numerical Kernel
 
-- `core/` 仅包含数值计算与物理模型相关代码  
-- 该目录不包含任何用户接口、脚本或工作流逻辑  
-- `core/` 的子模块组织应反映数值结构，而非使用场景  
+- `core/` 仅包含数值计算与物理模型相关代码
+- 该目录不包含任何用户接口、脚本或工作流逻辑
+- `core/` 的子模块组织应反映数值结构，而非使用场景
 
-- `core/` contains only numerical computation and physics-related code  
-- It must not include user interfaces, scripts, or workflow logic  
-- Submodules should reflect numerical structure, not usage scenarios  
+- `core/` contains only numerical computation and physics-related code
+- It must not include user interfaces, scripts, or workflow logic
+- Submodules should reflect numerical structure, not usage scenarios
 
 **约束补充 | Constraints**
 
@@ -738,15 +747,15 @@ instead, we emphasize **organizational boundaries and engineering constraints**.
   - CLI 解析
   - Python 绑定
   - 文件系统布局决策
-- `core/` 的对外可见接口应仅通过 `api/` 暴露  
+- `core/` 的对外可见接口应仅通过 `api/` 暴露
 
 **Constraints**
 
 - `core/` must not include:
   - CLI parsing
   - Python bindings
-  - File-system layout decisions  
-- Public access to `core/` must go through `api/` only  
+  - File-system layout decisions
+- Public access to `core/` must go through `api/` only
 
 ---
 
@@ -754,25 +763,25 @@ instead, we emphasize **organizational boundaries and engineering constraints**.
 
 ### 3.2 api/ —— 契约与边界的组织载体 | Organizational Carrier of Contracts and Boundaries
 
-- `api/` 组织所有对外稳定接口的实现  
-- 它是连接仓库内部实现与外部使用方式的“缓冲层”  
-- `api/` 中的代码应与 `docs/specs/` 中的契约保持一致  
+- `api/` 组织所有对外稳定接口的实现
+- 它是连接仓库内部实现与外部使用方式的“缓冲层”
+- `api/` 中的代码应与 `docs/specs/` 中的契约保持一致
 
-- `api/` organizes implementations of all stable public interfaces  
-- It acts as a buffer between internal implementation and external usage  
-- Code in `api/` must remain consistent with contracts in `docs/specs/`  
+- `api/` organizes implementations of all stable public interfaces
+- It acts as a buffer between internal implementation and external usage
+- Code in `api/` must remain consistent with contracts in `docs/specs/`
 
 **约束补充 | Constraints**
 
-- `api/` 不应暴露 `core/` 的内部数据结构  
-- `api/` 不依赖 Python 或具体 CLI 实现  
-- 任何破坏性修改必须与版本策略和文档同步  
+- `api/` 不应暴露 `core/` 的内部数据结构
+- `api/` 不依赖 Python 或具体 CLI 实现
+- 任何破坏性修改必须与版本策略和文档同步
 
 **Constraints**
 
-- `api/` must not expose internal data structures of `core/`  
-- `api/` must not depend on Python or specific CLI implementations  
-- Breaking changes must be synchronized with versioning and documentation  
+- `api/` must not expose internal data structures of `core/`
+- `api/` must not depend on Python or specific CLI implementations
+- Breaking changes must be synchronized with versioning and documentation
 
 ---
 
@@ -780,25 +789,25 @@ instead, we emphasize **organizational boundaries and engineering constraints**.
 
 ### 3.3 python/ —— 工作流代码的集中位置 | Centralized Location for Workflow Code
 
-- `python/` 集中存放教学、科研与 AI 工作流相关代码  
-- 该目录强调**易用性与灵活性**，而非长期接口稳定性  
-- `python/` 中的代码应全部通过 `api/` 访问系统能力  
+- `python/` 集中存放教学、科研与 AI 工作流相关代码
+- 该目录强调**易用性与灵活性**，而非长期接口稳定性
+- `python/` 中的代码应全部通过 `api/` 访问系统能力
 
-- `python/` hosts teaching, research, and AI workflow code  
-- It prioritizes usability and flexibility over long-term API stability  
-- All system access must go through `api/`  
+- `python/` hosts teaching, research, and AI workflow code
+- It prioritizes usability and flexibility over long-term API stability
+- All system access must go through `api/`
 
 **约束补充 | Constraints**
 
-- 禁止在 `python/` 中绕过 `api/` 直接调用 `core/`  
-- 不应在 `python/` 中固化物理语义或配置含义  
-- 可根据教学或 AI 需求频繁调整组织结构  
+- 禁止在 `python/` 中绕过 `api/` 直接调用 `core/`
+- 不应在 `python/` 中固化物理语义或配置含义
+- 可根据教学或 AI 需求频繁调整组织结构
 
 **Constraints**
 
-- `python/` must not bypass `api/` to access `core/`  
-- Physics semantics and config meanings must not be hard-coded here  
-- Directory structure may evolve to support teaching or AI needs  
+- `python/` must not bypass `api/` to access `core/`
+- Physics semantics and config meanings must not be hard-coded here
+- Directory structure may evolve to support teaching or AI needs
 
 ---
 
@@ -806,25 +815,25 @@ instead, we emphasize **organizational boundaries and engineering constraints**.
 
 ### 3.4 apps/ —— 工程与批处理入口的组织边界 | Organizational Boundary of Engineering and Batch Entry Points
 
-- apps/` 存放工程与 HPC 场景下使用的可执行入口  
-- 该目录强调**脚本化、可部署性与环境独立性**  
-- `apps/` 与 `python/` 在仓库结构上保持并列  
+- apps/` 存放工程与 HPC 场景下使用的可执行入口
+- 该目录强调**脚本化、可部署性与环境独立性**
+- `apps/` 与 `python/` 在仓库结构上保持并列
 
-- `apps/` contains executable entry points for engineering and HPC use  
-- It emphasizes scriptability, deployability, and environment independence  
-- `apps/` is organizationally parallel to `python/`  
+- `apps/` contains executable entry points for engineering and HPC use
+- It emphasizes scriptability, deployability, and environment independence
+- `apps/` is organizationally parallel to `python/`
 
 **约束补充 | Constraints**
 
-- `apps/` 中的程序必须通过 `api/` 调用系统能力  
-- `apps/` 中的程序在运行时不得依赖 Python 解释器或 Python 包生态  
-- CLI 行为应与 `api` 契约保持一致  
+- `apps/` 中的程序必须通过 `api/` 调用系统能力
+- `apps/` 中的程序在运行时不得依赖 Python 解释器或 Python 包生态
+- CLI 行为应与 `api` 契约保持一致
 
 **Constraints**
 
-- Programs in `apps/` must call system capabilities via `api/`  
-- Programs in `apps/` must not depend on the Python interpreter or Python package  
-- CLI behavior must remain consistent with `api` contracts  
+- Programs in `apps/` must call system capabilities via `api/`
+- Programs in `apps/` must not depend on the Python interpreter or Python package
+- CLI behavior must remain consistent with `api` contracts
 
 ---
 
@@ -833,29 +842,29 @@ instead, we emphasize **organizational boundaries and engineering constraints**.
 ### 3.5 cases/ —— 标准算例库 | Canonical Case Repository
 
 - `cases/` 集中存放 PeriSci 的标准仿真算例（canonical simulation cases）
-- 每个 case 定义一个**可复现的物理实验配置**  
-- 该目录为 examples、tests 与数据生产流程提供统一输入来源  
+- 每个 case 定义一个**可复现的数值实验配置**
+- 该目录为 examples、tests 与数据生产流程提供统一输入来源
 
-- `cases/` hosts the canonical simulation cases of PeriSci  
-- Each case defines a **reproducible physical experiment configuration**  
-- The directory provides shared inputs for examples, tests, and dataset generation workflows  
+- `cases/` hosts the canonical simulation cases of PeriSci
+- Each case defines a **reproducible numerical experiment configuration**
+- The directory provides shared inputs for examples, tests, and dataset generation workflows
 
 **约束补充 | Constraints**
 
-- 每个 case 必须包含完整且可运行的 `input.json`  
-- `cases/` 不包含实现代码、工作流脚本或数据处理逻辑  
-- 修改既有 case 行为必须保持可追溯并经过审查  
+- 每个 case 必须包含完整且可运行的 `input.json`
+- `cases/` 不包含实现代码、工作流脚本或数据处理逻辑
+- 修改既有 case 行为必须保持可追溯并经过审查
 
 **Constraints**
 
-- Each case must contain a complete and runnable `input.json`  
-- `cases/` must not contain implementation code, workflow scripts, or data-processing logic  
-- Changes that alter established case behavior must remain traceable and reviewed  
+- Each case must contain a complete and runnable `input.json`
+- `cases/` must not contain implementation code, workflow scripts, or data-processing logic
+- Changes that alter established case behavior must remain traceable and reviewed
 
 **设计说明 | Design Note**
 
 - `cases/` 定义系统共享的标准仿真算例
-- 它确保 examples、tests 与 AI 数据生产流程在相同物理配置下运行  
+- 它确保 examples、tests 与 AI 数据生产流程在相同物理配置下运行
 
 - `cases/` defines canonical simulation cases shared across the system
 - It ensures that examples, tests, and AI dataset workflows operate on the same canonical simulation cases
@@ -871,9 +880,9 @@ instead, we emphasize **organizational boundaries and engineering constraints**.
 
 在仓库生命周期中，这三类目录与 `cases/` 之间形成如下关系：
 
-- `examples/` 用于教学、示例展示与能力探索，其中一部分成熟稳定的示例可以被提升为 `cases/` 中的标准算例资产  
-- `cases/` 存放经过验证并冻结的标准算例，用于保证实验与数据的可复现性  
-- `tests/` 通常以 `cases/` 中的标准算例作为回归输入，用于验证数值行为与 API 契约在演进中的稳定性  
+- `examples/` 用于教学、示例展示与能力探索，其中一部分成熟稳定的示例可以被提升为 `cases/` 中的标准算例资产
+- `cases/` 存放经过验证并冻结的标准算例，用于保证实验与数据的可复现性
+- `tests/` 通常以 `cases/` 中的标准算例作为回归输入，用于验证数值行为与 API 契约在演进中的稳定性
 
 The directories `examples/`, `tests/`, and `docs/` together form PeriSci’s quality assurance system.  
 Among them, `tests/` serve as the core regression verification layer in CI, while `examples/` and `docs/` verify usability and design consistency.
@@ -890,8 +899,8 @@ During the repository lifecycle, these directories interact with `cases/` as fol
 
 `examples/` 在系统中具有双重职责：
 
-- 作为教学与示例层，帮助用户理解 API 的正确使用方式  
-- 作为探索与实验层，为潜在的标准算例提供实验起点  
+- 作为教学与示例层，帮助用户理解 API 的正确使用方式
+- 作为探索与实验层，为潜在的标准算例提供数值实验起点
 
 并非所有 examples 都会演进为 cases；只有在语义清晰、行为稳定且具备回归价值时，相关示例才可能被提升为 `cases/` 中的标准算例资产。
 
@@ -904,15 +913,15 @@ examples 必须始终保持可运行状态。
 
 `examples/` therefore serve a dual role in the system:
 
-- as a teaching and demonstration layer, helping users understand how to correctly use the API  
-- as an exploration and experimentation layer that may incubate potential canonical cases  
+- as a teaching and demonstration layer, helping users understand how to correctly use the API
+- as an exploration and numerical experimentation layer that may incubate potential canonical cases
 
-Not all examples are expected to evolve into cases.  Only when an example becomes semantically clear, behaviorally stable, and suitable for regression use may it be promoted into a canonical case under `cases/`.
+Not all examples are expected to evolve into cases. Only when an example becomes semantically clear, behaviorally stable, and suitable for regression use may it be promoted into a canonical case under `cases/`.
 
 Examples verify:
 
 - Whether APIs are understandable and usable
-- Whether new users can complete basic tasks  
+- Whether new users can complete basic tasks
 
 Examples must remain runnable at all times.
 
@@ -921,19 +930,20 @@ Examples must remain runnable at all times.
 #### tests/ —— 回归与契约验证 | Regression and Contract Verification
 
 Tests 锁定：
+
 - 数值行为不被意外破坏
 - API 契约持续成立
-- 关键结果具备可复现性  
+- 关键结果具备可复现性
 
-Tests 是 CI 的核心组成部分。多数回归测试使用 `cases/` 中的标准算例作为输入来源。  
+Tests 是 CI 的核心组成部分。多数回归测试使用 `cases/` 中的标准算例作为输入来源。
 
 Tests ensure:
 
 - Numerical behavior is not accidentally broken
 - API contracts remain valid
-- Key results remain reproducible  
+- Key results remain reproducible
 
-Tests are a core component of CI.  Most regression tests use canonical cases from `cases/` as their input sources.
+Tests are a core component of CI. Most regression tests use canonical cases from `cases/` as their input sources.
 
 ---
 
@@ -941,14 +951,14 @@ Tests are a core component of CI.  Most regression tests use canonical cases fro
 
 - docs 用于验证：
   - 实现是否符合既定架构与契约
-  - 新设计是否被明确记录与解释  
+  - 新设计是否被明确记录与解释
 
-- 文档滞后于实现被视为质量风险  
+- 文档滞后于实现被视为质量风险
 
 Docs verify:
 
 - Whether implementation aligns with defined architecture and contracts
-- Whether new designs are properly documented and explained  
+- Whether new designs are properly documented and explained
 
 Documentation lag is considered a quality risk.
 
@@ -968,28 +978,28 @@ Documentation lag is considered a quality risk.
 
 examples → cases → tests
 
-- `examples/` 用于教学展示与能力探索  
-- 部分成熟稳定的探索性示例可以被提升为 `cases/` 中的标准算例  
-- `tests/` 使用这些标准算例进行回归验证  
+- `examples/` 用于教学展示与能力探索
+- 部分成熟稳定的探索性示例可以被提升为 `cases/` 中的标准算例
+- `tests/` 使用这些标准算例进行回归验证
 
 In the development workflow of PeriSci, exploratory examples, canonical cases, and regression tests follow a clear evolution path:
 
 examples → cases → tests
 
-- `examples/` support teaching demonstrations and capability exploration  
-- some stable exploratory examples may be promoted into canonical cases under `cases/`  
-- `tests/` use these canonical cases to perform regression validation  
+- `examples/` support teaching demonstrations and capability exploration
+- some stable exploratory examples may be promoted into canonical cases under `cases/`
+- `tests/` use these canonical cases to perform regression validation
 
 这一结构确保：
 
-- 新能力可以在 `examples/` 中自由探索  
-- 稳定实验通过 `cases/` 被固定为可复现实验  
-- 系统演进通过 `tests/` 持续受到保护  
+- 新能力可以在 `examples/` 中自由探索
+- 稳定数值实验通过 `cases/` 被固定为可复现算例
+- 系统演进通过 `tests/` 持续受到保护
 
 This structure ensures that:
 
 - new capabilities can be explored freely in `examples/`
-- stable experiments are crystallized as canonical cases in `cases/`
+- stable numerical experiments are crystallized as canonical cases in `cases/`
 - system evolution remains protected through regression tests
 
 ---
@@ -1002,6 +1012,7 @@ This structure ensures that:
 **不参与运行时计算、但对项目长期演进具有决定性作用的治理文件**。
 
 这些文件共同定义了 PeriSci 的：
+
 - 对外承诺
 - 协作方式
 - 版本与演进规则
@@ -1012,6 +1023,7 @@ a set of **governance files** that do not participate in runtime execution
 but are critical to the long-term evolution of the project.
 
 Together, they define PeriSci’s:
+
 - External commitments
 - Collaboration model
 - Versioning and evolution rules
@@ -1020,6 +1032,7 @@ Together, they define PeriSci’s:
 ---
 
 #### README.md —— 项目对外入口 | Project Entry Point
+
 - README 是外部用户理解 PeriSci 的第一入口
 - 它定义项目定位、核心理念、基本使用方式与入口指引
 - README 的内容应与架构与 API 契约保持一致
@@ -1031,6 +1044,7 @@ Together, they define PeriSci’s:
 ---
 
 #### VERSIONING.md / CHANGELOG.md —— 演进与承诺 | Evolution and Commitments
+
 - VERSIONING.md 定义版本号的语义与破坏性修改的判定规则
 - CHANGELOG.md 记录每个版本的可见变化
 - 二者共同构成用户与贡献者的“演进预期管理”
@@ -1042,6 +1056,7 @@ Together, they define PeriSci’s:
 ---
 
 #### CONTRIBUTING.md / CODE_OF_CONDUCT.md —— 协作与边界 | Collaboration and Boundaries
+
 - CONTRIBUTING.md 说明如何参与项目、提交代码与讨论设计
 - CODE_OF_CONDUCT.md 定义社区交流的行为边界
 - 这些文件确保技术讨论在理性与尊重的环境中进行
@@ -1053,6 +1068,7 @@ Together, they define PeriSci’s:
 ---
 
 #### MAINTAINERS.md —— 技术治理 | Technical Governance
+
 - MAINTAINERS.md 明确项目的维护责任与决策机制
 - 它定义谁对核心架构与数值正确性拥有最终裁量权
 - 该文件是处理设计分歧与长期演进的重要依据
@@ -1064,29 +1080,31 @@ Together, they define PeriSci’s:
 ---
 
 #### AUTHORS —— 作者与贡献归属 | Authors and Contribution Attribution
-- AUTHORS 文件列出项目的主要作者与核心贡献者  
+
+- AUTHORS 文件列出项目的主要作者与核心贡献者
 - 它用于：
   - 明确学术与工程成果的归属
   - 与 CITATION.cff 形成互补
 - AUTHORS 不等同于维护者列表，而是侧重于**贡献事实的记录**
 
-- AUTHORS lists the main authors and core contributors of the project  
+- AUTHORS lists the main authors and core contributors of the project
 - It serves to:
   - Clarify attribution of academic and engineering contributions
-  - Complement CITATION.cff  
+  - Complement CITATION.cff
 - AUTHORS is distinct from the maintainer list; it focuses on recording contribution facts
 
 ---
 
 #### CITATION.cff —— 学术引用与成果归属 | Academic Citation and Attribution
-- CITATION.cff 用于声明 PeriSci 在学术工作中的标准引用方式  
-- 它支持被 GitHub、文献管理工具与期刊系统自动识别  
+
+- CITATION.cff 用于声明 PeriSci 在学术工作中的标准引用方式
+- 它支持被 GitHub、文献管理工具与期刊系统自动识别
 - 该文件确保：
   - 使用 PeriSci 的科研成果能够正确引用
   - 作者与贡献者的学术贡献得到规范承认
 
-- CITATION.cff defines the standard citation format for PeriSci in academic publications  
-- It is automatically recognized by GitHub, reference managers, and journal systems  
+- CITATION.cff defines the standard citation format for PeriSci in academic publications
+- It is automatically recognized by GitHub, reference managers, and journal systems
 - This file ensures that:
   - Research using PeriSci can be properly cited
   - Authors’ and contributors’ academic contributions are formally acknowledged
@@ -1106,35 +1124,37 @@ Together, they define PeriSci’s:
 ---
 
 #### CMakeLists.txt —— 构建体系入口 | Build System Entry Point
-- CMakeLists.txt 定义 PeriSci 的整体构建结构与模块组织方式  
-- 它是连接仓库结构与可执行/可链接产物的核心入口  
+
+- CMakeLists.txt 定义 PeriSci 的整体构建结构与模块组织方式
+- 它是连接仓库结构与可执行/可链接产物的核心入口
 - 顶层 CMakeLists.txt 只负责：
   - 项目声明
   - 全局构建选项
-  - 子目录组织  
+  - 子目录组织
 - 具体编译逻辑应分散在各子目录中，以保持结构清晰
 
-- CMakeLists.txt defines the overall build structure and module organization of PeriSci  
-- It is the central entry point connecting repository structure to buildable artifacts  
+- CMakeLists.txt defines the overall build structure and module organization of PeriSci
+- It is the central entry point connecting repository structure to buildable artifacts
 - The top-level CMakeLists.txt should only:
   - Declare the project
   - Define global build options
-  - Organize subdirectories  
+  - Organize subdirectories
 - Detailed compilation logic should reside in subdirectories to keep the structure clean
 
 ---
 
 #### .gitignore —— 仓库卫生与协作基础 | Repository Hygiene and Collaboration Foundation
-- .gitignore 定义哪些文件与目录不应进入版本控制  
+
+- .gitignore 定义哪些文件与目录不应进入版本控制
 - 它确保：
   - 构建产物、运行输出与临时文件不污染仓库
   - 不同开发环境之间的协作一致性
 - 对 PeriSci 而言，.gitignore 是长期协作与 CI 稳定运行的基础
 
-- .gitignore specifies which files and directories must not be tracked by version control  
+- .gitignore specifies which files and directories must not be tracked by version control
 - It ensures that:
   - Build artifacts, runtime outputs, and temporary files do not pollute the repository
-  - Collaboration remains consistent across different development environments  
+  - Collaboration remains consistent across different development environments
 - For PeriSci, .gitignore is a foundation for long-term collaboration and CI stability
 
 ---
@@ -1167,7 +1187,7 @@ Any change touching these boundaries must include:
 - Explicit versioning strategy (typically a MAJOR bump)
 - Migration or compatibility mechanisms when applicable
 
-------
+---
 
 <a id="api-contract-trio-must-persist"></a>
 
@@ -1186,12 +1206,12 @@ Any change touching these boundaries must include:
 - `export_dataset(results, spec) -> dataset_dir`
 
 **原因：**
- 这是教学、工程与 AI 三条路线共同依赖的**最小系统骨架**。
+这是教学、工程与 AI 三条路线共同依赖的**最小系统骨架**。
 
 **Rationale:**
- This trio forms the **minimal system backbone** shared by education, engineering, and AI workflows.
+This trio forms the **minimal system backbone** shared by education, engineering, and AI workflows.
 
-------
+---
 
 <a id="semantic-stability-of-config_schema"></a>
 
@@ -1210,12 +1230,12 @@ Any change touching these boundaries must include:
 - Newly added fields must remain backward compatible (MINOR)
 
 **原因：**
- 配置是仿真、标准算例、结果与数据集**可复现性的唯一源头**。
+配置是仿真、标准算例、结果与数据集**可复现性的唯一源头**。
 
 **Rationale:**
- Configuration is the **source of truth** for the reproducibility of simulations, canonical cases, results, and datasets.
+Configuration is the **source of truth** for the reproducibility of simulations, canonical cases, results, and datasets.
 
-------
+---
 
 <a id="dataset-specifications-must-be-versioned-and-traceable"></a>
 
@@ -1238,12 +1258,12 @@ Any change touching these boundaries must include:
 These specifications also affect datasets generated from canonical cases under `cases/`.
 
 **原因：**
- AI 生态依赖的是**可复现的数据资产**，而不是临时输出文件。
+AI 生态依赖的是**可复现的数据资产**，而不是临时输出文件。
 
 **Rationale:**
- AI ecosystems rely on **reproducible data assets**, not transient outputs.
+AI ecosystems rely on **reproducible data assets**, not transient outputs.
 
-------
+---
 
 <a id="strict-decoupling-of-core-from-upper-layers"></a>
 
@@ -1262,12 +1282,12 @@ These specifications also affect datasets generated from canonical cases under `
 - `python/` and `apps/` may access kernel capabilities only via `api/`
 
 **原因：**
- 这是保证数值内核可复用、可移植、可维护的根本前提。
+这是保证数值内核可复用、可移植、可维护的根本前提。
 
 **Rationale:**
- This is fundamental to the reusability, portability, and long-term maintainability of the numerical kernel.
+This is fundamental to the reusability, portability, and long-term maintainability of the numerical kernel.
 
-------
+---
 
 <a id="reproducibility-and-provenance-are-release-requirements"></a>
 
@@ -1284,12 +1304,12 @@ These specifications also affect datasets generated from canonical cases under `
 - Results must be traceable back to the corresponding config and code version
 
 **原因：**
- 科研、工程与 AI 都需要**可解释、可审计的结果**。
+科研、工程与 AI 都需要**可解释、可审计的结果**。
 
 **Rationale:**
- Research, engineering, and AI all require **interpretable and auditable results**.
+Research, engineering, and AI all require **interpretable and auditable results**.
 
-------
+---
 
 <a id="entry-point-consistency-across-use-cases"></a>
 
@@ -1306,12 +1326,12 @@ These specifications also affect datasets generated from canonical cases under `
 - Divergent “teaching”, “engineering”, or “AI” semantics are not allowed
 
 **原因：**
- 防止系统分裂，避免维护成本指数级增长。
+防止系统分裂，避免维护成本指数级增长。
 
 **Rationale:**
- This prevents system fragmentation and avoids exponential growth in maintenance cost.
+This prevents system fragmentation and avoids exponential growth in maintenance cost.
 
-------
+---
 
 <a id="canonical-case-repository-must-exist"></a>
 
@@ -1320,14 +1340,14 @@ These specifications also affect datasets generated from canonical cases under `
 **不可轻易改动：**
 
 - 项目必须维护一个用于存放标准算例的目录 `cases/`
-- `cases/` 中的算例配置必须保持语义稳定，并可用于长期复现实验
+- `cases/` 中的算例配置必须保持语义稳定，并可用于长期复现数值实验
 - `tests/` 的回归验证应以 `cases/` 中的标准算例作为主要输入来源
 - `cases/` 的结构性删除、语义重定义或大规模迁移都属于架构级变更
 
 **Must not be changed lightly:**
 
 - The project must maintain a canonical case repository under `cases/`
-- Configurations stored in `cases/` must remain semantically stable and suitable for long-term reproducible experiments
+- Configurations stored in `cases/` must remain semantically stable and suitable for long-term reproducible numerical experiments
 - Regression tests in `tests/` should primarily use canonical cases from `cases/` as their inputs
 - Structural removal, semantic redefinition, or large-scale relocation of `cases/` constitutes an architectural change
 
@@ -1337,7 +1357,7 @@ These specifications also affect datasets generated from canonical cases under `
 这些算例为系统提供稳定的实验基线，并被用于：
 
 - 回归测试（regression tests）
-- 可复现实验（reproducible computational experiments）
+- 可复现数值实验（reproducible numerical experiments）
 - AI 数据生成（dataset generation）
 
 因此，`cases/` 构成 PeriSci 架构中 **实验可复现性的稳定锚点**。
@@ -1348,12 +1368,12 @@ The `cases/` repository stores **canonical simulation cases** that serve as the 
 These cases support:
 
 - regression testing
-- reproducible computational experiments
+- reproducible numerical experiments
 - AI dataset generation
 
 Therefore, `cases/` forms the **stability anchor for experimental reproducibility** in the PeriSci architecture.
 
-------
+---
 
 ### 总结 | Summary
 
@@ -1365,7 +1385,7 @@ Therefore, `cases/` forms the **stability anchor for experimental reproducibilit
 
 <a id="change-management-and-adr"></a>
 
-## 5. 变更管理与 ADR | Change Management and ADR (Architecture Decision Records) 
+## 5. 变更管理与 ADR | Change Management and ADR (Architecture Decision Records)
 
 本节定义当 PeriSci 的设计或实现 **涉及第 4 节所述“不可轻易改动的设计边界”时**，应遵循的变更管理机制。
 
@@ -1383,19 +1403,19 @@ Architecture Decision Records (ADRs) are not casual design notes; they are a**fo
 
 在以下情况下，**必须**创建 ADR：
 
-- 修改或重定义第 4 节中任意一条 Hard Design Boundary  
-- 改变 API 契约三件套的语义或结构  
+- 修改或重定义第 4 节中任意一条 Hard Design Boundary
+- 改变 API 契约三件套的语义或结构
 - 引入可能影响标准算例（cases）可复现性、结果可追溯性或 AI 数据集一致性的机制
-- 引入新的核心依赖或改变依赖方向  
+- 引入新的核心依赖或改变依赖方向
 - 明确拒绝或替换已有架构原则
 
 ADRs **must** be created when:
 
-- Modifying or redefining any hard design boundary in Section 4  
-- Changing the semantics or structure of the API contract trio  
+- Modifying or redefining any hard design boundary in Section 4
+- Changing the semantics or structure of the API contract trio
 - Introducing mechanisms that may affect reproducibility of canonical cases, provenance, or AI dataset consistency
-- Introducing new core dependencies or changing dependency directions  
-- Explicitly rejecting or replacing an existing architectural principle  
+- Introducing new core dependencies or changing dependency directions
+- Explicitly rejecting or replacing an existing architectural principle
 
 ---
 
@@ -1405,15 +1425,15 @@ ADRs **must** be created when:
 
 以下情况通常**不需要** ADR（但仍应通过正常代码评审）：
 
-- 内部实现细节优化，不影响对外语义  
-- 性能改进且不改变数值或物理含义  
+- 内部实现细节优化，不影响对外语义
+- 性能改进且不改变数值或物理含义
 - 新增或更新 examples、tests 或文档
 - Python 工作流层的组织调整（不改变 API 契约或标准算例）
 
 ADRs are typically **not required** for:
 
-- Internal implementation refactoring without semantic changes  
-- Performance optimizations that preserve numerical and physical meaning  
+- Internal implementation refactoring without semantic changes
+- Performance optimizations that preserve numerical and physical meaning
 - Adding or updating examples, tests, or documentation
 - Reorganizing the Python workflow layer without changing API contracts or canonical cases
 
@@ -1425,45 +1445,45 @@ ADRs are typically **not required** for:
 
 每一份 ADR 至少应包含以下内容：
 
-- **背景（Context）**  
-  - 为什么需要做出这个决策  
-  - 当前架构约束是什么  
+- **背景（Context）**
+  - 为什么需要做出这个决策
+  - 当前架构约束是什么
 
-- **问题陈述（Problem Statement）**  
-  - 明确要解决的架构级问题  
+- **问题陈述（Problem Statement）**
+  - 明确要解决的架构级问题
 
-- **备选方案（Considered Options）**  
-  - 至少列出一个被否决的方案  
-  - 说明取舍理由  
+- **备选方案（Considered Options）**
+  - 至少列出一个被否决的方案
+  - 说明取舍理由
 
-- **决策（Decision）**  
-  - 最终选择的方案  
-  - 是否影响第 4 节中的硬边界  
+- **决策（Decision）**
+  - 最终选择的方案
+  - 是否影响第 4 节中的硬边界
 
-- **影响与后果（Consequences）**  
-  - 对现有用户、数据、API、维护成本的影响  
-  - 是否需要迁移或兼容策略  
+- **影响与后果（Consequences）**
+  - 对现有用户、数据、API、维护成本的影响
+  - 是否需要迁移或兼容策略
 
 Each ADR must include at least:
 
-- **Context**  
-  - Why this decision is needed  
-  - What architectural constraints currently exist  
+- **Context**
+  - Why this decision is needed
+  - What architectural constraints currently exist
 
-- **Problem Statement**  
-  - A clear statement of the architecture-level problem  
+- **Problem Statement**
+  - A clear statement of the architecture-level problem
 
-- **Considered Options**  
-  - At least one rejected alternative  
-  - Rationale for trade-offs  
+- **Considered Options**
+  - At least one rejected alternative
+  - Rationale for trade-offs
 
-- **Decision**  
-  - The chosen option  
-  - Whether it affects any hard design boundary in Section 4  
+- **Decision**
+  - The chosen option
+  - Whether it affects any hard design boundary in Section 4
 
-- **Consequences**  
-  - Impact on users, data, APIs, and maintenance cost  
-  - Migration or compatibility requirements, if any  
+- **Consequences**
+  - Impact on users, data, APIs, and maintenance cost
+  - Migration or compatibility requirements, if any
 
 ---
 
@@ -1472,9 +1492,7 @@ Each ADR must include at least:
 ### 5.4 ADR 的存放与命名约定 | ADR Location and Naming Convention
 
 - 所有 ADR 文件应存放于： `docs/adr/`
-  
 - 文件命名格式建议为：`NNNN-short-title.md`，其中 `NNNN` 为四位递增编号
-  
 - ADR 一经合并，不应被随意修改； 如需推翻，应新增 ADR 说明变更原因
 
 All ADRs should be stored in:
@@ -1483,7 +1501,7 @@ All ADRs should be stored in:
 
 Recommended file naming format:
 
-- `NNNN-short-title.md`  where `NNNN` is a four-digit incremental number
+- `NNNN-short-title.md` where `NNNN` is a four-digit incremental number
 
 Once merged, ADRs should not be modified arbitrarily; revisions should be recorded via new ADRs explaining the change.
 
@@ -1494,7 +1512,6 @@ Once merged, ADRs should not be modified arbitrarily; revisions should be record
 ### 5.5 ADR 与版本策略的关系 | Relationship Between ADRs and Versioning
 
 - 任何影响 Hard Design Boundaries 的 ADR，必须明确对应的版本影响（通常为 MAJOR）
-  
 - ADR 是 VERSIONING.md 与 CHANGELOG.md 的决策依据之一
 
 Any ADR affecting hard design boundaries must explicitly state its versioning implications (typically MAJOR).
@@ -1507,7 +1524,7 @@ ADRs serve as part of the decision basis for VERSIONING.md and CHANGELOG.md.
 
 > **第 4 节定义了什么是“不可轻易改动的”，本节定义了“如果必须改动，应该如何被记录、讨论与承担后果”。**
 
-> **Section 4 defines what must not be changed lightly;  this section defines how such changes must be recorded, discussed, and accounted for if they become unavoidable.**
+> **Section 4 defines what must not be changed lightly; this section defines how such changes must be recorded, discussed, and accounted for if they become unavoidable.**
 
 ---
 
@@ -1542,11 +1559,13 @@ Soft boundaries do not imply arbitrary change. They indicate areas that **may ev
 - 不得导致不同入口的语义分叉
 
 **Evolvable aspects:**
+
 - Organization of Python workflows and helper utilities
 - CLI (apps/) command options, flags, and interaction styles
 - Presentation and organization of tutorials, teaching examples, and exploratory examples
 
 **Constraints:**
+
 - Must not introduce new physical semantics
 - Must not bypass the API contract
 - Must not cause semantic divergence across entry points
@@ -1558,21 +1577,25 @@ Soft boundaries do not imply arbitrary change. They indicate areas that **may ev
 ### 6.2 内部实现与性能优化 | Internal Implementation and Performance Optimization
 
 **可演进内容：**
+
 - 内部算法实现细节
 - 数据结构与内存布局优化
 - 并行化与性能调优策略
 
 **约束：**
+
 - 不得改变对外可观察的数值语义
 - 不得破坏既有 tests 或 canonical cases 的可复现性
 - 性能优化必须通过 tests 验证
 
 **Evolvable aspects:**
+
 - Internal algorithmic implementation details
 - Data structures and memory layout optimizations
 - Parallelization and performance tuning strategies
 
 **Constraints:**
+
 - Must not change externally observable numerical semantics
 - Must not break reproducibility of existing tests or canonical cases
 - Performance changes must be validated by tests
@@ -1581,24 +1604,28 @@ Soft boundaries do not imply arbitrary change. They indicate areas that **may ev
 
 <a id="extension-capabilities-and-plugin-based-integration"></a>
 
-### 6.3 扩展能力与插件式集成 | Extension Capabilities and Plugin-Based Integration 
+### 6.3 扩展能力与插件式集成 | Extension Capabilities and Plugin-Based Integration
 
 **可演进内容：**
+
 - 新的物理模型或本构关系（作为扩展模块）
 - 与外部求解器、库或工具的集成
 - 面向 AI 的数据导出形式与适配器
 
 **约束：**
+
 - 扩展不得侵入 core 的稳定接口
 - 扩展必须通过 api 接入
 - 插件机制的引入不得破坏既有配置语义
 
 **Evolvable aspects:**
+
 - New physical models or constitutive laws (as extensions)
 - Integration with external solvers, libraries, or tools
 - AI-oriented data export formats and adapters
 
 **Constraints:**
+
 - Extensions must not intrude into stable core interfaces
 - Extensions must integrate through the api layer
 - Plugin mechanisms must not break existing configuration semantics
@@ -1610,6 +1637,7 @@ Soft boundaries do not imply arbitrary change. They indicate areas that **may ev
 ### 6.4 文档、示例与测试体系 | Documentation, Examples, and Testing System
 
 **可演进内容：**
+
 - 文档结构与写作风格
 - 示例覆盖范围、教学路径设计以及 examples 向 canonical cases 的演进组织
 - 测试粒度、覆盖率与组织方式
@@ -1621,11 +1649,13 @@ Soft boundaries do not imply arbitrary change. They indicate areas that **may ev
 - 测试失败不得被长期忽略
 
 **Evolvable aspects:**
+
 - Documentation structure and writing style
 - Example coverage, teaching pathways, and the organization of example-to-case evolution
 - Test granularity, coverage, and organization
 
 **Constraints:**
+
 - Documentation must remain consistent with current architecture and APIs
 - Examples must remain runnable
 - Failing tests must not be ignored over time
@@ -1636,9 +1666,9 @@ Soft boundaries do not imply arbitrary change. They indicate areas that **may ev
 
 ### 6.5 标准算例资产（cases） | Canonical Case Assets
 
-`cases/` 构成 PeriSci 的 **标准算例资产库（canonical simulation case assets）**。这些算例用于保证实验、数据集与回归测试的可复现性。它与 examples 与 tests 一起构成 PeriSci 的实验体系。
+`cases/` 构成 PeriSci 的 **标准算例资产库（canonical simulation case assets）**。这些算例用于保证数值实验、数据集与回归测试的可复现性。它与 examples 与 tests 一起构成 PeriSci 的数值实验体系。
 
-与 examples 不同，cases 通常代表 **经过验证并稳定的实验配置**，但算例库本身仍然允许随着项目发展逐步扩展与完善。
+与 examples 不同，cases 通常代表 **经过验证并稳定的数值实验配置**，但算例库本身仍然允许随着项目发展逐步扩展与完善。
 
 **可演进内容：**
 
@@ -1654,9 +1684,9 @@ Soft boundaries do not imply arbitrary change. They indicate areas that **may ev
 - 任何影响算例数值行为的修改必须通过 tests 验证
 - 算例变更不得破坏既有数据集或回归测试的可复现性
 
-The `cases/` directory forms the **canonical simulation case asset library** of PeriSci.  These cases ensure reproducibility of experiments, datasets, and regression tests. Together with examples and tests, it forms the experiment system of PeriSci.
+The `cases/` directory forms the **canonical simulation case asset library** of PeriSci. These cases ensure reproducibility of numerical experiments, datasets, and regression tests. Together with examples and tests, it forms the numerical experiment system of PeriSci.
 
-Unlike examples, canonical cases typically represent **validated and stabilized experiment configurations**,  but the case library itself may evolve as the project grows. 
+Unlike examples, canonical cases typically represent **validated and stabilized numerical experiment configurations**, but the case library itself may evolve as the project grows.
 
 **Evolvable aspects:**
 
@@ -1689,23 +1719,23 @@ Unlike examples, canonical cases typically represent **validated and stabilized 
 
 > **软边界定义了 PeriSci “如何生长”，硬边界定义了 PeriSci “不能越界”。**
 
-> **Soft boundaries define how PeriSci may grow;  hard boundaries define what PeriSci must not cross.**
+> **Soft boundaries define how PeriSci may grow; hard boundaries define what PeriSci must not cross.**
 
 ---
 
 <a id="appendix-common-anti-patterns"></a>
 
-## 7. 附：常见反模式（必须避免） | Appendix: Common Anti-Patterns (Must Be Avoided)  
+## 7. 附：常见反模式（必须避免） | Appendix: Common Anti-Patterns (Must Be Avoided)
 
 > **承接说明：**  
-> 本节所列的反模式并非新的“硬边界”。它们是发生在“软边界”范围内、最常见、也最容易被忽视的错误实践。  
-> 
->这些反模式往往源于短期便利或局部优化，但若不加以避免，将逐步侵蚀第 4 节所定义的硬边界。
+> 本节所列的反模式并非新的“硬边界”。它们是发生在“软边界”范围内、最常见、也最容易被忽视的错误实践。
+>
+> 这些反模式往往源于短期便利或局部优化，但若不加以避免，将逐步侵蚀第 4 节所定义的硬边界。
 
 > **Transition note:**  
-> The anti-patterns listed in this section are not new hard boundaries.  They represent the most common and subtle pitfalls that occur **within soft boundaries**.  
-> 
->These practices often arise from short-term convenience or local optimization, but if left unchecked, they will gradually erode the hard boundaries defined in Section 4.
+> The anti-patterns listed in this section are not new hard boundaries. They represent the most common and subtle pitfalls that occur **within soft boundaries**.
+>
+> These practices often arise from short-term convenience or local optimization, but if left unchecked, they will gradually erode the hard boundaries defined in Section 4.
 
 本节列出在 PeriSci 的设计、实现与演进过程中**看似合理、但实际会破坏架构边界与长期可维护性的反模式**。
 
@@ -1722,18 +1752,22 @@ These anti-patterns often arise from short-term convenience, local optimizations
 ### Anti-Pattern 1 — 绕过 API 直接访问 core | Bypassing the API to Access core Directly
 
 **表现形式：**
+
 - 在 python 或 apps 中直接调用 core 的内部类或函数
 - 为了“省事”暴露 core 内部实现细节
 
 **为什么这是错误的：**
+
 - 破坏 API 契约的权威性
 - 使 core 难以演进和复用
 
 **Symptoms:**
+
 - Directly calling internal core classes or functions from python or apps
 - Exposing core internals for convenience
 
 **Why this is wrong:**
+
 - Undermines the authority of the API contract
 - Makes core evolution and reuse difficult
 
@@ -1741,21 +1775,25 @@ These anti-patterns often arise from short-term convenience, local optimizations
 
 <a id="introducing-new-physical-semantics-at-entry-layers"></a>
 
-### Anti-Pattern 2 — 在入口层引入新的物理语义 | Introducing New Physical Semantics at Entry Layers 
+### Anti-Pattern 2 — 在入口层引入新的物理语义 | Introducing New Physical Semantics at Entry Layers
 
 **表现形式：**
+
 - 在 python 或 CLI 中隐式修改物理参数含义
 - 针对不同入口提供“特制版”物理行为
 
 **为什么这是错误的：**
+
 - 造成系统语义分裂
 - 破坏可复现性与用户信任
 
 **Symptoms:**
+
 - Implicitly modifying physical parameter meanings in python or CLI
 - Providing entry-specific “customized” physics behavior
 
 **Why this is wrong:**
+
 - Causes semantic fragmentation
 - Breaks reproducibility and user trust
 
@@ -1763,14 +1801,16 @@ These anti-patterns often arise from short-term convenience, local optimizations
 
 <a id="treating-datasets-as-physical-ground-truth"></a>
 
-### Anti-Pattern 3 — 将数据集当作物理真理来源 | Treating Datasets as Physical Ground Truth 
+### Anti-Pattern 3 — 将数据集当作物理真理来源 | Treating Datasets as Physical Ground Truth
 
 **表现形式：**
+
 - 从 dataset 反推或修改物理含义
 - 依赖数据导出格式解释物理行为
 - 用 dataset 替代 cases 或 config 作为物理语义来源
 
 **为什么这是错误的：**
+
 - 混淆 results 与 dataset 的职责
 - 对 AI 训练产生隐性偏差
 
@@ -1781,6 +1821,7 @@ These anti-patterns often arise from short-term convenience, local optimizations
 - Using datasets as a substitute for canonical cases or configuration when interpreting physics
 
 **Why this is wrong:**
+
 - Blurs the responsibility between results and datasets
 - Introduces hidden bias into AI training
 
@@ -1788,9 +1829,10 @@ These anti-patterns often arise from short-term convenience, local optimizations
 
 <a id="sacrificing-reproducibility-for-performance"></a>
 
-### Anti-Pattern 4 — 为性能牺牲可复现性 | Sacrificing Reproducibility for Performance 
+### Anti-Pattern 4 — 为性能牺牲可复现性 | Sacrificing Reproducibility for Performance
 
 **表现形式：**
+
 - 默认开启不可控的非确定性并行策略
 - 为提速而忽略随机种子与运行记录
 
@@ -1801,10 +1843,12 @@ These anti-patterns often arise from short-term convenience, local optimizations
 - 破坏 canonical cases 与 tests 的可复现性
 
 **Symptoms:**
+
 - Enabling uncontrolled nondeterministic parallelism by default
 - Ignoring random seeds or execution records for speed
 
 **Why this is wrong:**
+
 - Makes scientific results unverifiable
 - Makes engineering results unauditable
 - Breaks reproducibility of canonical cases and regression tests
@@ -1813,7 +1857,7 @@ These anti-patterns often arise from short-term convenience, local optimizations
 
 <a id="freezing-temporary-workarounds-into-the-architecture"></a>
 
-### Anti-Pattern 5 — 将临时方案固化为架构 | Freezing Temporary Workarounds into the Architecture  
+### Anti-Pattern 5 — 将临时方案固化为架构 | Freezing Temporary Workarounds into the Architecture
 
 **表现形式：**
 
@@ -1821,14 +1865,17 @@ These anti-patterns often arise from short-term convenience, local optimizations
 - 用注释而不是设计文档解释关键行为
 
 **为什么这是错误的：**
+
 - 技术债务快速累积
 - 架构边界逐步腐蚀
 
 **Symptoms:**
+
 - Introducing “temporary” interfaces that persist indefinitely
 - Explaining critical behavior via comments instead of design docs
 
 **Why this is wrong:**
+
 - Rapid accumulation of technical debt
 - Gradual erosion of architectural boundaries
 
@@ -1836,7 +1883,7 @@ These anti-patterns often arise from short-term convenience, local optimizations
 
 <a id="treating-roadmaps-as-architectural-commitments"></a>
 
-### Anti-Pattern 6 — 用路线图代替架构承诺 | Treating Roadmaps as Architectural Commitments 
+### Anti-Pattern 6 — 用路线图代替架构承诺 | Treating Roadmaps as Architectural Commitments
 
 **表现形式：**
 
@@ -1849,21 +1896,23 @@ These anti-patterns often arise from short-term convenience, local optimizations
 - 模糊当前系统的责任边界
 
 **Symptoms:**
+
 - Accepting poor design because “we will refactor later”
 - Treating short-term plans as architectural guarantees
 
 **Why this is wrong:**
+
 - Roadmaps change; architectural boundaries must not
 - Blurs responsibility boundaries of the current system
 
 ---
 
-### 总结 | Summary 
+### 总结 | Summary
 
-> **反模式并非“做不到”，  而是“做了之后系统会慢慢失控”。**
+> **反模式并非“做不到”， 而是“做了之后系统会慢慢失控”。**
 >
-> **这些反模式通常首先破坏实验体系（examples、cases、tests），并最终侵蚀系统的架构边界。** 
+> **这些反模式通常首先破坏数值实验体系（examples、cases、tests），并最终侵蚀系统的架构边界。**
 
-> **Anti-patterns are not things that cannot be done,  but things that cause the system to gradually lose control if done. **
+> **Anti-patterns are not things that cannot be done, but things that cause the system to gradually lose control if done. **
 >
-> **These anti-patterns often first damage the experiment system (examples, canonical cases, and tests) before eventually eroding the architectural boundaries.**
+> **These anti-patterns often first damage the numerical experiment system (examples, canonical cases, and tests) before eventually eroding the architectural boundaries.**

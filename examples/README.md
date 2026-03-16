@@ -94,11 +94,11 @@ ex-XX-keyword
 
 ```
 ex-00-hello
- ex-01-minimal-run
- ex-02-config-basics
- ex-03-poisson-basic
- ex-04-poisson-refinement
- ex-05-three-beam-intro
+ex-01-minimal-run
+ex-02-config-basics
+ex-03-poisson-basic
+ex-04-poisson-refinement
+ex-05-three-beam-intro
 ```
 ---
 

@@ -18,7 +18,7 @@
 
 - PeriSci’s system architecture **must** follow the **Three-Beams** structure.  
 - PeriSci’s numerical core **must** follow the **Four-Cores** structure.  
-- PeriSci’s evolution **must** accumulate **Case Assets** from day one as a core engineering mechanism.
+- PeriSci’s evolution **must** treat the accumulation of **Case Assets** as a core engineering mechanism from the outset.
 
 ------
 
@@ -163,22 +163,48 @@ During the v0.2.x phase, the **minimum mandatory guarantees** for code governanc
 
 ## 1. 核心概念总览 | Core Concept Overview
 PeriSci 的架构由三类“不可替代要素”组成：  
+
 1) **三梁（系统宪法）**：保证系统可运行、可复现、可扩展、可自动化  
 2) **四核（数值骨架）**：保证求解器扩展时不发生结构性重构  
 3) **算例资产（价值积累机制）**：保证质量门禁、回归测试、方法对比与长期演进  
 
-这三者构成闭环：  
-- 执行方向：**三梁 → 四核 → 算例资产**  
-- 治理方向：**算例资产 → 反向约束四核与三梁**
+这三者构成 PeriSci 的长期结构闭环：  
 
-PeriSci’s architecture is built on three non-substitutable pillars:  
-1) **Three-Beams (system constitution)**: runnability, reproducibility, extensibility, automation  
-2) **Four-Cores (numerical skeleton)**: prevents structural refactors as physics expands  
-3) **Case Assets (value accumulation)**: enables quality gates, regression, comparison, long-term evolution  
+- **执行方向**：**三梁 → 四核 → 算例资产**  
+- **治理方向**：**算例资产 → 反向约束四核与三梁**  
 
-They form a loop:  
-- Execution: **Three-Beams → Four-Cores → Case Assets**  
-- Governance: **Case Assets → constrain and validate Four-Cores and Three-Beams**
+在当前 **v0.2.0** 阶段，围绕这一长期结构闭环，PeriSci 已经形成一个最小工程治理闭环：  
+
+- **`run -> export -> validate -> regression`**
+
+其中：
+
+- `run` 与 `export` 分别对应三梁中的 **B 梁（`run_case`）** 与 **C 梁（`export_dataset`）**；
+- `validate` / `regression` 属于围绕三梁与算例资产运行的**验证与门禁机制**；
+- 它们用于检查输出是否满足契约、溯源、结构与质量要求，并将 canonical cases 纳入可重复的回归体系；
+- 该闭环**不改变三梁作为系统主结构的地位**，而是其在当前阶段的最小工程化落地形式。
+
+PeriSci’s architecture is built on three non-substitutable elements:  
+
+1) **Three-Beams (system constitution)**: ensure runnability, reproducibility, extensibility, and automation  
+2) **Four-Cores (numerical skeleton)**: prevent structural refactors as solver capabilities expand  
+3) **Case Assets (value accumulation mechanism)**: enable quality gates, regression, method comparison, and long-term evolution  
+
+Together, these form PeriSci’s long-term structural loop:  
+
+- **Execution direction**: **Three-Beams → Four-Cores → Case Assets**  
+- **Governance direction**: **Case Assets → constrain Four-Cores and Three-Beams in return**  
+
+At the current **v0.2.0** stage, around this long-term structural loop, PeriSci has already established a minimal engineering governance loop:  
+
+- **`run -> export -> validate -> regression`**
+
+Within this loop:
+
+- `run` and `export` correspond respectively to **Beam B (`run_case`)** and **Beam C (`export_dataset`)** of the Three-Beams;
+- `validate` and `regression` are **validation and gating mechanisms** operating around the Three-Beams and Case Assets;
+- they are used to check whether outputs satisfy contractual, provenance, structural, and quality requirements, and to place canonical cases into a repeatable regression system;
+- this loop **does not alter the Three-Beams as the system’s primary structure**, but represents its minimal engineering realization at the current stage.
 
 ---
 
@@ -268,11 +294,11 @@ It is a **constitutional, system-level governance contract**.
 
 **必须满足 / Must have**
 
-- **单入口、闭环**：输入仅来自 config（以及显式 workdir）；输出仅通过 结果（和 export）。
+- **单入口、闭环**：输入语义仅来自 config；执行过程中不得依赖任何隐含输入来源（文件系统状态、环境变量或 GUI 状态）。输出仅通过 results，并由 export_dataset 负责导出为数据集。
 - **可批量**：能够在脚本/CI/HPC 中循环调用上千次，互不污染。
 - **确定性可控**：随机性必须显式（seed）；并行差异必须可记录并可解释。
 - **无交互**：运行过程中不得需要人工输入，不依赖 GUI。
-- **Single entry, closed loop**: inputs come only from config (and explicit workdir); outputs via results/export.
+- **Single entry, closed loop**: the semantic input comes only from the config; the execution must not depend on hidden inputs (filesystem state, environment variables, or GUI state). Outputs are produced only as results and exported as datasets via export_dataset.
 - **Batchable**: safe for thousands of runs in scripts/CI/HPC without cross-run contamination.
 - **Controllable determinism**: explicit seeds; parallel variance recorded and explainable.
 - **Non-interactive**: no human input, no GUI dependency.
@@ -512,15 +538,14 @@ For a computation to be regarded as a **Case Asset**, it MUST possess at least a
 
 - **A 梁（Intent / Strategy 锚点）**：
   - `config_schema`（权威输入契约）；
-  - 经 schema 校验并参与语义 语义差异比较 与 `config_hash` 计算的配置对象；
+  - 经 schema 校验并参与语义差异比较 与 `config_hash` 计算的配置对象；
 - **B 梁（Execution 锚点）**：
   - 受控、可重复调用的执行入口（`run_case`）；
   - 明确的执行策略解释路径，不引入隐含输入；
 - **C 梁（Result / Asset 锚点）**：
   - `dataset_spec`（输出结构与语义契约）；
   - `manifest`（权威元数据入口），包含 溯源、版本元数据与结构化结果索引；
-  - 对于 C 梁算例资产，凡是涉及输出结构、manifest 语义、溯源绑定或 canonical 治理规则的任何破坏性变更，必须通过提升 `dataset_version` 的主版本号（Major）来体现，其定义以 `dataset-spec` 为准。
-  - 对于 C 梁算例资产，凡涉及破坏性变更的版本处理规则，**必须遵循 `dataset-spec` 中定义的 Versioning Red Line（C 梁）**
+  - 对于 C 梁算例资产，凡涉及输出结构、manifest 语义、溯源绑定或 canonical 治理规则的破坏性变更，其版本处理**必须遵循 `dataset-spec` 中定义的 Versioning Red Line（C梁）**；在当前规范下，这意味着必须通过提升 `dataset_version` 的主版本号（Major）来体现。
 - **代码治理锚点（Code Governance）**：
   - 可唯一定位生成逻辑的代码标识（如 `code_version`，必要时附加 `dirty` / `code_hash`）；
   - 代码通过被 canonical 的元数据参与溯源、语义差异比较 与冻结治理，而非作为 canonical JSON 本体；
@@ -544,8 +569,7 @@ In PeriSci, the **minimal governed composition** of a Case Asset includes, but i
 - **Beam C (Result / Asset Anchors)**:
   - `dataset_spec` (output structure and semantic contract);
   - `manifest` (authoritative metadata entry), containing provenance, version metadata, and structured result indexing;
-  - For Beam C assets, any breaking change in output structure, manifest semantics, provenance binding, or canonical governance rules MUST be reflected by a major bump of dataset_version, as defined in dataset-spec；
-  - For Beam C case assets, version handling for breaking changes **MUST follow the Versioning Red Line (Beam C) defined in the dataset-spec**；
+  - For Beam C case assets, any breaking change involving output structure, manifest semantics, provenance binding, or canonical governance rules **MUST follow the Versioning Red Line (Beam C) defined in `dataset-spec`;** under the current specification, this means a major bump of `dataset_version`.
 - **Code Governance Anchors**:
   - Code identifiers capable of uniquely locating the generating logic (e.g., `code_version`, optionally augmented with `dirty` / `code_hash`);
   - Code participating in provenance binding, **semantic diff**, and freeze governance through canonical metadata rather than as canonical JSON bodies;
@@ -646,10 +670,14 @@ Each PR should at least answer the following questions (suggested to be included
 ### 7.3 算例资产检查 | Case Assets
 
 > 本检查清单用于评估一个 PR / 变更是否引入、修改或影响 **算例资产**，以及该算例是否满足《5.2 算例资产的最小可治理构成》所定义的治理要求。
->  **凡涉及 算例资产 的 PR，必须逐条通过以下检查项；未通过者不得合并。**
+> **凡涉及 算例资产 的 PR，必须逐条通过以下检查项；未通过者不得合并。**
+>
+> 以下检查项代表目标治理要求；在当前阶段，尚未自动化覆盖的条目也应作为人工评审标准执行。
 
 > This checklist is used to evaluate whether a PR or change introduces, modifies, or affects a **Case Asset**, and whether that case satisfies the governance requirements defined in *5.2 Minimal Governed Composition of a Case Asset*.
 > **Any PR involving Case Assets MUST pass all checks below; failure to do so SHALL block merging.**
+>
+> The following checks represent target governance requirements; items not yet fully automated at the current stage shall still be enforced through manual review.
 
 ------
 
@@ -751,13 +779,17 @@ Each PR should at least answer the following questions (suggested to be included
 - `Dataset export_dataset(const Config&, const Results&, const ExportContext&)`
 - `Comparison compare(const Dataset&, const Dataset&)`（可逐步实现）
 
-To ensure that the three beams can be lowered, the following minimum interface configuration is recommended:
+说明：`load_config` 仅表示从外部介质载入配置对象；其治理语义仍以 schema 校验与 canonical 表示为准，而非以文件路径本身为准。
+
+To make the Three-Beams structure operational in practice, the following minimal interfaces are recommended:
 
 - `Config load_config(path) -> Config`
 - `void validate_config(const Config&)`
 - `Results run_case(const Config&, const RunContext&)`
 - `Dataset export_dataset(const Config&, const Results&, const ExportContext&)`
 - `Comparison compare(const Dataset&, const Dataset&)`
+
+Note: `load_config` only denotes loading a configuration object from external storage; its governance semantics are still defined by schema validation and canonical representation, not by the file path itself.
 
 ---
 
@@ -848,12 +880,12 @@ To ensure that the three beams can be lowered, the following minimum interface c
 
 #### **三梁对象、语义与治理对照表 | Three-Beams Objects, Semantics, and Governance Matrix**
 
-| 梁 / Beam | 核心对象 / Core Object       | 它是什么 / What It Is     | 谁写 / 产生 / Authored By | 是否可实例化 / Instantiable | 是否参与校验 / Validation | 是否参与 diff  | 是否参与 hash      | 是否参与 provenance | canonical JSON 的角色 / Role of Canonical JSON |
-| --------- | ---------------------------- | ------------------------- | ------------------------- | --------------------------- | ------------------------- | -------------- | ------------------ | ------------------- | ---------------------------------------------- |
-| **A 梁**  | **`config_schema`**          | 权威输入规范（规则/契约） | 系统设计者                | ❌                           | 用来校验他人              | ❌              | ❌                  | ❌                   | 自身以 JSON 表示，作为权威规则                 |
-| **A 梁**  | **配置对象** (config object) | 某次运行的配置实例        | 用户 / pipeline           | ✅                           | ✅                         | ✅（语义 diff） | ✅（`config_hash`） | ✅                   | **必须 canonical JSON 后才能参与治理**         |
-| **B 梁**  | **API / 接口契约**           | 输入输出结构约定          | 系统设计者                | ❌                           | 用来校验请求/响应         | ❌              | （可选）           | （间接）            | JSON 作为稳定接口格式                          |
-| **C 梁**  | **dataset-spec**             | 输出结构与语义规范        | 系统设计者                | ❌                           | 用来校验 dataset          | ❌              | ❌                  | ❌                   | 自身以 JSON / Markdown 固化                    |
-| **C 梁**  | **manifest（元数据对象）**   | dataset 的权威语义入口    | 系统自动生成              | ✅                           | ✅                         | ✅（结构 diff） | ✅（可选）          | ✅（核心）           | **权威 canonical JSON**                        |
-| **C 梁**  | **results 内容对象**         | 实际输出结果              | 系统自动生成              | ✅                           | （间接）                  | （可选）       | （可选）           | ✅（被引用）         | 通常不强制 canonical                           |
-| **C 梁**  | **case asset（未来）**       | 可审计、可复现案例        | 系统组合生成              | ✅                           | ✅                         | ✅              | ✅                  | ✅                   | canonical JSON 作为治理 glue                   |
+| 梁 / Beam | 核心对象 / Core Object       | 它是什么 / What It Is     | 谁写 / 产生 / Authored By | 是否可实例化 / Instantiable | 是否参与校验 / Validation | 是否参与 diff  | 是否参与 hash      | 是否参与 provenance | canonical JSON 的角色 / Role of Canonical JSON               |
+| --------- | ---------------------------- | ------------------------- | ------------------------- | --------------------------- | ------------------------- | -------------- | ------------------ | ------------------- | ------------------------------------------------------------ |
+| **A 梁**  | **`config_schema`**          | 权威输入规范（规则/契约） | 系统设计者                | ❌                           | 用来校验他人              | ❌              | ❌                  | ❌                   | 其治理对象以 canonical JSON 表示；规范本体可由文档与实现共同定义 |
+| **A 梁**  | **配置对象** (config object) | 某次运行的配置实例        | 用户 / pipeline           | ✅                           | ✅                         | ✅（语义 diff） | ✅（`config_hash`） | ✅                   | **必须 canonical JSON 后才能参与治理**                       |
+| **B 梁**  | **API / 接口契约**           | 输入输出结构约定          | 系统设计者                | ❌                           | 用来校验请求/响应         | ❌              | （可选）           | （间接）            | JSON 作为稳定接口格式                                        |
+| **C 梁**  | **dataset-spec**             | 输出结构与语义规范        | 系统设计者                | ❌                           | 用来校验 dataset          | ❌              | ❌                  | ❌                   | 规范本体以文档形式定义；其约束的治理对象通过 canonical JSON 落地 |
+| **C 梁**  | **manifest（元数据对象）**   | dataset 的权威语义入口    | 系统自动生成              | ✅                           | ✅                         | ✅（结构 diff） | ✅（可选）          | ✅（核心）           | **权威 canonical JSON**                                      |
+| **C 梁**  | **results 内容对象**         | 实际输出结果              | 系统自动生成              | ✅                           | （间接）                  | （可选）       | （可选）           | ✅（被引用）         | 通常不强制 canonical                                         |
+| **C 梁**  | **case asset（未来）**       | 可审计、可复现案例        | 系统组合生成              | ✅                           | ✅                         | ✅              | ✅                  | ✅                   | canonical JSON 作为治理 glue                                 |

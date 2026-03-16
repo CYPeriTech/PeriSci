@@ -45,7 +45,7 @@ cases/case-00-minimal
 - 参与 canonical 表示与 config_hash 计算
 - 修改 input 等价于改变“问题定义”
 
->v0.2.x 阶段为了支持平台 smoke gate（如 `case-00-minimal`），允许最小配置仅包含 `meta` 分区。  
+> v0.2.x 阶段为了支持平台 smoke gate（如 `case-00-minimal`），允许最小配置仅包含 `meta` 分区。  
 > `meta` 用于标识与追踪（如 `schema_version`、`config_id`），不得影响数值行为。  
 > 当未来引入严格 schema 校验时，必须确保该最小输入仍然合法（详见 config-schema 的 v0.2.x 最小配置条款）。
 
@@ -68,8 +68,9 @@ cases/case-00-minimal
 
 修改 expected 等价于改变“通过标准”。
 
->expected 的校验对象可以逐步扩展：  
-> - v0.2.x：以“结构/状态/必备字段存在性”为主（平台 smoke gate）  
+> expected 的校验对象可以逐步扩展：
+>
+> - v0.2.x：以“结构/状态/必备字段存在性”为主（平台 smoke gate）
 > - v0.3.x+：逐步加入数值阈值、不变量、收敛行为等（能力基准）
 
 ---
@@ -148,8 +149,8 @@ validate_case  ──▶  expected.json 判据（回归门禁）
 - **validate_case**：结构与门禁检查的入口（可对 bundle / dataset manifest 做校验）
 - **expected.json**：只定义“通过标准”，不参与执行
 
->因此，可以认为：input 产生结果；expected 约束结果  
->并且：validate 是“校验的程序入口”，expected 是“校验的判据配置”。
+> 因此，可以认为：input 产生结果；expected 约束结果  
+> 并且：validate 是“校验的程序入口”，expected 是“校验的判据配置”。
 
 ---
 
@@ -169,7 +170,7 @@ input → 执行 → 观察 → 写 expected
 
 不是反过来。
 
-------
+---
 
 ### 后续演进时：
 
@@ -181,7 +182,7 @@ input → 执行 → 观察 → 写 expected
 
 这说明能力增强。
 
-------
+---
 
 #### 情况 B：问题定义变化
 
@@ -196,7 +197,7 @@ input → 执行 → 观察 → 写 expected
 
 修改 input = 改变问题定义  
 修改 expected = 改变通过标准  
-修改 notes = 更新维护记录  
+修改 notes = 更新维护记录
 
 三者语义不同，应在评审中区分。
 
@@ -211,6 +212,6 @@ input → 执行 → 观察 → 写 expected
 
 四者构成：
 
-> 可重复实验 + 可判定结果 + 可维护历史
+> 可重复数值实验 + 可判定计算结果 + 可维护历史
 
 **注：Case资产创建标准流程，详见：CASE_WORKFLOW.md**
