@@ -1,4 +1,5 @@
-# PeriSci  
+# PeriSci
+
 **An Open-source PeriFEM-based CAE Platform for Scientific Computing and Engineering Simulation**  
 **开源近场有限元（PeriFEM）科学计算与工程仿真平台**
 
@@ -13,22 +14,23 @@
 
 ## 项目简介 | Overview
 
-**PeriSci** 是一款面向科学计算与工程仿真的开源 CAE 软件，  
-以 **近场有限元法（PeriFEM, Peridynamics-based Finite Element Method）** 为核心数值框架，  
-用于模拟 **多物理场耦合及极端条件下结构变形与破坏行为**。
+**PeriSci** 是一款面向科学计算与工程仿真的开源 CAE 软件平台，用于模拟多物理场耦合与极端条件下结构的变形与破坏行为。
 
-PeriSci 是近场有限元软件生态体系**PERISOFT**中的开源软件品牌，  
-目标是构建一个 **可教学、可研究、可工程化、可被 AI 调用的物理可信仿真基座**。
+该平台以 **近场有限元方法（PeriFEM, Peridynamics-based Finite Element Method）** 为核心数值框架，将非局部力学与有限元离散方法结合，用于描述断裂、损伤及复杂材料行为的数值模拟。
+
+除了作为仿真工具之外，**PeriSci 同时也是一个用于探索科学计算平台架构的实验工具**，包括运行时执行结构、数值实验体系以及面向可复现计算研究的软件长期稳定性设计。
+
+PeriSci 是近场有限元软件生态体系 **PERISOFT** 中的开源软件品牌，目标是构建一个 **可教学、可研究、可工程化、可被 AI 调用的物理可信仿真基座**。
 
 ---
 
-**PeriSci** is an open-source CAE software platform designed for scientific computing and engineering simulation.  
-It is built upon the **PeriFEM (Peridynamics-based Finite Element Method)** framework,  
-aiming to simulate **structural deformation and failure behavior under coupled multiphysics and extreme conditions**.
+**PeriSci** is an open-source CAE software platform for scientific computing and engineering simulation, designed to model structural deformation and failure under extreme conditions and multiphysics coupling.
 
-PeriSci is the open-source brand of the PeriFEM software ecosystem (**PERISOFT**).  
-Its long-term vision is to provide a **physically trustworthy simulation backbone** that supports  
-education, research, engineering applications, and AI-driven modeling.
+The platform is built around the **Peridynamics-based Finite Element Method (PeriFEM)**, a numerical framework that integrates nonlocal mechanics with finite element discretization to enable robust simulation of fracture, damage, and complex material behavior.
+
+Beyond providing a simulation tool, **PeriSci also serves as an experimental tool for exploring architectures of scientific computing platforms**, including runtime execution structures, numerical experiment systems, and long-term software stability design for reproducible computational research.
+
+PeriSci is part of the **PERISOFT** ecosystem for PeriFEM-based scientific software. The project aims to establish a **physically trustworthy simulation foundation that is teachable, research-oriented, engineering-ready, and callable by AI agents**.
 
 ---
 
@@ -55,10 +57,10 @@ education, research, engineering applications, and AI-driven modeling.
 
 ## 核心理念 | Core Philosophy
 
-- **以近场有限元法为核心（PeriFEM-core）**  
-- **物理可信优先于经验拟合（Physics-first）**  
-- **复杂性由系统承担，而非用户承担**  
-- **长期可复现性与可追溯性（Reproducibility-by-design）**  
+- **以近场有限元法为核心（PeriFEM-core）**
+- **物理可信优先于经验拟合（Physics-first）**
+- **复杂性由系统承担，而非用户承担**
+- **长期可复现性与可追溯性（Reproducibility-by-design）**
 - **面向未来 AI–CAE 融合的开放接口**
 - **采用算例驱动的生长模式：**每一个算例均被视为一等资产，并同时承担教学示例、回归基准与数据生成单元的功能。
 
@@ -83,20 +85,20 @@ PeriSci adopts a **Three-Beam Contract Architecture** and a **Four-Core Numerica
 三梁不是目录划分，也不是“前处理 / 求解器 / 后处理”的命名替代，而是面向可治理计算资产的最小执行契约结构：
 
 - **A 梁：`config_schema`**
-   唯一合法的物理意图与执行声明载体（输入契约）
+  唯一合法的物理意图与执行声明载体（输入契约）
 - **B 梁：`run_case`**
-   纯执行边界（schema in → structured results out），无隐式状态
+  纯执行边界（schema in → structured results out），无隐式状态
 - **C 梁：`export_dataset`**
-   唯一资产级结果出口（固化、溯源、冻结、版本化）
+  唯一资产级结果出口（固化、溯源、冻结、版本化）
 
 The Three-Beam structure is neither a directory layout nor a renaming of “pre-processing / solver / post-processing”, but the minimal execution contract structure for governable computational assets:
 
 - **Beam A: `config_schema`**
-   The sole legitimate carrier of physical intent and execution declaration (input contract)
+  The sole legitimate carrier of physical intent and execution declaration (input contract)
 - **Beam B: `run_case`**
-   A pure execution boundary (schema in → structured results out), with no implicit state
+  A pure execution boundary (schema in → structured results out), with no implicit state
 - **Beam C: `export_dataset`**
-   The only asset-level result outlet (solidification, provenance, freeze determination, and versioning)
+  The only asset-level result outlet (solidification, provenance, freeze determination, and versioning)
 
 四核结构定义数值内核的最小稳定骨架，包括离散对象、局部相互作用、贡献汇总与状态推进。
 The Four-Core structure defines the minimal stable skeleton of the numerical kernel, including discrete objects, local interactions, accumulation (assembly), and state advancement.
@@ -110,7 +112,7 @@ The Four-Core structure defines the minimal stable skeleton of the numerical ker
 该文档构成架构与治理层面的权威来源。
 
 The above architecture constitutes a constitutional-level constraint of PeriSci.
- Its complete definition is provided in:
+Its complete definition is provided in:
 
 > ```
 > docs/DESIGN_CONTRACT.md
@@ -126,21 +128,21 @@ This document serves as the authoritative source for architectural and governanc
 
 ### 当前与规划中的能力 | Current & Planned
 
-- ✅ 近场有限元法（PeriFEM）结构分析  
-- ✅ 动态 / 静态损伤与断裂模拟  
-- 🚧 热–力耦合多物理场分析  
-- 🚧 自适应耦合近场有限元与经典有限元计算  
-- 🚧 面向计算流体动力学、离散单元法等的插件式接口  
-- 🚧 面向 AI 的仿真数据集生成与接口规范  
+- ✅ 近场有限元法（PeriFEM）结构分析
+- ✅ 动态 / 静态损伤与断裂模拟
+- 🚧 热–力耦合多物理场分析
+- 🚧 自适应耦合近场有限元与经典有限元计算
+- 🚧 面向计算流体动力学、离散单元法等的插件式接口
+- 🚧 面向 AI 的仿真数据集生成与接口规范
 
 ---
 
-- ✅ PeriFEM-based structural analysis  
-- ✅ Static and dynamic damage / fracture simulation  
-- 🚧 Thermo-mechanical multiphysics coupling  
-- 🚧 Adaptive Coupling between PeriFEM and classical FEM  
-- 🚧 Plugin-based interfaces for CFD, DEM, etc.  
-- 🚧 AI-oriented simulation dataset generation and APIs  
+- ✅ PeriFEM-based structural analysis
+- ✅ Static and dynamic damage / fracture simulation
+- 🚧 Thermo-mechanical multiphysics coupling
+- 🚧 Adaptive Coupling between PeriFEM and classical FEM
+- 🚧 Plugin-based interfaces for CFD, DEM, etc.
+- 🚧 AI-oriented simulation dataset generation and APIs
 
 ---
 
@@ -149,41 +151,44 @@ This document serves as the authoritative source for architectural and governanc
 ## 面向用户 | Target Users
 
 ### 👩‍🎓 教师与研究生（学习与研究）| Teacher and Graduate Students
-- 学习近场有限元法与结构损伤与断裂建模  
-- 通过简化接口与算例理解近场动力学及其耦合建模思想 
-- 用于课程教学、方法验证与学术论文研究  
+
+- 学习近场有限元法与结构损伤与断裂建模
+- 通过简化接口与算例理解近场动力学及其耦合建模思想
+- 用于课程教学、方法验证与学术论文研究
 
 ---
 
-- Learn PeriFEM-based modeling for structural damage and fracture  
-- Understand peridynamics and its coupling modeling through simplified interfaces and examples  
-- Use PeriSci for coursework, methodological studies, and academic research 
+- Learn PeriFEM-based modeling for structural damage and fracture
+- Understand peridynamics and its coupling modeling through simplified interfaces and examples
+- Use PeriSci for coursework, methodological studies, and academic research
 
 ---
 
 ### 🧑‍🔬 科研与工程人员（问题求解）| Researchers and Engineering Users
+
 - 面向复杂结构破坏与极端工况的数值分析
 - 提供可复现、可诊断、可批量运行的仿真流程
-- 面向高性能计算平台部署 
+- 面向高性能计算平台部署
 
 ---
 
-- Perform numerical analysis of complex structural failure under extreme conditions 
+- Perform numerical analysis of complex structural failure under extreme conditions
 - Access reproducible, diagnosable, and batch-oriented simulation workflows
 - Deploy simulations on high-performance computing platforms
 
 ---
 
 ### 🤖 AI 与数据驱动建模人员 | AI and Data-driven Modeling Users
-- 获取基于物理模型的高可信度仿真数据  
-- 构建 AI–CAE 混合模型与代理模型（surrogates）  
-- 通过标准化接口将 PeriSci 作为 AI 调用的物理仿真基座  
+
+- 获取基于物理模型的高可信度仿真数据
+- 构建 AI–CAE 混合模型与代理模型（surrogates）
+- 通过标准化接口将 PeriSci 作为 AI 调用的物理仿真基座
 
 ---
 
 - Obtain high-fidelity, physics-based simulation datasets
 - Develop AI–CAE hybrid models and surrogate predictor
-- Use PeriSci as a physics-grounded simulation backend for AI workflows 
+- Use PeriSci as a physics-grounded simulation backend for AI workflows
 
 ---
 
@@ -200,9 +205,9 @@ PeriSci/
 ├── python/        		 # Python 绑定与工作流层（教学、AI数据生产、脚本接口）| Workflow layer
 ├── apps/          		 # 可执行程序/CLI（工程入口、批处理、校验、工具）| Executable program layer
 
-# Experiment Asset System | 实验体系
+# Numerical Experiment System | 数值实验体系
 ├── examples/      		 # 教学与参考算例（hello/最小示例、教程、benchmark）| Examples layer
-├── cases/         		 # 标准算例资产（稳定的可复现实验，用于回归测试与数据生产）| Canonical case assets
+├── cases/         		 # 标准算例资产（稳定的可复现数值实验，用于回归测试与数据生产）| Canonical case assets
 ├── tests/         		 # 单测/回归（保证核心与契约层不退化）| Testing layer
 
 # Documentation and Design Records | 文档与设计记录
@@ -275,6 +280,7 @@ ninja --version
 选择一个远端仓库克隆（Gitee 为主仓，GitHub 可作为镜像）：
 
 **Gitee（推荐）**
+
 ```bash
 git clone https://gitee.com/CYPeriTech/perisci
 ```
@@ -310,7 +316,7 @@ cmake --build build -j
 ```
 
 > 若你使用 Visual Studio / Xcode 等 **多配置生成器**，构建与测试需要显式指定配置：
->  `cmake --build build --config Debug`，以及 `ctest --test-dir build -C Debug`。
+> `cmake --build build --config Debug`，以及 `ctest --test-dir build -C Debug`。
 
 ---
 
@@ -342,12 +348,12 @@ Build: PeriSci (api) v0.1.5
 ctest --test-dir build --output-on-failure
 ```
 
-------
+---
 
 ### 常见问题 | Common Issues
 
 - **Q: 找不到可执行文件路径？**
-   A: 不同 CMake 组织方式生成路径可能不同。你可以在 `build/` 下查找：
+  A: 不同 CMake 组织方式生成路径可能不同。你可以在 `build/` 下查找：
 
   ```
   find build -maxdepth 4 -type f -perm -111
@@ -356,7 +362,7 @@ ctest --test-dir build --output-on-failure
   然后运行对应的可执行文件。
 
 - **Q: CMake 、GCC或者Ninja配置失败？**
-   A: 请确认 CMake 版本与编译器可用：
+  A: 请确认 CMake 版本与编译器可用：
 
   ```
   cmake --version
@@ -396,7 +402,7 @@ For detailed rules and conventions, please refer to:
 - [VERSIONING.md](VERSIONING.md)
 - [CHANGELOG.md](CHANGELOG.md)
 
-------
+---
 
 <a id="contributing"></a>
 
@@ -411,10 +417,10 @@ For detailed rules and conventions, please refer to:
 
 基本贡献流程如下：
 
-1. Fork 本仓库  
-2. 新建功能分支（如 `feat/xxx`）  
-3. 提交代码并保证本地测试通过  
-4. 创建 Pull Request 并说明修改内容与动机  
+1. Fork 本仓库
+2. 新建功能分支（如 `feat/xxx`）
+3. 提交代码并保证本地测试通过
+4. 创建 Pull Request 并说明修改内容与动机
 
 更详细的内容，如开发环境配置、代码格式规范（如 `.clang-format`、`.editorconfig`）以及其他贡献约定，请参阅：[CONTRIBUTING.md](CONTRIBUTING.md)
 
@@ -431,26 +437,26 @@ We welcome community contributions in various forms, including but not limited t
 
 The basic contribution workflow is:
 
-1. Fork this repository  
-2. Create a feature branch (e.g. `feat/xxx`)  
-3. Commit your changes and ensure tests pass locally  
-4. Submit a Pull Request with a clear description of your changes  
+1. Fork this repository
+2. Create a feature branch (e.g. `feat/xxx`)
+3. Commit your changes and ensure tests pass locally
+4. Submit a Pull Request with a clear description of your changes
 
 For more details, please refer to:  
 [CONTRIBUTING.md](CONTRIBUTING.md)
 
-------
+---
 
 <a id="license"></a>
 
 ## 开源协议 | License
 
 本项目采用 **MulanPSL-2.0（木兰宽松许可证 v2）** 开源发布。
- This project is released under the **MulanPSL-2.0 License**.
+This project is released under the **MulanPSL-2.0 License**.
 
 详见 | See: LICENSE
 
-------
+---
 
 <a id="project-status"></a>
 
@@ -458,8 +464,8 @@ For more details, please refer to:
 
 PeriSci 当前处于 **早期开发阶段（v0.x）**。
 
-- 软件架构与接口仍在持续演进中  
-- 数值方法与功能模块将逐步完善  
+- 软件架构与接口仍在持续演进中
+- 数值方法与功能模块将逐步完善
 - 但我们承诺：**每一个发布的版本 Tag 都是可复现、可解释、可被信任的**
 
 在 v1.0.0 之前，API 与配置规范可能发生变化，相关破坏性变更将被清晰记录。
@@ -476,7 +482,7 @@ PeriSci is currently in an **early development stage (v0.x)**.
 Before reaching v1.0.0, APIs and configuration schemas may evolve.
 All breaking changes will be explicitly documented.
 
-------
+---
 
 <a id="contact-community"></a>
 
@@ -484,32 +490,32 @@ All breaking changes will be explicitly documented.
 
 我们欢迎关于以下方面的交流与合作：
 
-- 学术研究与方法讨论  
-- 工程应用与算例验证  
-- 开源社区共建与长期合作  
+- 学术研究与方法讨论
+- 工程应用与算例验证
+- 开源社区共建与长期合作
 
 请通过以下方式与我们联系：
 
-- 问题反馈与功能建议：请使用 Gitee / GitHub Issues  
-- 代码贡献与讨论：通过 Pull Request 与 Review  
-- 学术与合作交流：请通过仓库主页提供的联系方式联系维护者  
+- 问题反馈与功能建议：请使用 Gitee / GitHub Issues
+- 代码贡献与讨论：通过 Pull Request 与 Review
+- 学术与合作交流：请通过仓库主页提供的联系方式联系维护者
 
 ---
 
 We welcome communication and collaboration on:
 
-- Academic research and methodological discussions  
-- Engineering applications and benchmark validation  
-- Open-source community building and long-term collaboration  
+- Academic research and methodological discussions
+- Engineering applications and benchmark validation
+- Open-source community building and long-term collaboration
 
 You may contact us via:
 
-- Bug reports and feature requests: Gitee / GitHub Issues  
-- Code contributions and discussions: Pull Requests and Reviews  
+- Bug reports and feature requests: Gitee / GitHub Issues
+- Code contributions and discussions: Pull Requests and Reviews
 - Academic and collaboration inquiries: via the contact information
   provided on the repository homepage
 
-------
+---
 
 <a id="citation-notice"></a>
 
@@ -518,4 +524,3 @@ You may contact us via:
 若在论文、报告或数据集中引用 PeriSci，请以 `CITATION.cff` 为唯一权威引用来源。
 
 For academic publications, reports, or datasets, please use `CITATION.cff` as the single authoritative citation source for PeriSci
-

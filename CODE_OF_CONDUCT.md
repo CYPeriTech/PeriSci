@@ -2,17 +2,13 @@
 
 ## 宗旨 | Purpose
 
-PeriSci 是一个以 **科学严谨性、工程可靠性与长期合作** 为目标的
-开源科学计算与工程仿真项目。
+PeriSci 是一个以 **科学严谨性、工程可靠性与长期合作** 为目标的开源科学计算与工程仿真项目。
 
-我们致力于构建一个 **尊重、理性、以科学研究与工程技术为导向** 的社区环境，
-确保所有参与者都能在专业与友好的氛围中进行交流与合作。
+我们致力于构建一个 **尊重、理性、以科学研究与工程技术为导向** 的社区环境，确保所有参与者都能在专业与友好的氛围中进行交流与合作。
 
-PeriSci is an open-source scientific computing and engineering simulation project
-committed to **scientific rigor, engineering reliability, and long-term collaboration**.
+PeriSci is an open-source scientific computing and engineering simulation project committed to **scientific rigor, engineering reliability, and long-term collaboration**.
 
-We aim to foster a **respectful, rational, and science- and engineering-driven**
-community environment for all participants.
+We aim to foster a **respectful, rational, and science- and engineering-driven** community environment for all participants.
 
 ---
 
@@ -51,7 +47,7 @@ The following behaviors are not tolerated in the PeriSci community:
 - Personal attacks, harassment, or abusive language  
 - Discriminatory, hateful, or hostile remarks  
 - Persistent, unconstructive arguing or spamming  
-- Discussions clearly unrelated to science or engineering  
+- Discussions clearly unrelated to the project’s scientific or engineering scope
 - Inappropriate pressure on maintainers or contributors 
 
 ---
@@ -62,15 +58,15 @@ The following behaviors are not tolerated in the PeriSci community:
 
 - GitHub / Gitee Issues  
 - Pull Requests 与代码审查  
-- 项目文档与讨论区  
-- 邮件讨论列表
+- 项目文档与讨论区（待建）
+- 项目邮件讨论列表（待建）
 
 This Code of Conduct applies to all PeriSci-related public spaces, including but not limited to:
 
 - GitHub / Gitee Issues  
 - Pull Requests and code reviews  
-- Project documentation and discussion channels 
-- Email discussion list
+- Project documentation and discussion channels  (planned)
+- Project mailing list (planned)
 
 ---
 

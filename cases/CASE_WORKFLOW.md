@@ -241,7 +241,7 @@ perisci-export --bundle bundle.json --out output_dir
 
 最终目标：
 
-> 可重复实验 + 可判定结果 + 可维护历史
+> 可重复数值实验 + 可判定结果 + 可维护历史
 
 ---
 

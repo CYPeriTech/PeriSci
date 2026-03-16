@@ -1,19 +1,18 @@
 # 项目维护与治理 | Maintainers and Governance
-
 ## 项目治理原则 | Governance Principles
 
 PeriSci 采用 **维护者主导（Maintainer-led）** 的治理模式。
 
 在当前阶段，项目强调：
 - 架构一致性
-- 数值与物理的正确性
+- 数值与物理一致性
 - 长期可维护性
 
 PeriSci follows a **maintainer-led governance model**.
 
 At the current stage, the project prioritizes:
 - Architectural consistency
-- Numerical and physical correctness
+- Numerical and physical validity
 - Long-term maintainability
 
 ---
@@ -26,19 +25,17 @@ At the current stage, the project prioritizes:
 - **角色**：  
   - 项目整体技术方向与长期愿景  
   - 核心架构与数值方法把关  
-  - 设计决策与物理建模的最终裁决者  
+  - 设计决策与物理建模相关问题的最终决策责任  
 - **主要职责范围**：  
   - 近场有限元（PeriFEM）核心算法  
   - 多物理场耦合总体策略  
   - API、数据模型与版本一致性  
 
----
-
-- **Name**: Han Fei  
+- **Name**: Fei Han  
 - **Role**:  
   - Overall project direction and long-term vision  
   - Stewardship of core architecture and numerical methods  
-  - Final authority on design and physical modeling decisions  
+  - Final decision responsibility on design and physical modeling questions  
 - **Areas of Responsibility**:  
   - PeriFEM core algorithms  
   - Multiphysics coupling strategy  
