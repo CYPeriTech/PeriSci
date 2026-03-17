@@ -4,47 +4,49 @@
 
 ## 0. 当前开发状态 | Current Development Status
 
-### 当前阶段：v0.2.x（三梁阶段 / 接口冻结阶段）| Current Phase: v0.2.x (Three-Beams Stage / Interface Stabilization Stage)
+### 当前阶段：v0.2.x（三梁执行结构冻结阶段）| Current Phase: v0.2.x (Three-Beam Execution Structure Freeze Stage)
 
-PeriSci 当前处于 **v0.2.x 三梁阶段**。
-PeriSci is currently in the **v0.2.x Three-Beams Stage**.
+PeriSci 当前处于 **v0.2.x 三梁执行结构阶段**。  
+PeriSci is currently in the **v0.2.x Three-Beam Execution Structure stage**.
 
 这一阶段的核心目标不是扩展功能数量，而是：
-> 冻结系统契约、明确边界、稳定治理结构。
 
-The core objective of this stage is not to expand the number of features, but to:
-> Freeze system contracts, clarify boundaries, and stabilize governance structure.
+> 冻结三梁执行契约、明确系统边界、稳定治理结构。
+
+The core objective of this stage is not to expand feature capabilities, but to:
+
+> Freeze the Three-Beam execution contracts, clarify system boundaries, and stabilize the governance structure.
 
 #### 已完成内容 | Completed Items
 
-- Core / API 分层结构冻结
-- A / B / C 三梁执行契约建立
-- CMake 依赖方向稳定（api → core）
-- CTest 自动契约门禁建立
-- dataset-spec 与 manifest 最小规范确立
+- Core / API 分层结构冻结  
+- 三梁执行结构建立（配置梁 / 执行梁 / 输出梁）  
+- CMake 依赖方向稳定（api → core）  
+- CTest 自动契约门禁建立  
+- `dataset_spec` 与 `manifest` 最小规范确立  
 - 版本治理对齐（CMake / version.hpp / 构建输出）
 
-- Core / API layered structure frozen
-- A / B / C three-beam execution contract established
-- Stable CMake dependency direction (api → core)
-- CTest-based automated contract gates established
-- dataset-spec and minimal manifest specification defined
+- Core / API layered structure frozen  
+- Three-Beam execution structure established (Config / Run / Export Beams)  
+- Stable CMake dependency direction (api → core)  
+- CTest-based automated contract gates established  
+- Minimal specification for `dataset_spec` and `manifest` defined  
 - Version governance aligned (CMake / version.hpp / build outputs)
 
-#### 明确不包含  | Explicitly Not Included
+#### 明确不包含 | Explicitly Not Included
 
-- 真实数值算例资产（计划于 v0.3 引入）
-- 完整物理求解器能力
-- 性能优化与并行能力
-- 生产级 CAE 功能体系
+- 具备物理意义的算例资产（计划于 v0.3 引入）  
+- 完整物理求解器能力  
+- 性能优化与并行能力  
+- 生产级 CAE 功能体系  
 
-- Real numerical case assets (planned for v0.3)
-- Complete physical solver capabilities
-- Performance optimization and parallel capabilities
-- Production-grade CAE functionality
+- Physically meaningful case assets (planned for v0.3)  
+- Complete physical solver capabilities  
+- Performance optimization and parallel execution  
+- Production-grade CAE functionality  
 
-v0.2.x 是一个 **结构稳定里程碑**，而不是能力扩展版本。
-v0.2.x is a **structural stabilization milestone**, rather than a capability expansion release.
+v0.2.x 是一个 **结构治理稳定里程碑**，而不是能力扩展版本。  
+v0.2.x is a **structural governance stabilization milestone**, rather than a capability expansion release.
 
 ---
 
@@ -110,61 +112,80 @@ The evolution of PeriSci is not driven by “feature accumulation”, but judged
 
 ---
 
-### v0.2.x（三梁体系确立阶段）| v0.2.x (Three-Beams Stage)
+### v0.2.x（三梁执行结构阶段）| v0.2.x (Three-Beam Execution Structure Stage)
 
 #### 阶段定位 | Positioning
 
 - 从“骨架成立”过渡到“系统可运行但不承诺物理完整性”
-- 以契约、边界、制度冻结为核心目标
+- 以执行契约、系统边界与治理规则冻结为核心目标
+
 - Transition from “skeleton established” to “system runnable without committing to physical completeness”
-- Focused on freezing contracts, boundaries, and institutional rules
+- Focused on freezing execution contracts, system boundaries, and governance rules
+
+---
 
 #### 阶段目标 | Goals
 
 - 让系统“能跑”，但更重要的是：
-  - 不能被误用
-  - 不能悄然漂移
+  - 误用被结构性约束
+  - 语义漂移被契约机制阻止
+
 - Make the system “runnable”, but more importantly:
-  - Impossible to misuse
-  - Impossible to drift silently
+  - Misuse is structurally constrained
+  - Semantic drift is prevented by contract mechanisms
+
+---
 
 #### 核心里程碑 | Core Milestones
 
-##### 1. A 梁：config_schema（权威输入契约）| Beam A: config_schema (Authoritative Input Contract)
+##### 1. 配置梁（Config Beam）：config_schema（权威输入契约）  
+| Config Beam: config_schema (Authoritative Input Contract)
 
-- schema 成为唯一物理意图载体
-- 明确字段语义、版本策略、兼容规则
-- 支持 diff / hash / 校验
-- The schema becomes the sole carrier of physical intent
-- Field semantics, version strategy, and compatibility rules clearly defined
-- Supports diff / hash / validation
+- schema 成为唯一物理意图载体  
+- 明确字段语义、版本策略与兼容规则  
+- 支持语义 diff / hash / 校验  
 
-##### 2. B 梁：run_case(config) → results（纯执行闭环）| Beam B: run_case(config) → results (Pure Execution Loop)
+- The schema becomes the sole carrier of physical intent  
+- Field semantics, versioning strategy, and compatibility rules clearly defined  
+- Supports semantic diff / hashing / validation  
 
-- 不引入 GUI 或隐式状态
-- 输入仅接受 schema
-- 输出为结构化 results（非文件副作用）
-- No GUI or implicit state introduced
-- Inputs accept schema only
-- Outputs are structured results (no file-side effects)
+---
 
-##### 3. C 梁：export_dataset(results, spec)（权威输出 + provenance）| Beam C: export_dataset(results, spec) (Authoritative Output + Provenance)
+##### 2. 执行梁（Run Beam）：run_case(config) → results（纯执行闭环）  
+| Run Beam: run_case(config) → results (Pure Execution Loop)
 
-- 明确 dataset 目录结构与 manifest 规范
-- 记录 provenance（config / code / version / environment）
-- 为未来算例资产与回归测试提供制度基础
-- Dataset directory structure and manifest specification clearly defined
-- Provenance recorded (config / code / version / environment)
-- Provides institutional foundation for future case assets and regression testing
+- 不引入 GUI 或隐式状态  
+- 输入仅接受通过 schema 校验的配置对象（config）  
+- 输出为结构化 results（无文件副作用）  
+
+- No GUI or implicit state introduced  
+- Input strictly accepts schema-validated configuration objects (config)  
+- Output is structured results (no file-side effects)  
+
+---
+
+##### 3. 输出梁（Export Beam）：export_dataset(results, dataset_spec)（权威输出 + 溯源）  
+| Export Beam: export_dataset(results, dataset_spec) (Authoritative Output + Provenance)
+
+- 明确 dataset 目录结构与 manifest 规范  
+- 记录 provenance（config / code / version / environment）  
+- 为算例资产与回归测试提供制度基础  
+
+- Dataset directory structure and manifest specification clearly defined  
+- Provenance recorded (config / code / version / environment)  
+- Provides the governance foundation for case assets and regression testing  
+
+---
 
 #### 明确的非目标 | Explicit Non-Goals
 
-- 不承诺真实工程物理完备性
-- 不引入复杂插件或多物理场机制
-- 不将临时算例固化为“官方能力”
-- No commitment to full engineering-grade physical completeness
-- No introduction of complex plugin or multiphysics mechanisms
-- No solidification of temporary cases into “official capabilities”
+- 不承诺真实工程物理完备性  
+- 不引入复杂插件或多物理场机制  
+- 不将临时算例固化为“官方能力”  
+
+- No commitment to full engineering-grade physical completeness  
+- No introduction of complex plugin or multiphysics mechanisms  
+- No solidification of temporary cases into “official capabilities”  
 
 ---
 

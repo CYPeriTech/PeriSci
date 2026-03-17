@@ -79,26 +79,31 @@ PeriSci is part of the **PERISOFT** ecosystem for PeriFEM-based scientific softw
 
 ## 架构宪法 | Architecture Constitution
 
-PeriSci 采用 **三梁契约架构（Three-Beam Contract Architecture）** 与 **四核数值骨架（Four-Core Numerical Skeleton）** 作为系统的长期治理基础。
-PeriSci adopts a **Three-Beam Contract Architecture** and a **Four-Core Numerical Skeleton** as the long-term governance foundation of the system.
+PeriSci 采用 **三梁执行结构（Three-Beam Execution Structure）** 与 **四核求解器结构（Four-Kernel Solver Structure）** 作为系统的长期治理基础。
+PeriSci adopts a **Three-Beam Execution Structure** and a **Four-Core Numerical Skeleton** as the long-term governance foundation of the system.
 
-三梁不是目录划分，也不是“前处理 / 求解器 / 后处理”的命名替代，而是面向可治理计算资产的最小执行契约结构：
+三梁不是目录划分，也不是“前处理 / 求解器 / 后处理”的命名替代，而是一种用于科学计算平台的**执行契约结构（execution contract structure）**，用于定义输入、执行与结果资产之间的责任边界。
 
-- **A 梁：`config_schema`**
-  唯一合法的物理意图与执行声明载体（输入契约）
-- **B 梁：`run_case`**
-  纯执行边界（schema in → structured results out），无隐式状态
-- **C 梁：`export_dataset`**
-  唯一资产级结果出口（固化、溯源、冻结、版本化）
+- **配置梁（Config Beam，Beam A：`config_schema`）**  
+  唯一合法的物理意图与执行声明载体（权威配置契约，Authoritative Configuration Contract）
 
-The Three-Beam structure is neither a directory layout nor a renaming of “pre-processing / solver / post-processing”, but the minimal execution contract structure for governable computational assets:
+- **执行梁（Run Beam，Beam B：`run_case`）**  
+  纯执行边界（schema in → structured results out），不依赖隐式输入来源（Pure Execution Boundary）
 
-- **Beam A: `config_schema`**
-  The sole legitimate carrier of physical intent and execution declaration (input contract)
-- **Beam B: `run_case`**
-  A pure execution boundary (schema in → structured results out), with no implicit state
-- **Beam C: `export_dataset`**
-  The only asset-level result outlet (solidification, provenance, freeze determination, and versioning)
+- **输出梁（Export Beam，Beam C：`export_dataset`）**  
+  唯一资产级结果出口（结果资产化、溯源、冻结与版本化，Dataset Materialization and Provenance）
+
+The Three-Beam structure is neither a directory layout nor a renaming of “pre-processing / solver / post-processing”.  
+It is an **execution contract structure** for scientific computing platforms, defining clear responsibility boundaries between configuration, execution, and dataset materialization.
+
+- **Config Beam (Beam A: `config_schema`)**  
+  The sole authoritative carrier of physical intent and execution declaration (Authoritative Configuration Contract)
+
+- **Run Beam (Beam B: `run_case`)**  
+  A pure execution boundary (schema in → structured results out), with no implicit input sources (Pure Execution Boundary)
+
+- **Export Beam (Beam C: `export_dataset`)**  
+  The only asset-level result outlet (dataset materialization, provenance, freeze determination, and versioning)
 
 四核结构定义数值内核的最小稳定骨架，包括离散对象、局部相互作用、贡献汇总与状态推进。
 The Four-Core structure defines the minimal stable skeleton of the numerical kernel, including discrete objects, local interactions, accumulation (assembly), and state advancement.

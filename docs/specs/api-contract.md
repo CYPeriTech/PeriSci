@@ -10,7 +10,7 @@
 >
 > This specification is concerned with **whether execution boundaries are clear, auditable, and resistant to misuse**, rather than functional completeness or numerical complexity.
 
-------
+---
 
 ## 1. 规范目的与范围 | Purpose and Scope
 
@@ -20,19 +20,19 @@
 
 - `run_case` 是 **纯执行契约**（即只负责执行一次计算，不引入流程控制、状态积累或外部副作用） (说明：外部副作用是指通过写文件、修改全局状态等方式，在返回值之外对系统产生的隐式影响，比如改变任何的调度逻辑等)
 - `export_dataset` 是 **权威输出与固化（资产化）契约**（“资产化”在此指的是将运行时的结果固化为可审计、可比较的数据集资产）
-> `run_case` 与 `export_dataset` 依次位于 A 梁（`config_schema`）之后，共同在数值内核（`core`）的前后形成包裹：
->  `run_case` 作为唯一合法的执行入口驱动 `core`，
->  `export_dataset` 作为唯一合法的结果出口固化 `core` 的执行产物。
->  在架构治理层面，外界不得绕过 `run_case` 或 `export_dataset` 直接接触 `core`。
+  > `run_case` 与 `export_dataset` 依次位于 A 梁（`config_schema`）之后，共同在数值内核（`core`）的前后形成包裹：
+  > `run_case` 作为唯一合法的执行入口驱动 `core`，
+  > `export_dataset` 作为唯一合法的结果出口固化 `core` 的执行产物。
+  > 在架构治理层面，外界不得绕过 `run_case` 或 `export_dataset` 直接接触 `core`。
 
 This specification establishes the following system-level facts:
 
 - `run_case` is a **pure execution contract** (i.e., it is responsible only for executing a single computation, without introducing flow control, state accumulation, or external side effects) (Note: external side effects refer to implicit impacts on the system (for example, to change any scheduling logic) outside the return value, such as writing files or modifying global state)
 - `export_dataset` is an **authoritative export and persistence (assetization) contract** (“persistence/assetization” here means solidifying runtime results into auditable, comparable dataset assets.)
-> `run_case` and `export_dataset` are sequentially positioned after Beam A (`config_schema`),  together forming a front-and-back enclosure around the numerical core (`core`):  
-> `run_case` serves as the sole legitimate execution entry point that drives the `core`,  
-> while `export_dataset` serves as the sole legitimate result outlet that solidifies the execution products of the `core`.  
-> At the architectural governance level, external entities must not bypass `run_case` or `export_dataset` to directly access the `core`.
+  > `run_case` and `export_dataset` are sequentially positioned after Beam A (`config_schema`), together forming a front-and-back enclosure around the numerical core (`core`):  
+  > `run_case` serves as the sole legitimate execution entry point that drives the `core`,  
+  > while `export_dataset` serves as the sole legitimate result outlet that solidifies the execution products of the `core`.  
+  > At the architectural governance level, external entities must not bypass `run_case` or `export_dataset` to directly access the `core`.
 
 ### 1.2 非目标 | Non-Goals
 
@@ -68,7 +68,7 @@ To avoid confusion, this document adopts the following definitions:
 - **Execution logic**: behaviors within a single `run_case` invocation, including interpretation, execution-context construction, driving the core, and collecting results (these are `run_case` responsibilities).
 - **Workflow / scheduling logic**: cross-invocation process orchestration, job management, and resource allocation (these are not `run_case` responsibilities, and are also outside the descriptive scope of this document).
 
-------
+---
 
 在上述定义基础上，进一步澄清以下两组容易混淆但必须严格区分的概念：
 
@@ -83,9 +83,7 @@ To avoid confusion, this document adopts the following definitions:
     - 根据前一次结果决定是否重算或进入下一阶段
     - 批量参数扫描、重试策略、任务排队或并发控制
   - 因此，`run_case` 内部构建执行上下文是其作为“纯执行契约”的必要组成部分，而不构成 workflow 或调度逻辑。
-  
 - **执行逻辑（execution logic） vs 调度逻辑（scheduling logic）**
-
   - 执行逻辑指在**一次 `run_case` 调用内部**，描述“如何完成一次计算”的逻辑，例如：
     - 如何驱动数值内核（core）
     - 如何推进求解过程
@@ -99,7 +97,6 @@ To avoid confusion, this document adopts the following definitions:
 Based on the definitions above, the following two pairs of concepts—commonly confused but requiring strict separation—are further clarified:
 
 - **Execution context vs workflow / scheduling logic**
-
   - Execution context refers to the runtime objects and states constructed and used **within a single `run_case` invocation** in order to complete one computation, for example:
     - interpreting `config_schema` into executable data structures
     - constructing execution-time objects such as meshes, degrees of freedom, and neighborhood relations
@@ -112,7 +109,6 @@ Based on the definitions above, the following two pairs of concepts—commonly c
   - Therefore, constructing an execution context inside `run_case` is a necessary component of its role as a “pure execution contract” and does not constitute workflow or scheduling logic.
 
 - **Execution logic vs scheduling logic**
-
   - Execution logic refers to logic **within a single `run_case` invocation** that defines how one computation is carried out, for example:
     - how the numerical core (`core`) is driven
     - how the solving process is advanced
@@ -123,7 +119,7 @@ Based on the definitions above, the following two pairs of concepts—commonly c
     - cross-invocation conditional branching or loops
   - This document explicitly stipulates that `run_case` contains execution logic only and must not contain scheduling logic; scheduling logic must reside in explicit orchestration outside `run_case`.
 
-------
+---
 
 ## 2. run_case 执行契约 | run_case Execution Contract
 
@@ -137,16 +133,16 @@ The system-level role of `run_case` is:
 
 > **To interpret and map the physical intent and execution strategy declared in `config_schema` into a single, well-defined numerical execution process.** (where “execution strategy” refers to numerical and algorithmic choices declared in the schema that affect how a single computation is carried out, and does not involve cross-invocation workflows or scheduling logic)
 
-在三梁结构中：
+在三梁执行结构中：
 
 - `run_case` **不声明** 物理意图
-- `run_case` **不固化** 执行结果 
+- `run_case` **不固化** 执行结果
 - `run_case` 仅负责：
   - 解释 schema
   - 驱动 core
   - 生成结构化 results
 
-Within the Three-Beams structure:
+Within the Three-Beam Execution structure:
 
 - `run_case` does **not declare** physical intent
 - `run_case` does **not solidify** execution results
@@ -157,7 +153,7 @@ Within the Three-Beams structure:
 
 > #### 概念澄清（解释性注释，不构成规范）
 >
-> 为避免对 `run_case` 在三梁结构中职责的误解，特此澄清以下三个相关但不同的概念：
+> 为避免对 `run_case` 在三梁执行结构中职责的误解，特此澄清以下三个相关但不同的概念：
 >
 > **物理意图（physical intent）**
 >
@@ -191,12 +187,12 @@ Within the Three-Beams structure:
 > - **执行策略**：这一次怎么算；
 > - **执行上下文**：现在用哪些具体对象来算。
 >
-> 换言之，`config_schema` 负责声明 *物理意图 + 执行策略*，
-> 而 `run_case` 负责构建 *执行上下文* 并驱动数值内核完成一次计算。
+> 换言之，`config_schema` 负责声明 _物理意图 + 执行策略_，
+> 而 `run_case` 负责构建 _执行上下文_ 并驱动数值内核完成一次计算。
 
 > #### Concept Clarification (Explanatory Note, Non-Normative)
 >
-> To avoid misunderstandings regarding the responsibilities of `run_case` within the Three-Beams structure, the following three related but distinct concepts are clarified:
+> To avoid misunderstandings regarding the responsibilities of `run_case` within the Three-Beam Execution structure, the following three related but distinct concepts are clarified:
 >
 > **Physical intent**
 >
@@ -230,10 +226,10 @@ Within the Three-Beams structure:
 > - **Execution strategy**: how this computation is carried out;
 > - **Execution context**: which concrete objects are used to carry it out.
 >
-> In other words, `config_schema` is responsible for declaring *physical intent + execution strategy*,
-> while `run_case` is responsible for constructing the *execution context* and driving the numerical core to complete a single computation.
+> In other words, `config_schema` is responsible for declaring _physical intent + execution strategy_,
+> while `run_case` is responsible for constructing the _execution context_ and driving the numerical core to complete a single computation.
 
-------
+---
 
 ### 2.2 输入约束 | Input Constraints
 
@@ -267,7 +263,7 @@ Explicitly prohibited:
 - the schema must pass structural and version validation
 - all choices affecting physical or numerical semantics must be explicitly present
 
-------
+---
 
 ### 2.3 Results 结构 | Results Structure
 
@@ -332,49 +328,49 @@ Explicitly prohibited:
 >
 > - **显式 orchestration** 是“上层调用者”的一个子集，专指负责跨多次 `run_case` 调用进行流程编排与控制的逻辑；
 > - 并非所有上层调用者都是 orchestration，例如单次调用的测试代码或简单 API 封装同样属于上层调用者，但不承担流程调度职责。
-> 
+>
 > 在第 2.3 节中强调“结果可被上层调用者稳定消费”，其目的在于保证 `results` 作为接口产物的结构与语义稳定性，而非暗示任何特定的工作流或调度模式。
 >
-> ------
-> 
+> ---
+>
 > ##### b) 为避免对下述两种表述的误解，即 “`run_case`输出的`results`可被上层调用者稳定消费” 与 “`export_dataset` 作为唯一合法的结果出口（参见第1.1节）”，有必要区分以下两个不同层级的概念：
-> 
->**结果（results）**
+>
+> **结果（results）**
 >
 > - 指 `run_case` 通过返回值产生的**内存态、结构化执行结果**；
->- 可被上层调用者直接读取、检查和处理，例如：
+> - 可被上层调用者直接读取、检查和处理，例如：
 >   - 用于判断计算是否成功或是否收敛；
->  - 用于在线分析、调试或可视化；
->   - 用于回归测试断言；
->   - 用于显式 orchestration 决定后续是否再次调用 `run_case`；
+> - 用于在线分析、调试或可视化；
+> - 用于回归测试断言；
+> - 用于显式 orchestration 决定后续是否再次调用 `run_case`；
 > - `results` 的“可被消费”并不意味着其已经成为可发布、可归档的数据资产。
-> 
+>
 > **结果出口（result outlet）**
-> 
+>
 > - 指将一次 `run_case` 的执行产物**从运行态固化为可留存、可审计的数据资产（dataset）**的制度化通道；
->- 在本架构中，这一职责**唯一**由 `export_dataset` 承担；
+> - 在本架构中，这一职责**唯一**由 `export_dataset` 承担；
 > - 结果出口关注的是：
->  - 数据资产的结构与命名；
->   - 完整性与可追溯性（provenance）；
->   - 可比较性与可复现性；
+> - 数据资产的结构与命名；
+> - 完整性与可追溯性（provenance）；
+> - 可比较性与可复现性；
 > - 因此，“唯一合法的结果出口”指的是**资产级、落盘级输出通道的唯一性**，而非对运行态结果可见性的限制。
-> 
+>
 > **需要特别避免的反例（重要）**：
-> 
+>
 > 下列行为将破坏“唯一合法结果出口”的架构治理原则：
-> 
->- 在 `run_case` 内部直接写文件、生成目录或构造 dataset；
+>
+> - 在 `run_case` 内部直接写文件、生成目录或构造 dataset；
 > - 在上层调用者中绕过 `export_dataset`，将 `results` 以临时或随意方式写入文件系统，并在项目中被视为正式或可复用的数据产物；
->- 通过其他函数或脚本绕开 `run_case` / `export_dataset`，直接从 `core` 或中间状态导出可留存结果。
-> 
->上述反例并非限制对 `results` 的正常使用，而是明确区分“运行态结果的消费”与“资产态结果的固化”这两个层级，以防止结果出口在演进过程中被无意识地分裂或绕过。
+> - 通过其他函数或脚本绕开 `run_case` / `export_dataset`，直接从 `core` 或中间状态导出可留存结果。
+>
+> 上述反例并非限制对 `results` 的正常使用，而是明确区分“运行态结果的消费”与“资产态结果的固化”这两个层级，以防止结果出口在演进过程中被无意识地分裂或绕过。
 
 > #### Concept Clarification (Explanatory Note, Non-Normative)
 >
 > ##### a) To avoid misunderstandings regarding the term “upper-level callers”, the following clarification is provided:
 >
 > In the context of this document, “upper-level callers” refers to **any external code or system component that resides above `run_case` and receives its `results` via interface invocation**.  
-> This term describes a *role*, rather than a specific module or architectural layer.
+> This term describes a _role_, rather than a specific module or architectural layer.
 >
 > Typical “upper-level callers” include (important):
 >
@@ -397,7 +393,7 @@ Explicitly prohibited:
 >
 > The emphasis in Section 2.3 that “results can be stably consumed by upper-level callers” is intended to ensure the structural and semantic stability of `results` as an interface artifact, rather than to imply any specific workflow or scheduling pattern.
 >
-> ------
+> ---
 >
 > ##### b) To avoid misunderstandings between the following two statements — “the `results` output by `run_case` can be stably consumed by upper-level callers” and “`export_dataset` serves as the sole legitimate result outlet (see Section 1.1)” — it is necessary to distinguish between the following two conceptual layers:
 >
@@ -431,7 +427,7 @@ Explicitly prohibited:
 >
 > These counterexamples are not intended to restrict the legitimate use of `results`, but to clearly distinguish between “consumption of runtime results” and “solidification of asset-level outputs”, thereby preventing the result outlet from being unintentionally fragmented or bypassed as the system evolves.
 
-------
+---
 
 ### 2.3.1 Results 的契约边界 | Contract Boundary of Results
 
@@ -464,13 +460,12 @@ In the v0.2.x phase, the contract boundary of `results` follows these rules:
 - if the semantics of stable fields in `results` are changed in a breaking way, such changes MUST be handled through explicit governance paths (such as version upgrades or ADRs), and MUST NOT occur silently under the name of implementation refactoring;
 - `results` express runtime execution outputs only, and do not assume responsibility for dataset directory structure, file naming, or asset organization.
 
-------
+---
 
 ### 2.3.2 可序列化性与导出适配要求 | Serializability and Export Adaptation Requirement
 
 `results` **必须能够被稳定地序列化或等价地转换为可导出的结构化表示**，以支持 `export_dataset` 在不依赖隐式运行时状态的前提下完成数据资产固化。
 `results` **MUST be stably serializable, or equivalently transformable into an exportable structured representation**, so that `export_dataset` can solidify them into data assets without relying on implicit runtime state.
-
 
 这意味着：
 
@@ -494,7 +489,7 @@ The purpose of this requirement is not to mandate any specific serialization for
 - `results` can serve as a **stable contract object** between Beam B and Beam C;
 - `export_dataset` is responsible only for assetization and structural organization, rather than reinterpreting internal execution-time state.
 
-------
+---
 
 ### 2.3.3 `run_case` 的 `results` 与 `manifest.results` 的区别 | Distinction Between `run_case` Results and `manifest.results`
 
@@ -534,7 +529,7 @@ In other words:
 - `manifest.results` are for post-export dataset structural indexing;
 - the two share the same name, but belong to different semantic layers and MUST be kept strictly distinct.
 
-------
+---
 
 ### 2.4 生命周期 | Lifecycle Semantics
 
@@ -569,7 +564,7 @@ The execution lifecycle of `run_case` is defined as three logical stages:
 - the lifecycle is atomic from the caller’s perspective (i.e., externally observable only as a single indivisible operation: the caller can observe either complete success or complete failure, with no visible intermediate stages)
 - multiple invocations **must not** share implicit state (including, but not limited to, execution-time information passed via global variables, static objects, or singleton caches)
 
-------
+---
 
 ### 2.5 副作用与状态约束 | Side-Effect and State Constraints
 
@@ -591,7 +586,7 @@ In the v0.2.x stage, `run_case`:
 
 > In other words, `run_case` is a **repeatedly callable, side-effect-free execution boundary**.
 
-------
+---
 
 ### 2.6 确定性与可复现性（v0.2.x 最小保证）| Determinism and Reproducibility (v0.2.x Minimum Guarantees)
 
@@ -609,7 +604,7 @@ The goal of these guarantees is not to pursue bitwise complete identity in all c
 - **under which conditions results should be consistent**
 - **which differences are allowed and must be recorded**
 
-------
+---
 
 #### 2.6.1 必须保证一致性的条件 | Conditions Requiring Consistency
 
@@ -641,7 +636,7 @@ Under these conditions:
 
 > Note: bitwise identity is not mandatory in v0.2.x, but if an implementation claims to support it, it must do so reliably.
 
-------
+---
 
 #### 2.6.2 允许差异的因素（需显式记录）| Allowed Sources of Variation (Must Be Explicitly Recorded)
 
@@ -657,14 +652,14 @@ The following factors may lead to numerical differences in results and are consi
 - differences in parallel execution order (threads / processes)
 - differences in underlying math libraries or hardware
 
-**约束  | Constraints**：
+**约束 | Constraints**：
 
 - 上述差异 **不得** 改变结果的物理或语义解释
 - 差异来源 **必须通过 元信息 被显式记录**
 - such differences **must not** alter the physical or semantic interpretation of results
 - sources of variation **must be explicitly recorded via metadata**
 
-------
+---
 
 #### 2.6.3 结果结构中的溯源元信息 | Provenance Metadata in Results Structure
 
@@ -692,7 +687,7 @@ These metadata:
 - do not participate in numerical computation
 - but must exist as structured components of results
 
-------
+---
 
 #### 2.6.4 最小测试要求（Determinism Smoke Test）| Minimum Testing Requirements (Determinism Smoke Test)
 
@@ -718,7 +713,7 @@ The purpose of this test is to:
 
 - prevent the introduction of implicit non-determinism during the evolution of `run_case` (i.e., behaviors that are not explicitly declared in the interface or results but may cause identical inputs to produce different outputs), rather than to cover all numerical execution paths
 
-------
+---
 
 ### 2.7 非目标与禁止模式（run_case）| Non-Goals and Forbidden Patterns (run_case)
 
@@ -741,7 +736,7 @@ The purpose of this test is to:
 - any multi-step execution or complex process
   - must be performed by an explicit orchestration layer (i.e., outer control logic located outside `run_case` that explicitly organizes invocation order, conditions, and dependencies across multiple calls)，and must not be hidden within `run_case`’s internal state or logic
 
-------
+---
 
 ## 3. export_dataset 权威输出与固化（资产化）契约 | Authoritative Export and Persistence (Assetization) Contract
 
@@ -763,7 +758,7 @@ It is:
 
 - the only institutionalized outlet for execution-time realizations (i.e., the only system-level allowed, supported, and auditable channel for result solidification and export)
 
-------
+---
 
 ### 3.2 输入约束 | Input Constraints
 
@@ -787,7 +782,7 @@ Explicitly prohibited:
 - exporting directly from the core or intermediate states while bypassing results
 - reinterpreting physical intent during export
 
-------
+---
 
 ### 3.3 输出与副作用 | Outputs and Side Effects
 
@@ -816,27 +811,26 @@ Its outputs must:
 > **解释性注释（不构成规范）**
 >
 > 上述所说的“文件系统副作用”，指在程序执行过程中对文件系统产生的**持久性影响**，例如创建、修改或删除文件与目录，或将数据写入磁盘以供后续使用。
-> 
->在本架构中，文件系统副作用本身并非被一概禁止，而是被**集中、制度化地约束**：
-> 
->- 在 `run_case` 中，文件系统副作用被明确禁止，以确保其作为纯执行契约，不承担结果固化或资产生成职责；
+>
+> 在本架构中，文件系统副作用本身并非被一概禁止，而是被**集中、制度化地约束**：
+>
+> - 在 `run_case` 中，文件系统副作用被明确禁止，以确保其作为纯执行契约，不承担结果固化或资产生成职责；
 > - 在 `export_dataset` 中，文件系统副作用被**显式允许**，因为其职责正是将运行态的 `results` 固化为可留存、可审计的数据资产（dataset）。
-> 
+>
 > 因此，这里的“允许产生文件系统副作用”，并不意味着任意写文件都是合理的，而是指：**只有在履行数据导出与结果固化职责的语境下，且通过 `export_dataset` 这一受控通道，文件系统写入才是合法且期望的行为。**
 
 > **Explanatory Note (Non-Normative)**
 >
 > As mentioned above, “file system side effects” refers to **persistent effects** on the file system produced during program execution, such as creating, modifying, or deleting files and directories, or writing data to disk for subsequent use.
-> 
->In this architecture, file system side effects are not categorically forbidden; instead, they are **centralized and institutionally constrained**:
-> 
->- Within `run_case`, file system side effects are explicitly prohibited, in order to ensure that it remains a pure execution contract and does not assume responsibilities for result solidification or asset generation;
+>
+> In this architecture, file system side effects are not categorically forbidden; instead, they are **centralized and institutionally constrained**:
+>
+> - Within `run_case`, file system side effects are explicitly prohibited, in order to ensure that it remains a pure execution contract and does not assume responsibilities for result solidification or asset generation;
 > - Within `export_dataset`, file system side effects are **explicitly permitted**, because its responsibility is precisely to solidify runtime `results` into durable, auditable data assets (datasets).
-> 
+>
 > Therefore, “allowing file system side effects” here does not imply that arbitrary file writing is acceptable. Rather, it means that **file system writes are legitimate and expected only when performed through the controlled channel of `export_dataset`, and only in the context of fulfilling its data export and result solidification responsibilities.**
 
-
-------
+---
 
 ### 3.4 非目标与约束 | Non-Goals and Constraints
 
@@ -864,7 +858,7 @@ It is only responsible for:
 - recording
 - archiving
 
-------
+---
 
 ## 4. 冻结声明 | Freeze Statement
 
@@ -887,7 +881,7 @@ Starting from v0.2.x:
   - must be reflected via ADR or version changes
 
 > 本文档整体自 v0.2.0 起作为 **执行契约冻结规范** 生效，其稳定性优先级高于任何单一功能或实现便利性（即不得因短期功能需求而破坏已冻结的执行契约）。  
-> 文中仅在少数条款中出现“在 v0.2.x 阶段”等表述，用于标注这些条款在当前阶段所承诺的**最小保证**（例如确定性、可复现性或副作用约束的最小要求），而不意味着本文档的其他冻结条款可以被弱化、忽略或视为非冻结。  是否在后续版本中对这些阶段性最小保证进行调整、细化或强化，须通过明确的版本升级或 ADR 过程声明，而不得在 v0.2.x 生命周期内以隐式方式变更。
+> 文中仅在少数条款中出现“在 v0.2.x 阶段”等表述，用于标注这些条款在当前阶段所承诺的**最小保证**（例如确定性、可复现性或副作用约束的最小要求），而不意味着本文档的其他冻结条款可以被弱化、忽略或视为非冻结。 是否在后续版本中对这些阶段性最小保证进行调整、细化或强化，须通过明确的版本升级或 ADR 过程声明，而不得在 v0.2.x 生命周期内以隐式方式变更。
 >
 > This document as a whole takes effect as a **frozen execution contract specification** starting from v0.2.0, and its stability takes precedence over any single feature or implementation convenience (i.e., the frozen execution contract must not be violated for short-term functional demands).  
-> Only a limited number of clauses in this document explicitly use expressions such as “in the v0.2.x stage”; these are used to indicate the **minimum guarantees** promised at the current stage (e.g., minimal requirements for determinism, reproducibility, or side-effect constraints), and do not imply that other frozen clauses in this document may be weakened, ignored, or treated as non-frozen.  Whether these stage-specific minimum guarantees are adjusted, refined, or strengthened in subsequent versions must be declared through explicit version upgrades or ADR processes, and must not be altered implicitly within the v0.2.x lifecycle.
+> Only a limited number of clauses in this document explicitly use expressions such as “in the v0.2.x stage”; these are used to indicate the **minimum guarantees** promised at the current stage (e.g., minimal requirements for determinism, reproducibility, or side-effect constraints), and do not imply that other frozen clauses in this document may be weakened, ignored, or treated as non-frozen. Whether these stage-specific minimum guarantees are adjusted, refined, or strengthened in subsequent versions must be declared through explicit version upgrades or ADR processes, and must not be altered implicitly within the v0.2.x lifecycle.
