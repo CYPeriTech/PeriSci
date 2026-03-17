@@ -48,9 +48,9 @@ The changelog follows these principles:
 
 #### 三梁执行契约正式确立
 
-- A 梁：`config_schema` 权威输入契约结构冻结
-- B 梁：`run_case(config)` 纯执行接口确立
-- C 梁：`export_dataset(results)` 资产级输出接口确立
+- 配置梁（Config Beam，A梁）：`config_schema` 权威输入契约结构冻结
+- 执行梁（Run Beam，B梁）：`run_case(config)` 纯执行接口确立
+- 输出梁（Export Beam，C梁）：`export_dataset(results)` 资产级输出接口确立
 - 明确三梁职责边界与调用路径约束
 
 #### 数据集规范（dataset-spec）冻结
@@ -103,7 +103,7 @@ The changelog follows these principles:
 - 本版本确立 C 梁为资产级输出边界
 - 自 v0.2.0 起，任何数据集结构破坏性修改必须提升 `dataset_version` 主版本 (major version)
 - 自 v0.2.0 起，版本引用不完整视为不可复现状态
-- 自 v0.2.0 起，三梁契约进入冻结阶段
+- 自 v0.2.0 起，三梁执行契约进入冻结阶段
 
 ---
 

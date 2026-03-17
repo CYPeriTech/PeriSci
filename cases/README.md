@@ -23,7 +23,7 @@ cases/case-00-minimal
 
 - **平台闭环 smoke gate**
 - 不追求物理正确性与数值精度
-- 主要用于验证 run / export / validate 三梁链路是否可用
+- 主要用于验证 `run_case → export_dataset → validate_case` 最小闭环是否可用，并验证基于配置契约的执行链路已经贯通
 
 因此，在 v0.2.x 阶段，`case-00-minimal` 的 `expected.json` 可以保持为“结构/状态类门禁”（例如 status 不得失败），并逐步演进为更强的结构校验与可观测性字段校验。
 
@@ -123,34 +123,48 @@ README 内容应保持稳定、结构化、可长期引用。
 
 标准流程：
 
-```
-input.json  ──▶  run_case  ──▶  results(bundle)
- │
- ▼
- export_dataset
- │
- ▼
- dataset
- │
- ▼
- validate_case
-```
-
-然后：
-
-```
-validate_case  ──▶  expected.json 判据（回归门禁）
+```text
+input.json
+   │
+   ▼
+run_case
+   │
+   ▼
+results (bundle)
+   │
+   ▼
+export_dataset
+   │
+   ▼
+dataset
+   │
+   ▼
+validate_case  ◀── expected.json
 ```
 
 说明：
 
-- **run_case**：执行计算，产出 results/bundle（内存态）
-- **export_dataset**：唯一允许落盘的边界，产出 dataset（资产态）
-- **validate_case**：结构与门禁检查的入口（可对 bundle / dataset manifest 做校验）
-- **expected.json**：只定义“通过标准”，不参与执行
+- **input.json**：权威输入配置，定义问题与执行所需的合法参数
+- **run_case**：执行计算，产出 `results` / `bundle`（内存态）
+- **export_dataset**：唯一允许落盘的边界，将运行结果固化为 `dataset`（资产态）
+- **validate_case**：校验程序入口，可对 `results`、`dataset` 或其 manifest 进行结构检查、状态检查和回归判定
+- **expected.json**：只定义“通过标准”，不参与执行，仅参与校验判定
 
-> 因此，可以认为：input 产生结果；expected 约束结果  
-> 并且：validate 是“校验的程序入口”，expected 是“校验的判据配置”。
+需要特别区分的是：
+
+- **三梁执行结构**对应的是：
+  - 配置梁（Config Beam / `config_schema`）
+  - 执行梁（Run Beam / `run_case`）
+  - 输出梁（Export Beam / `export_dataset`）
+- **validate_case** 不属于三梁本身，而属于回归验证与实验门禁机制
+- **expected.json** 也不属于执行结构，而是验证判据配置
+
+因此，可以更准确地理解为：
+
+- `input.json` 定义问题
+- `run_case` 执行问题
+- `export_dataset` 固化结果
+- `validate_case + expected.json` 共同判定该结果是否通过回归门禁
 
 ---
 
