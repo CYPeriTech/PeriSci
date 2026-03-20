@@ -106,6 +106,36 @@ You do **not** need an ADR for:
 
 ------
 
+## ADR 与版本策略的关系 | Relationship Between ADRs and Versioning
+
+ADR 用于判断和记录“为什么允许某项架构级变化发生”；版本策略用于标记“这项变化在外部语义上属于什么等级”。
+
+在 PeriSci 中，两者的关系应理解为：
+
+- **ADR** 决定：某项架构级变更是否被允许、为何被允许、影响哪些边界与长期方向
+- **Versioning** 决定：该变更应如何对外标记、是否属于 breaking change、是否需要迁移说明
+
+一般而言：
+
+- 影响硬边界、长期稳定锚点或冻结契约语义的 ADR，通常应对应 **MAJOR** 级版本影响
+- 在软边界内的可控扩展，通常对应 **MINOR** 或 **PATCH**
+- 纯局部实现优化、未触及契约与边界的变更，通常不需要 ADR，也不应触发 MAJOR
+
+ADRs determine whether and why an architecture-level change is allowed; versioning determines how that change is exposed externally and whether it is breaking.
+
+In PeriSci, the relationship is:
+
+- **ADR** decides whether a change to architecture is allowed, why it is allowed, and which boundaries or long-term directions it affects
+- **Versioning** decides how that change is marked externally, whether it is breaking, and whether migration guidance is required
+
+In general:
+
+- ADRs affecting hard boundaries, long-term stability anchors, or frozen contract semantics typically imply **MAJOR** version impact
+- Controlled growth within soft boundaries typically maps to **MINOR** or **PATCH**
+- Purely local implementation optimizations that do not affect contracts or boundaries usually require no ADR and should not trigger MAJOR
+
+------
+
 ## ADR 文件命名与编号 | Naming and Numbering
 
 ADR 文件采用以下命名规则：

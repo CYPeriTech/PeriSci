@@ -47,6 +47,7 @@ A version tag represents a **stable state that is reproducible over the long ter
 - `config_schema` 的不兼容修改
 - 数据集目录结构或字段语义的不兼容修改
 - 相同配置下仿真结果物理意义发生改变
+- 违反或实质性改变已冻结的数值语义契约（例如四核求解器结构、装配无副作用、trial/commit 语义、模型演化边界等）
 - 公共 API（如 `run_case`、`export_dataset`）的删除或语义改变
 - 不再保证旧版本结果可复现
 
@@ -61,10 +62,19 @@ Breaking changes include, but are not limited to:
 - Incompatible changes to `config_schema`
 - Incompatible changes to dataset directory structure or field semantics
 - Changes in the physical meaning of simulation results under identical configurations
+- Violations of, or substantive changes to, frozen numerical semantic contracts (e.g., the Four-Core Solver Structure, side-effect-free assembly, trial/commit semantics, or model-evolution boundaries)
 - Removal or semantic changes of public APIs (e.g., `run_case`, `export_dataset`)
 - Loss of reproducibility guarantees for results from previous versions
 
 A MAJOR version bump indicates that **existing configuration files, datasets, or AI models may require migration or regeneration**.
+
+> 说明：  
+> 这里所谓“破坏性变更”不仅包括配置、数据集与公共 API 的显式结构变化，也包括数值语义层的破坏。  
+> 如果某项修改虽然未改变接口形式，但破坏了已冻结的执行契约或数值语义约束（如四核结构、无副作用边界、试算/提交语义），则该修改同样应被视为 MAJOR 级变化。
+
+> Note:  
+> “Breaking change” here includes not only explicit structural changes to configuration, > datasets, and public APIs, but also semantic breakage at the numerical level.  
+> If a change preserves interface shape but violates frozen execution contracts or numerical semantic constraints (such as the Four-Core structure, side-effect boundaries, or trial/commit semantics), it SHALL also be treated as a MAJOR-level change.
 
 ---
 
@@ -195,6 +205,10 @@ In datasets and AI workflows, **the version tag must be recorded instead of a mo
 
 ## 版本层级体系 | Versioning Layers
 
+在 PeriSci 中，版本治理所对应的“契约”并不限于公共 API，而是覆盖输入契约、执行契约与输出/数据契约三层。  因此，本文件中的版本层级（Repository / Schema / Dataset）并不是普通软件版本号的并列列表，而是对不同契约层的分层治理。
+
+In PeriSci, the “contract” governed by versioning is not limited to public APIs; it spans the input contract, execution contract, and output/data contract.  Therefore, the version layers defined in this file (Repository / Schema / Dataset) are not a flat list of software versions, but a layered governance system for different contract layers.
+
 为避免在长期演进过程中产生版本语义混淆，本项目采用**分层版本体系**。
 不同层级的版本号具有不同治理职责，彼此之间不可混用。
 To prevent semantic confusion during long-term evolution, this project adopts a layered versioning system.
@@ -299,6 +313,14 @@ Rules:
 数据集版本与仓库版本可以不同步，但必须在 provenance 中建立明确绑定关系。
 The Dataset Version and the Repository Version MAY evolve independently, but a clear binding relationship MUST be established in provenance.
 
+> 补充说明：  
+> `cases/` 中的 canonical cases 并不直接等同于 `dataset_version` 所管理的数据资产版本，但它们构成了验证数据契约、执行契约与结果语义是否发生漂移的重要基准。  
+因此，任何导致 canonical cases 行为语义变化的修改，都必须通过版本记录、回归验证与必要时的迁移说明加以治理。
+
+> Additional note:  
+> Canonical cases under `cases/` are not themselves identical to the data assets governed by `dataset_version`, but they form a critical baseline for validating whether data contracts, execution contracts, and result semantics have drifted.  
+Therefore, any change that alters the semantic behavior of canonical cases MUST be governed through version records, regression validation, and migration notes where necessary.
+
 ------
 
 ### 4. 层级关系约束 | Layered Relationship Constraints
@@ -384,6 +406,28 @@ The following practices are prohibited:
 
 版本引用不完整视为不可复现状态。
 Incomplete version citation SHALL be considered a non-reproducible state.
+
+------
+
+### 6. ADR 触发与版本影响 | ADR Triggers and Version Impact
+
+当某项变更：
+
+- 触及架构硬边界
+- 改变长期稳定锚点的治理语义
+- 破坏冻结契约
+- 改写长期技术路线
+
+则该变更不仅需要版本标记，还应通过 ADR 明确记录其背景、决策理由、边界影响与迁移后果。
+
+When a change:
+
+- touches a hard architectural boundary
+- changes the governance semantics of a long-term stability anchor
+- breaks a frozen contract
+- rewrites a long-term technical direction
+
+it requires not only version marking, but also an ADR that explicitly records its context, rationale, boundary impact, and migration consequences.
 
 ---
 
