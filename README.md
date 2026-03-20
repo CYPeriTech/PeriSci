@@ -79,7 +79,7 @@ PeriSci is part of the **PERISOFT** ecosystem for PeriFEM-based scientific softw
 
 ## 架构宪法 | Architecture Constitution
 
-PeriSci 采用 **三梁执行结构（Three-Beam Execution Structure）** 与 **四核求解器结构（Four-Kernel Solver Structure）** 作为系统的长期治理基础。
+PeriSci 采用 **三梁执行结构（Three-Beam Execution Structure）** 与 **四核求解器结构（Four-Core Solver Structure）** 作为系统的长期治理基础。
 PeriSci adopts a **Three-Beam Execution Structure** and a **Four-Core Numerical Skeleton** as the long-term governance foundation of the system.
 
 三梁不是目录划分，也不是“前处理 / 求解器 / 后处理”的命名替代，而是一种用于科学计算平台的**执行契约结构（execution contract structure）**，用于定义输入、执行与结果资产之间的责任边界。

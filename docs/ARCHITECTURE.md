@@ -181,6 +181,13 @@ In particular:
 - **Governance Framework** describes how the project maintains long-term evolution through governance files such as versioning policies, contribution rules, and maintainer responsibilities.
 - **Long-term Stability Structure** highlights the key elements that anchor long-term stability: `core`, `api`, and `cases`
 
+> 需要进一步说明的是，`core → api → cases` 表示的是系统长期稳定性的锚点结构，而不是执行过程本身。  其中，`api` 层承载三梁执行结构在系统层面的对外契约形态；`core` 承载四核求解器结构及其数值语义；`cases` 则作为 canonical case assets，承担实验可复现性的稳定锚点与回归验证载体。
+> It should be further clarified that `core → api → cases` represents the anchor structure of long-term system stability, rather than the execution process itself.  Within this structure, the `api` layer carries the outward contractual form of the Three-Beam execution structure, `core` carries the Four-Core solver structure and its numerical semantics, and `cases` serve as canonical case assets anchoring experiment reproducibility and regression validation.
+
+
+>需要特别强调的是，`cases` 不是对外 API 契约本体，也不是运行时调用链的一部分；它作为 canonical case repository，承担的是实验可复现性的稳定锚点与契约验证载体的角色。
+>It must be emphasized that `cases` is neither the public API contract itself nor part of the runtime call chain; as the canonical case repository, it serves as the stability anchor of experiment reproducibility and as a verification carrier of system contracts.
+
 ---
 
 #### 运行时分层总览 | Runtime Layer Overview
