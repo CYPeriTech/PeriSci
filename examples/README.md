@@ -23,6 +23,7 @@ examples/
  ex-00-hello/
  ex-01-minimal-run/
 ```
+
 说明：
 
 - **ex-00-hello**：环境验证示例（Quickstart）
@@ -57,12 +58,12 @@ cases/case-00-minimal
 
 它与 `examples/ex-01-minimal-run` 的职责不同：
 
-| 项目 | ex-01-minimal-run | case-00-minimal |
-|-----|------------------|----------------|
-| 位置 | examples | cases |
-| 用途 | CLI 使用示例 | CI 回归门禁 |
-| 是否稳定 | 可演进 | 必须稳定 |
-| 是否含 expected.json | 否 | 是 |
+| 项目                 | ex-01-minimal-run | case-00-minimal |
+| -------------------- | ----------------- | --------------- |
+| 位置                 | examples          | cases           |
+| 用途                 | CLI 使用示例      | CI 回归门禁     |
+| 是否稳定             | 可演进            | 必须稳定        |
+| 是否含 expected.json | 否                | 是              |
 
 因此：
 
@@ -74,6 +75,7 @@ cases/case-00-minimal
 ```
 教学路径 + 回归验证
 ```
+
 ---
 
 ## 2. 命名规范
@@ -100,6 +102,7 @@ ex-03-poisson-basic
 ex-04-poisson-refinement
 ex-05-three-beam-intro
 ```
+
 ---
 
 ## 3. 排序规则
@@ -180,7 +183,7 @@ run → export → validate
 
 该示例的目的仅为展示执行流程，不保证任何物理正确性或数值结果。
 
-------
+---
 
 ## 5. 关键词选取原则
 
@@ -219,7 +222,7 @@ run → export → validate
 - 使用短横线分隔
 - 不使用中文
 
-------
+---
 
 ## 6. 示例目录结构建议
 
@@ -236,7 +239,7 @@ run → export → validate
 - CI 强制规则
 - 资产冻结声明
 
-------
+---
 
 ## 7. 示例的演进路径
 
@@ -268,7 +271,7 @@ run → export → validate
 4. 编写完整 README
 5. 添加 notes.md
 
-------
+---
 
 ## 8. 示例的维护原则
 
@@ -283,7 +286,7 @@ run → export → validate
 - 能体现预期教学目标
 - 不故意破坏基本功能
 
-------
+---
 
 ## 9. 示例与算例的协作关系
 
@@ -312,7 +315,7 @@ Poisson 算例用于验证：
 
 两者职责不同，但可以共享概念背景。
 
-------
+---
 
 ## 10. 示例的治理定位
 
@@ -325,3 +328,13 @@ cases 是：
 > 能力验证与回归基准层
 
 保持两层分离，是项目结构稳定的关键。
+
+## 11. 示例结构级别（v0.3.x 引入）
+
+除教学编号外，每个示例应标注其结构成熟度：
+
+- demo：仅用于演示，不要求进入 run→export→validate 闭环
+- closed-loop：可完整执行 run→export→validate
+- pre-case：具备稳定输入与验证条件，可升级为 case
+
+该标注用于指导示例向 case 的演进路径，不影响编号体系。
