@@ -1,4 +1,4 @@
-# PeriSci Hello (v0.1.5)
+# PeriSci Hello (v0.2.0)
 
 这是 PeriSci 的最小可运行示例，用于验证：
 - `core` 可以编译成库
@@ -37,8 +37,8 @@ cmake --build build -j
 
 ```
 Hello, PeriSci!
-Version: 0.1.5
-Build: PeriSci (api) v0.1.5
+Version: 0.2.0
+Build: PeriSci (api) v0.2.0
 ```
 
 ## 运行测试（推荐）

@@ -96,6 +96,7 @@ compile_commands.json
 # ==============================
 .ipynb_checkpoints/
 TAGS
+book/
 
 # Totalview breakpoint files
 *.TVD.*breakpoints
