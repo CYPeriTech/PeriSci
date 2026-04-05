@@ -43,7 +43,7 @@ int main()
   fs::remove_all(tmp);
   fs::create_directories(tmp);
 
-  const auto old_cwd = fs::current_path();
+  const fs::path old_cwd = fs::current_path();
   fs::current_path(tmp);
 
   const std::size_t before = count_files_recursively(tmp);
