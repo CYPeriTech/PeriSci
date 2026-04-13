@@ -26,17 +26,27 @@
 
 namespace fs = std::filesystem;
 
-static std::string read_all(const fs::path& p)
+namespace
 {
-  std::ifstream f(p, std::ios::binary);
-  std::string s((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-  return s;
-}
 
-static bool contains(const std::string& hay, const std::string& needle)
-{
-  return hay.find(needle) != std::string::npos;
-}
+  std::string read_all(const fs::path& p)
+  {
+    std::ifstream f(p, std::ios::binary);
+    if (!f)
+    {
+      throw std::runtime_error("cannot open file for reading: " + p.string());
+    }
+    std::ostringstream ss;
+    ss << f.rdbuf();
+    return ss.str();
+  }
+
+  bool contains(const std::string& hay, const std::string& needle)
+  {
+    return hay.find(needle) != std::string::npos;
+  }
+
+} // namespace
 
 int main()
 {

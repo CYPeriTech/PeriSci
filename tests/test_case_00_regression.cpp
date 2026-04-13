@@ -32,101 +32,106 @@ namespace fs = std::filesystem;
 // -----------------------------
 // Small helpers
 // -----------------------------
-static std::string read_all_text(const fs::path& p)
+namespace
 {
-  std::ifstream ifs(p, std::ios::in | std::ios::binary);
-  if (!ifs)
+
+  std::string read_all_text(const fs::path& p)
   {
-    throw std::runtime_error("cannot open file for reading: " + p.string());
-  }
-  std::ostringstream ss;
-  ss << ifs.rdbuf();
-  return ss.str();
-}
-
-static void write_all_text(const fs::path& p, const std::string& s)
-{
-  std::ofstream ofs(p, std::ios::out | std::ios::binary);
-  if (!ofs)
-  {
-    throw std::runtime_error("cannot open file for writing: " + p.string());
-  }
-  ofs << s;
-}
-
-static bool contains(const std::string& s, const std::string& needle)
-{
-  return s.find(needle) != std::string::npos;
-}
-
-static std::string trim(const std::string& s)
-{
-  const char* ws = " \t\r\n";
-  const auto begin = s.find_first_not_of(ws);
-  if (begin == std::string::npos)
-    return {};
-  const auto end = s.find_last_not_of(ws);
-  return s.substr(begin, end - begin + 1);
-}
-
-static std::string json_unescape(const std::string& s)
-{
-  std::string out;
-  out.reserve(s.size());
-
-  for (std::size_t i = 0; i < s.size(); ++i)
-  {
-    char c = s[i];
-    if (c == '\\' && i + 1 < s.size())
+    std::ifstream ifs(p, std::ios::in | std::ios::binary);
+    if (!ifs)
     {
-      const char n = s[i + 1];
-      switch (n)
+      throw std::runtime_error("cannot open file for reading: " + p.string());
+    }
+    std::ostringstream ss;
+    ss << ifs.rdbuf();
+    return ss.str();
+  }
+
+  void write_all_text(const fs::path& p, const std::string& s)
+  {
+    std::ofstream ofs(p, std::ios::out | std::ios::binary);
+    if (!ofs)
+    {
+      throw std::runtime_error("cannot open file for writing: " + p.string());
+    }
+    ofs << s;
+  }
+
+  bool contains(const std::string& s, const std::string& needle)
+  {
+    return s.find(needle) != std::string::npos;
+  }
+
+  std::string trim(const std::string& s)
+  {
+    const char* ws = " \t\r\n";
+    const auto begin = s.find_first_not_of(ws);
+    if (begin == std::string::npos)
+      return {};
+    const auto end = s.find_last_not_of(ws);
+    return s.substr(begin, end - begin + 1);
+  }
+
+  std::string json_unescape(const std::string& s)
+  {
+    std::string out;
+    out.reserve(s.size());
+
+    for (std::size_t i = 0; i < s.size(); ++i)
+    {
+      char c = s[i];
+      if (c == '\\' && i + 1 < s.size())
       {
-      case '\\':
-        out.push_back('\\');
-        ++i;
-        break;
-      case '"':
-        out.push_back('"');
-        ++i;
-        break;
-      case '/':
-        out.push_back('/');
-        ++i;
-        break;
-      case 'b':
-        out.push_back('\b');
-        ++i;
-        break;
-      case 'f':
-        out.push_back('\f');
-        ++i;
-        break;
-      case 'n':
-        out.push_back('\n');
-        ++i;
-        break;
-      case 'r':
-        out.push_back('\r');
-        ++i;
-        break;
-      case 't':
-        out.push_back('\t');
-        ++i;
-        break;
-      default:
+        const char n = s[i + 1];
+        switch (n)
+        {
+        case '\\':
+          out.push_back('\\');
+          ++i;
+          break;
+        case '"':
+          out.push_back('"');
+          ++i;
+          break;
+        case '/':
+          out.push_back('/');
+          ++i;
+          break;
+        case 'b':
+          out.push_back('\b');
+          ++i;
+          break;
+        case 'f':
+          out.push_back('\f');
+          ++i;
+          break;
+        case 'n':
+          out.push_back('\n');
+          ++i;
+          break;
+        case 'r':
+          out.push_back('\r');
+          ++i;
+          break;
+        case 't':
+          out.push_back('\t');
+          ++i;
+          break;
+        default:
+          out.push_back(c);
+          break;
+        }
+      }
+      else
+      {
         out.push_back(c);
-        break;
       }
     }
-    else
-    {
-      out.push_back(c);
-    }
+
+    return out;
   }
 
-  return out;
-}
+} // namespace
 
 /**
  * Extremely small JSON string extractor for flat/simple cases.

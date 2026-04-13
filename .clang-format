@@ -28,6 +28,10 @@ PointerAlignment: Left   # int* p;
 ReferenceAlignment: Left # int& r;
 
 AlignAfterOpenBracket: Align
+AlignConsecutiveMacros: false
+AlignConsecutiveBitFields: false
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
 AlignOperands: true
 AlignTrailingComments: true
 
@@ -51,6 +55,14 @@ FixNamespaceComments: true
 
 # ---- Preprocessor ----
 IndentPPDirectives: AfterHash
+
+# ---- C++ specific ----
+Standard: c++17
+Cpp11BracedListStyle: true
+
+# ---- Short constructs ----
+AllowShortEnumsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: false
 
 # ---- Misc ----
 DeriveLineEnding: true

@@ -24,17 +24,22 @@
 
 namespace fs = std::filesystem;
 
-static std::size_t count_files_recursively(const fs::path& p)
+namespace
 {
-  std::size_t n = 0;
-  for (auto it = fs::recursive_directory_iterator(p); it != fs::recursive_directory_iterator();
-       ++it)
+
+  std::size_t count_files_recursively(const fs::path& p)
   {
-    if (it->is_regular_file())
-      n++;
+    std::size_t n = 0;
+    for (auto it = fs::recursive_directory_iterator(p); it != fs::recursive_directory_iterator();
+         ++it)
+    {
+      if (it->is_regular_file())
+        n++;
+    }
+    return n;
   }
-  return n;
-}
+
+} // namespace
 
 int main()
 {
@@ -43,7 +48,7 @@ int main()
   fs::remove_all(tmp);
   fs::create_directories(tmp);
 
-  const auto old_cwd = fs::current_path();
+  const fs::path old_cwd = fs::current_path();
   fs::current_path(tmp);
 
   const std::size_t before = count_files_recursively(tmp);

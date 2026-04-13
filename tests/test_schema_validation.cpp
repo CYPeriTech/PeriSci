@@ -21,14 +21,19 @@
 #include <perisci/api/config_schema.hpp>
 #include <string>
 
-static bool looks_like_semver(const std::string& s)
+namespace
 {
-  int dots = 0;
-  for (char c : s)
-    if (c == '.')
-      dots++;
-  return dots >= 2;
-}
+
+  bool looks_like_semver(const std::string& s)
+  {
+    int dots = 0;
+    for (char c : s)
+      if (c == '.')
+        dots++;
+    return dots >= 2;
+  }
+
+} // namespace
 
 int main()
 {
