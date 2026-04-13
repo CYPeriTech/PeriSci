@@ -33,6 +33,10 @@ namespace
   std::string read_all(const fs::path& p)
   {
     std::ifstream ifs(p, std::ios::binary);
+    if (!ifs)
+    {
+      throw std::runtime_error("cannot open file for reading: " + p.string());
+    }
     std::ostringstream ss;
     ss << ifs.rdbuf();
     return ss.str();
@@ -41,6 +45,10 @@ namespace
   void write_all(const fs::path& p, const std::string& s)
   {
     std::ofstream ofs(p, std::ios::binary);
+    if (!ofs)
+    {
+      throw std::runtime_error("cannot open file for writing: " + p.string());
+    }
     ofs << s;
   }
 
