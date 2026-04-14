@@ -131,134 +131,135 @@ namespace
     return out;
   }
 
-} // namespace
-
-/**
- * Extremely small JSON string extractor for flat/simple cases.
- * Assumes `"key": "value"` shape somewhere in the text.
- * Returns empty string if not found.
- */
-static std::string extract_json_string_field(const std::string& json, const std::string& key)
-{
-  const std::string needle = "\"" + key + "\"";
-  const auto key_pos = json.find(needle);
-  if (key_pos == std::string::npos)
-    return {};
-
-  const auto colon_pos = json.find(':', key_pos + needle.size());
-  if (colon_pos == std::string::npos)
-    return {};
-
-  const auto first_quote = json.find('"', colon_pos + 1);
-  if (first_quote == std::string::npos)
-    return {};
-
-  const auto second_quote = json.find('"', first_quote + 1);
-  if (second_quote == std::string::npos)
-    return {};
-
-  const std::string value = json.substr(first_quote + 1, second_quote - first_quote - 1);
-  return json_unescape(value);
-}
-
-static std::string get_env_or_empty(const char* key)
-{
-  const char* v = std::getenv(key);
-  if (!v)
-    return {};
-  return std::string(v);
-}
-
-static std::string require_env_exe(const char* key)
-{
-  std::string v = get_env_or_empty(key);
-  if (v.empty())
+  /**
+   * Extremely small JSON string extractor for flat/simple cases.
+   * Assumes `"key": "value"` shape somewhere in the text.
+   * Returns empty string if not found.
+   */
+  std::string extract_json_string_field(const std::string& json, const std::string& key)
   {
-    std::cerr << "[case-00] missing required environment variable: " << key << "\n";
-    std::cerr << "Hint: tests/CMakeLists.txt should set "
-                 "PERISCI_RUN/PERISCI_EXPORT/PERISCI_VALIDATE via $<TARGET_FILE:...>\n";
-    std::exit(3);
+    const std::string needle = "\"" + key + "\"";
+    const auto key_pos = json.find(needle);
+    if (key_pos == std::string::npos)
+      return {};
+
+    const auto colon_pos = json.find(':', key_pos + needle.size());
+    if (colon_pos == std::string::npos)
+      return {};
+
+    const auto first_quote = json.find('"', colon_pos + 1);
+    if (first_quote == std::string::npos)
+      return {};
+
+    const auto second_quote = json.find('"', first_quote + 1);
+    if (second_quote == std::string::npos)
+      return {};
+
+    const std::string value = json.substr(first_quote + 1, second_quote - first_quote - 1);
+    return json_unescape(value);
   }
-  return v;
-}
 
-/**
- * Walk upward from current_path() until repository root is found.
- * Criterion: cases/case-00-minimal/input.json exists.
- */
-static fs::path find_repo_root()
-{
-  fs::path p = fs::current_path();
-
-  for (;;)
+  std::string get_env_or_empty(const char* key)
   {
-    const fs::path input = p / "cases" / "case-00-minimal" / "input.json";
-    const fs::path expected = p / "cases" / "case-00-minimal" / "expected.json";
-    if (fs::exists(input) && fs::exists(expected))
+    const char* v = std::getenv(key);
+    if (!v)
+      return {};
+    return std::string(v);
+  }
+
+  std::string require_env_exe(const char* key)
+  {
+    std::string v = get_env_or_empty(key);
+    if (v.empty())
     {
-      return p;
+      throw std::runtime_error(
+          "EnvironmentVariableError:[case-00] missing required environment variable: " +
+          std::string(key) +
+          "\nHint: tests/CMakeLists.txt should set PERISCI_RUN/PERISCI_EXPORT/PERISCI_VALIDATE via "
+          "$<TARGET_FILE:...>");
+    }
+    return v;
+  }
+
+  /**
+   * Walk upward from current_path() until repository root is found.
+   * Criterion: cases/case-00-minimal/input.json exists.
+   */
+  fs::path find_repo_root()
+  {
+    fs::path p = fs::current_path();
+
+    for (;;)
+    {
+      const fs::path input = p / "cases" / "case-00-minimal" / "input.json";
+      const fs::path expected = p / "cases" / "case-00-minimal" / "expected.json";
+      if (fs::exists(input) && fs::exists(expected))
+      {
+        return p;
+      }
+
+      if (!p.has_parent_path() || p.parent_path() == p)
+        break;
+      p = p.parent_path();
     }
 
-    if (!p.has_parent_path() || p.parent_path() == p)
-      break;
-    p = p.parent_path();
+    return {};
   }
 
-  return {};
-}
+  /**
+   * Cross-platform command runner aligned with tests/test_cli_boundaries.cpp.
+   * Uses temp files for stdin/stdout/stderr.
+   */
+  std::pair<int, std::string> run_capture(const std::vector<std::string>& args,
+                                          const fs::path& workdir,
+                                          const std::string* stdin_text)
+  {
+    const fs::path in_file = workdir / "__stdin.txt";
+    const fs::path out_file = workdir / "__stdout.txt";
 
-/**
- * Cross-platform command runner aligned with tests/test_cli_boundaries.cpp.
- * Uses temp files for stdin/stdout/stderr.
- */
-static std::pair<int, std::string> run_capture(const std::vector<std::string>& args,
-                                               const fs::path& workdir,
-                                               const std::string* stdin_text)
-{
-  const fs::path in_file = workdir / "__stdin.txt";
-  const fs::path out_file = workdir / "__stdout.txt";
+    if (stdin_text)
+      write_all_text(in_file, *stdin_text);
 
-  if (stdin_text)
-    write_all_text(in_file, *stdin_text);
-
-  std::ostringstream cmd;
+    std::ostringstream cmd;
 #ifdef _WIN32
-  cmd << "cmd /c \"";
-  for (std::size_t i = 0; i < args.size(); ++i)
-  {
-    if (i)
-      cmd << " ";
-    cmd << args[i];
-  }
-  if (stdin_text)
-    cmd << " < \"" << in_file.string() << "\"";
-  cmd << " > \"" << out_file.string() << "\" 2>&1";
-  cmd << "\"";
+    cmd << "cmd /c \"";
+    for (std::size_t i = 0; i < args.size(); ++i)
+    {
+      if (i)
+        cmd << " ";
+      cmd << args[i];
+    }
+    if (stdin_text)
+      cmd << " < \"" << in_file.string() << "\"";
+    cmd << " > \"" << out_file.string() << "\" 2>&1";
+    cmd << "\"";
 #else
-  cmd << "cd \"" << workdir.string() << "\" && ";
-  for (std::size_t i = 0; i < args.size(); ++i)
-  {
-    if (i)
-      cmd << " ";
-    cmd << args[i];
-  }
-  if (stdin_text)
-    cmd << " < \"" << in_file.filename().string() << "\"";
-  cmd << " > \"" << out_file.filename().string() << "\" 2>&1";
+    cmd << "cd \"" << workdir.string() << "\" && ";
+    for (std::size_t i = 0; i < args.size(); ++i)
+    {
+      if (i)
+        cmd << " ";
+      cmd << args[i];
+    }
+    if (stdin_text)
+      cmd << " < \"" << in_file.filename().string() << "\"";
+    cmd << " > \"" << out_file.filename().string() << "\" 2>&1";
 #endif
 
-  const int rc = std::system(cmd.str().c_str());
+    const int rc = std::system(cmd.str().c_str());
 
-  std::string out;
-  if (fs::exists(out_file))
-    out = read_all_text(out_file);
+    std::string out;
+    if (fs::exists(out_file))
+      out = read_all_text(out_file);
 
-  std::error_code ec;
-  fs::remove(in_file, ec);
-  fs::remove(out_file, ec);
+    std::error_code ec;
+    fs::remove(in_file, ec);
+    fs::remove(out_file, ec);
 
-  return {rc, out};
-}
+    return {rc, out};
+  }
+
+} // namespace
 
 // -----------------------------
 // Test: case-00 regression gate
@@ -450,7 +451,19 @@ int main()
   }
   catch (const std::exception& e)
   {
-    std::cerr << "[case-00] unexpected exception: " << e.what() << "\n";
-    return 2;
+    std::string error_msg = e.what();
+
+    // Check for environment variable error marker
+    if (error_msg.find("EnvironmentVariableError:") == 0)
+    {
+      std::cerr << error_msg.substr(25) << "\n";
+      return 3; // Environment variable error
+    }
+    else
+    {
+      // All other exceptions (including file open errors) use the original format
+      std::cerr << "[case-00] unexpected exception: " << error_msg << "\n";
+      return 2; // File open errors and other exceptions
+    }
   }
 }
