@@ -48,7 +48,33 @@ add_subdirectory(api)
 add_subdirectory(apps)
 
 if(PERISCI_BUILD_EXAMPLES)
-  add_subdirectory(examples/ex-00-hello)
+  # 直接在代码中定义需要跳过的示例目录列表
+  # 格式：set(EXAMPLES_TO_SKIP "目录1" "目录2" ...)
+  # 例如：set(EXAMPLES_TO_SKIP "examples/ex-01-minimal-run" "examples/ex-02-another")
+  set(EXAMPLES_TO_SKIP "")
+  
+  # 批量添加所有示例目录
+  file(GLOB EXAMPLE_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "examples/ex-*")
+  foreach(EXAMPLE_DIR ${EXAMPLE_DIRS})
+    set(EXAMPLE_FULL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${EXAMPLE_DIR})
+    
+    # 检查是否为目录
+    if(IS_DIRECTORY ${EXAMPLE_FULL_PATH})
+      # 检查是否包含CMakeLists.txt文件
+      if(EXISTS ${EXAMPLE_FULL_PATH}/CMakeLists.txt)
+        # 检查是否在跳过列表中
+        list(FIND EXAMPLES_TO_SKIP ${EXAMPLE_DIR} SKIP_INDEX)
+        if(SKIP_INDEX EQUAL -1)
+          add_subdirectory(${EXAMPLE_DIR})
+          message(STATUS "Added example: ${EXAMPLE_DIR}")
+        else()
+          message(STATUS "Skipped example (in skip list): ${EXAMPLE_DIR}")
+        endif()
+      else()
+        message(STATUS "Skipped example (no CMakeLists.txt): ${EXAMPLE_DIR}")
+      endif()
+    endif()
+  endforeach() 
 endif()
 
 if(PERISCI_BUILD_TESTS)
