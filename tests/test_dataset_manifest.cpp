@@ -19,34 +19,13 @@
 
 #include <cassert>
 #include <filesystem>
-#include <fstream>
 #include <perisci/api/export_dataset.hpp>
 #include <perisci/api/run_case.hpp>
 #include <string>
 
+#include "test_common_functions.hpp"
+
 namespace fs = std::filesystem;
-
-namespace
-{
-
-  std::string read_all(const fs::path& p)
-  {
-    std::ifstream f(p, std::ios::binary);
-    if (!f)
-    {
-      throw std::runtime_error("cannot open file for reading: " + p.string());
-    }
-    std::ostringstream ss;
-    ss << f.rdbuf();
-    return ss.str();
-  }
-
-  bool contains(const std::string& hay, const std::string& needle)
-  {
-    return hay.find(needle) != std::string::npos;
-  }
-
-} // namespace
 
 int main()
 {
@@ -73,11 +52,11 @@ int main()
   assert(fs::exists(root / "version" / "dataset_version.txt"));
   assert(fs::exists(root / "version" / "export_tool_version.txt"));
 
-  const std::string manifest = read_all(root / "manifest.json");
-  assert(contains(manifest, "\"dataset_version\""));
-  assert(contains(manifest, "\"provenance\""));
-  assert(contains(manifest, "\"code\""));
-  assert(contains(manifest, "\"results\""));
+  const std::string manifest = perisci::tests::read_all_text(root / "manifest.json");
+  assert(perisci::tests::contains(manifest, "\"dataset_version\""));
+  assert(perisci::tests::contains(manifest, "\"provenance\""));
+  assert(perisci::tests::contains(manifest, "\"code\""));
+  assert(perisci::tests::contains(manifest, "\"results\""));
 
   fs::remove_all(out);
   return 0;

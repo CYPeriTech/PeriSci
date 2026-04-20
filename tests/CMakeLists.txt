@@ -22,6 +22,17 @@
 # - Or: include(CTest)
 # This file only registers tests.
 
+add_library(perisci_test_common STATIC
+  test_common_functions.cpp
+)
+
+target_compile_features(perisci_test_common PUBLIC cxx_std_17)
+
+target_include_directories(perisci_test_common
+  PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 # ------------------------------------------------------------
 # (1) Legacy build/link smoke test
 #     Introduced in v0.1.5.
@@ -60,6 +71,7 @@ add_executable(perisci_test_dataset_manifest
 )
 target_compile_features(perisci_test_dataset_manifest PRIVATE cxx_std_17)
 target_link_libraries(perisci_test_dataset_manifest PRIVATE perisci_api)
+target_link_libraries(perisci_test_dataset_manifest PRIVATE perisci_test_common)
 add_test(NAME perisci.dataset_manifest COMMAND perisci_test_dataset_manifest)
 set_tests_properties(perisci.dataset_manifest PROPERTIES TIMEOUT 30)
 
@@ -69,6 +81,7 @@ add_executable(perisci_test_case_00_regression
   test_case_00_regression.cpp
 )
 target_compile_features(perisci_test_case_00_regression PRIVATE cxx_std_17)
+target_link_libraries(perisci_test_case_00_regression PRIVATE perisci_test_common)
 
 add_test(NAME perisci.case_00_regression COMMAND perisci_test_case_00_regression)
 
@@ -92,6 +105,7 @@ add_executable(perisci_test_cli_boundaries
   test_cli_boundaries.cpp
 )
 target_compile_features(perisci_test_cli_boundaries PRIVATE cxx_std_17)
+target_link_libraries(perisci_test_cli_boundaries PRIVATE perisci_test_common)
 add_test(NAME perisci.cli_boundaries COMMAND perisci_test_cli_boundaries)
 
 # 让 CTest 直接把 target 的真实路径传给测试（跨生成器/跨Debug/Release稳定）
