@@ -18,7 +18,6 @@
  */
 
 // apps/perisci_export_main.cpp
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <perisci/api/export_dataset.hpp>

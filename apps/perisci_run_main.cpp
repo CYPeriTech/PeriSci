@@ -18,7 +18,6 @@
  */
 
 // apps/perisci_run_main.cpp
-#include <cctype>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
