@@ -8,7 +8,7 @@
 
   "problem": {
     "type": "{{elliptic | parabolic | hyperbolic | custom}}",
-    "dimension": {{2}},
+    "dimension": 2,
     "equation": "{{简要描述或引用}}"
   },
 
@@ -26,16 +26,16 @@
 
   "material": {
     "parameters": {
-      "{{parameter_name}}": {{value}}
+      "{{parameter_name}}": "{{value}}"
     }
   },
 
   "discretization": {
     "mesh": {
       "type": "{{structured | unstructured}}",
-      "resolution": {{16}}
+      "resolution": 16
     },
-    "basis_order": {{1}}
+    "basis_order": 1
   },
 
   "solver": {

@@ -16,7 +16,7 @@
 当前保留的标签分区如下：
 
 | 标签 | 含义                              |
-| ---- | --------------------------------- |
+| ---- | ---------------------------------|
 | [I]  | 基本信息（Identity）              |
 | [P]  | 问题定义（Problem）               |
 | [A]  | 假设与适用范围（Assumptions）     |
@@ -25,11 +25,11 @@
 | [M]  | 回归判据（Metrics）               |
 | [D]  | 数据集语义（Dataset Semantics）   |
 | [S]  | 敏感性与稳定性（Sensitivity）     |
-| [V]  | 可视化与展示建议（Visualization） |
+| [V]  | 可视化与展示建议（Visualization）  |
 | [L]  | 局限性（Limitations）             |
 | [E]  | 结果解释（Explanation）           |
 | [X]  | 扩展与关联（Extensions）          |
-| [H]  | 历史与版本演进（History）         |
+| [H]  | 历史与版本演进（History）          |
 
 > 若某分区不适用于本算例，可删除整个分区。
 
