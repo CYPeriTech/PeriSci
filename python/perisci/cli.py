@@ -146,8 +146,18 @@ def cmd_export(args: argparse.Namespace) -> int:
     if args.bundle == "-":
         bundle_text = sys.stdin.read()
     else:
-        with open(args.bundle, "r", encoding="utf-8") as f:
-            bundle_text = f.read()
+        # 尝试用UTF-8读取，如果失败则尝试UTF-16
+        try:
+            with open(args.bundle, "r", encoding="utf-8") as f:
+                bundle_text = f.read()
+        except UnicodeDecodeError:
+            try:
+                with open(args.bundle, "r", encoding="utf-16") as f:
+                    bundle_text = f.read()
+            except UnicodeDecodeError:
+                # 如果都失败，尝试使用系统默认编码
+                with open(args.bundle, "r") as f:
+                    bundle_text = f.read()
 
     exe = resolve_executable(args.perisci_export)
     out = run_cmd([exe, "--bundle", "-", "--out", args.out], stdin_text=bundle_text)

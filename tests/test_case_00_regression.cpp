@@ -27,6 +27,8 @@
 #include <utility>
 #include <vector>
 
+#include "test_common_functions.hpp"
+
 namespace fs = std::filesystem;
 
 // -----------------------------
@@ -34,33 +36,6 @@ namespace fs = std::filesystem;
 // -----------------------------
 namespace
 {
-
-  std::string read_all_text(const fs::path& p)
-  {
-    std::ifstream ifs(p, std::ios::in | std::ios::binary);
-    if (!ifs)
-    {
-      throw std::runtime_error("cannot open file for reading: " + p.string());
-    }
-    std::ostringstream ss;
-    ss << ifs.rdbuf();
-    return ss.str();
-  }
-
-  void write_all_text(const fs::path& p, const std::string& s)
-  {
-    std::ofstream ofs(p, std::ios::out | std::ios::binary);
-    if (!ofs)
-    {
-      throw std::runtime_error("cannot open file for writing: " + p.string());
-    }
-    ofs << s;
-  }
-
-  bool contains(const std::string& s, const std::string& needle)
-  {
-    return s.find(needle) != std::string::npos;
-  }
 
   std::string trim(const std::string& s)
   {
@@ -206,59 +181,6 @@ namespace
     return {};
   }
 
-  /**
-   * Cross-platform command runner aligned with tests/test_cli_boundaries.cpp.
-   * Uses temp files for stdin/stdout/stderr.
-   */
-  std::pair<int, std::string> run_capture(const std::vector<std::string>& args,
-                                          const fs::path& workdir,
-                                          const std::string* stdin_text)
-  {
-    const fs::path in_file = workdir / "__stdin.txt";
-    const fs::path out_file = workdir / "__stdout.txt";
-
-    if (stdin_text)
-      write_all_text(in_file, *stdin_text);
-
-    std::ostringstream cmd;
-#ifdef _WIN32
-    cmd << "cmd /c \"";
-    for (std::size_t i = 0; i < args.size(); ++i)
-    {
-      if (i)
-        cmd << " ";
-      cmd << args[i];
-    }
-    if (stdin_text)
-      cmd << " < \"" << in_file.string() << "\"";
-    cmd << " > \"" << out_file.string() << "\" 2>&1";
-    cmd << "\"";
-#else
-    cmd << "cd \"" << workdir.string() << "\" && ";
-    for (std::size_t i = 0; i < args.size(); ++i)
-    {
-      if (i)
-        cmd << " ";
-      cmd << args[i];
-    }
-    if (stdin_text)
-      cmd << " < \"" << in_file.filename().string() << "\"";
-    cmd << " > \"" << out_file.filename().string() << "\" 2>&1";
-#endif
-
-    const int rc = std::system(cmd.str().c_str());
-
-    std::string out;
-    if (fs::exists(out_file))
-      out = read_all_text(out_file);
-
-    std::error_code ec;
-    fs::remove(in_file, ec);
-    fs::remove(out_file, ec);
-
-    return {rc, out};
-  }
-
 } // namespace
 
 // -----------------------------
@@ -296,8 +218,8 @@ int main()
       return 2;
     }
 
-    const std::string config_json = read_all_text(input_path);
-    const std::string expected_json = read_all_text(expected_path);
+    const std::string config_json = perisci::tests::read_all_text(input_path);
+    const std::string expected_json = perisci::tests::read_all_text(expected_path);
     const std::string status_must_not_be =
         extract_json_string_field(expected_json, "status_must_not_be");
 
@@ -314,7 +236,7 @@ int main()
                                       "--config",
                                       "-"};
 
-      auto [rc, out] = run_capture(cmd, out_dir, &config_json);
+      auto [rc, out] = perisci::tests::run_capture(cmd, out_dir, &config_json);
 
       if (rc != 0)
       {
@@ -323,7 +245,7 @@ int main()
         return 1;
       }
 
-      if (!contains(out, "{") || !contains(out, "}"))
+      if (!perisci::tests::contains(out, "{") || !perisci::tests::contains(out, "}"))
       {
         std::cerr << "[case-00] perisci-run output not JSON-like.\n";
         std::cerr << out << "\n";
@@ -342,7 +264,7 @@ int main()
         }
 
         const std::string forbidden_fragment = "\"status\":\"" + status_must_not_be + "\"";
-        if (contains(out, forbidden_fragment))
+        if (perisci::tests::contains(out, forbidden_fragment))
         {
           std::cerr << "[case-00] run result violates expected rule: status_must_not_be="
                     << status_must_not_be << "\n";
@@ -351,7 +273,7 @@ int main()
         }
       }
 
-      write_all_text(out_dir / "run_bundle.json", out);
+      perisci::tests::write_all_text(out_dir / "run_bundle.json", out);
     }
 
     // -----------------------------
@@ -359,7 +281,7 @@ int main()
     // -----------------------------
     fs::path dataset_root;
     {
-      const std::string bundle = read_all_text(out_dir / "run_bundle.json");
+      const std::string bundle = perisci::tests::read_all_text(out_dir / "run_bundle.json");
 
       std::vector<std::string> cmd = {"\"" + fs::path(perisci_export).string() + "\"",
                                       "--bundle",
@@ -367,7 +289,7 @@ int main()
                                       "--out",
                                       "\"" + out_dir.string() + "\""};
 
-      auto [rc, out] = run_capture(cmd, out_dir, &bundle);
+      auto [rc, out] = perisci::tests::run_capture(cmd, out_dir, &bundle);
 
       if (rc != 0)
       {
@@ -376,20 +298,20 @@ int main()
         return 1;
       }
 
-      if (!contains(out, "{") || !contains(out, "\"ok\":"))
+      if (!perisci::tests::contains(out, "{") || !perisci::tests::contains(out, "\"ok\":"))
       {
         std::cerr << "[case-00] perisci-export output not recognized as JSON report.\n";
         std::cerr << out << "\n";
         return 1;
       }
-      if (contains(out, "\"ok\":false"))
+      if (perisci::tests::contains(out, "\"ok\":false"))
       {
         std::cerr << "[case-00] perisci-export reported ok=false.\n";
         std::cerr << out << "\n";
         return 1;
       }
 
-      write_all_text(out_dir / "export_report.json", out);
+      perisci::tests::write_all_text(out_dir / "export_report.json", out);
 
       const std::string dataset_root_str = trim(extract_json_string_field(out, "dataset_root"));
       if (dataset_root_str.empty())
@@ -425,7 +347,7 @@ int main()
       std::vector<std::string> cmd = {"\"" + fs::path(perisci_validate).string() + "\"",
                                       "\"" + manifest.string() + "\""};
 
-      auto [rc, out] = run_capture(cmd, out_dir, nullptr);
+      auto [rc, out] = perisci::tests::run_capture(cmd, out_dir, nullptr);
 
       if (rc != 0)
       {
@@ -435,7 +357,7 @@ int main()
         return 1;
       }
 
-      if (!contains(out, "\"ok\":true"))
+      if (!perisci::tests::contains(out, "\"ok\":true"))
       {
         std::cerr << "[case-00] perisci-validate did not report ok=true.\n";
         std::cerr << out << "\n";

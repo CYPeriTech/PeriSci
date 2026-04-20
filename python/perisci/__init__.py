@@ -17,6 +17,7 @@
 
 # python/perisci/__init__.py
 from .run import run_case
-from .dataset import export_dataset
+from .export import export_dataset
+from .validate import validate_case
 
-__all__ = ["run_case", "export_dataset"]
+__all__ = ["run_case", "export_dataset", "validate_case"]

@@ -19,7 +19,7 @@
 from __future__ import annotations
 
 import json
-from .cli import run_cmd
+from .cli import run_cmd, resolve_executable
 
 
 def run_case(config_json: str, *, perisci_run: str = "perisci-run") -> dict:
@@ -36,7 +36,8 @@ def run_case(config_json: str, *, perisci_run: str = "perisci-run") -> dict:
         }
     """
 
-    out = run_cmd([perisci_run, "--config", "-"], stdin_text=config_json)
+    exe = resolve_executable(perisci_run)
+    out = run_cmd([exe, "--config", "-"], stdin_text=config_json)
     bundle = json.loads(out)
 
     # Backward compatibility:

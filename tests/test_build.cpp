@@ -22,7 +22,7 @@
 #include <string>
 
 int main()
-{
+ {
   // 目标：验证头文件可 include、符号可链接、可运行
   const std::string v = perisci::api::version_string();
 
