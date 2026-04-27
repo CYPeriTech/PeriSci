@@ -167,6 +167,8 @@ validation = validate_case(report["dataset_root"], perisci_validate=r"D:\My_Work
 print(bundle)
 print(report)
 print(validation)
+
+exit(0)   退出python解释器
 ```
 
 说明：
