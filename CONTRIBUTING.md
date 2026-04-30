@@ -104,8 +104,9 @@ Please note that **not all Pull Requests will be merged immediately**, but every
 > 示例：
 >
 > - `ex-00-hello`
-> - `ex-01-minimal-run`
-> - `ex-02-linear-elasticity-demo`
+> - `ex-01-config-basics`
+> - `ex-02-dataset-export`
+> - `ex-03-poisson-basic`
 >
 > Directories under `examples/` should reflect their teaching / demonstration role and are recommended to use:
 >
@@ -122,8 +123,9 @@ Please note that **not all Pull Requests will be merged immediately**, but every
 > Examples include:
 >
 > - `ex-00-hello`
-> - `ex-01-minimal-run`
-> - `ex-02-linear-elasticity-demo`
+> - `ex-01-config-basics`
+> - `ex-02-dataset-export`
+> - `ex-03-poisson-basic`
 >
 > #### `cases/` 的命名规则 | Naming Convention for `cases/`
 >

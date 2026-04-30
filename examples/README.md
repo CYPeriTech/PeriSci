@@ -21,13 +21,15 @@
 ```
 examples/
  ex-00-hello/
- ex-01-minimal-run/
+ ex-01-config-basics/
+ ex-02-dataset-export/
 ```
 
 说明：
 
 - **ex-00-hello**：环境验证示例（Quickstart）
-- **ex-01-minimal-run**：最小运行示例，用于展示 CLI 执行流程
+- **ex-01-config-basics**：基础配置示例，用于展示 C++ API 中的配置构造与运行调用
+- **ex-02-dataset-export**：dataset 导出示例，用于展示 `run_case -> export_dataset -> dataset/`
 
 未来示例将按编号逐步增加。
 
@@ -56,16 +58,11 @@ examples/
 cases/case-00-minimal
 ```
 
-它与 `examples/ex-01-minimal-run` 的职责不同：
+它负责验证 PeriSci 的最小执行闭环，属于 **cases** 层，而不是 **examples** 层。
 
-| 项目                 | ex-01-minimal-run | case-00-minimal |
-| -------------------- | ----------------- | --------------- |
-| 位置                 | examples          | cases           |
-| 用途                 | CLI 使用示例      | CI 回归门禁     |
-| 是否稳定             | 可演进            | 必须稳定        |
-| 是否含 expected.json | 否                | 是              |
+examples 中不再保留与 `case-00-minimal` 职责重叠的最小运行影子算例。
 
-因此：
+治理原则：
 
 - **examples 可以修改**
 - **cases 必须保持稳定**
@@ -96,11 +93,10 @@ ex-XX-keyword
 
 ```
 ex-00-hello
-ex-01-minimal-run
-ex-02-config-basics
+ex-01-config-basics
+ex-02-dataset-export
 ex-03-poisson-basic
 ex-04-poisson-refinement
-ex-05-three-beam-intro
 ```
 
 ---
@@ -131,8 +127,8 @@ ex-00-hello 是环境验证示例（Quickstart Example）。
 用途：
 
 - 验证项目是否成功构建
-- 验证 CLI 是否可运行
-- 验证最小运行链路是否畅通
+- 验证基础示例程序是否可运行
+- 验证 C++ API 引用链路是否畅通
 
 它不展示物理能力，不涉及数值收敛，不构成进阶教学内容。
 
@@ -140,48 +136,32 @@ ex-00-hello 是环境验证示例（Quickstart Example）。
 
 ---
 
-## 4.1 最小运行示例：ex-01-minimal-run
+## 4.1 基础配置示例：ex-01-config-basics
 
-`ex-01-minimal-run` 用于展示 PeriSci CLI 的最小执行流程。
+`ex-01-config-basics` 是 hello 之后的第一个正式教学示例。
 
-示例配置通常为：
+它的目标是展示 PeriSci 配置文件的基础结构，例如：
 
-```json
-{
-  "meta": {
-    "schema_version": "1.0.0",
-    "config_id": "example-minimal-run"
-  }
-}
-```
+- `meta`
+- 基本问题描述
+- 求解或运行选项
+- 输出配置
 
-最小运行方式：
+该示例面向教学与探索，而不是复制 `cases/case-00-minimal` 的回归门禁职责。
 
-```
-cat examples/ex-01-minimal-run/input.json | perisci-run --config -
-```
+---
 
-该命令会输出一个 JSON bundle。
+## 4.2 dataset 导出示例：ex-02-dataset-export
 
-随后可以进行数据导出：
+`ex-02-dataset-export` 展示何时以及如何把运行结果导出为 `dataset/`。
 
-```
-cat bundle.json | perisci-export --bundle - --out output_dir
-```
+它的目标是展示 PeriSci 的导出边界，例如：
 
-并进行验证：
+- `run_case` 返回内存态 `RunResults`
+- `export_dataset` 是唯一负责生成 `dataset/` 的 API
+- 示例可以生成 dataset，但仍不等同于稳定 case asset
 
-```
-perisci-validate output_dir/manifest.json
-```
-
-上述流程构成 PeriSci 的最小执行闭环：
-
-```
-run → export → validate
-```
-
-该示例的目的仅为展示执行流程，不保证任何物理正确性或数值结果。
+该示例用于理解 `RunResults -> export_dataset -> dataset/`，不承担 `cases/case-00-minimal` 的回归门禁职责。
 
 ---
 
@@ -193,7 +173,6 @@ run → export → validate
 
 ### 5.1 基础功能类
 
-- minimal-run
 - config-basics
 - boundary-conditions
 - solver-options
