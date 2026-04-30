@@ -51,7 +51,7 @@ add_subdirectory(apps)
 if(PERISCI_BUILD_EXAMPLES)
   # 直接在代码中定义需要跳过的示例目录列表
   # 格式：set(EXAMPLES_TO_SKIP "目录1" "目录2" ...)
-  # 例如：set(EXAMPLES_TO_SKIP "examples/ex-01-minimal-run" "examples/ex-02-another")
+  # 例如：set(EXAMPLES_TO_SKIP "examples/ex-01-config-basics" "examples/ex-02-another")
   set(EXAMPLES_TO_SKIP "")
   
   # 批量添加所有示例目录

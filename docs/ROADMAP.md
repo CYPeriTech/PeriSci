@@ -234,10 +234,10 @@ The evolution of PeriSci is not driven by “feature accumulation”, but judged
 - Lock key numerical metrics or invariants
 - Prevent regression of architectural and numerical semantics
 
-##### Python 层与 CLI | Python layer and CLI
+##### Python 工作流层 | Python workflow layer
 
-- 提供批量与教学友好的入口（非权威层）
-- Provide batch-friendly and teaching-friendly entry points (non-authoritative layer)
+- 提供面向教学、演示与批量组织的友好入口（非权威层）
+- Provide user-friendly, non-authoritative entry points for teaching, demonstration, and batch-oriented workflow organization
 
 ---
 

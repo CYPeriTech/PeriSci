@@ -1,197 +1,236 @@
-# PeriSci Python Layer（v0.2.x）
+# PeriSci Python Layer (v0.2.x)
 
 本目录包含 **PeriSci 的 Python 工作流层（workflow layer）**。
 
-Python 层的目标不是实现数值计算逻辑，也不是定义新的语义契约，而是提供：
+它的职责不是实现数值计算本身，也不是定义新的物理语义或配置契约，而是为教学、研究脚本、自动化和 AI 数据生产提供一个更容易组织的外层入口。
 
-- 教学与示例工作流
+在仓库整体分层中，`python/` 对应根 README 中的：
+
+```text
+python/  # Python 绑定与工作流层（教学、AI 数据生产、脚本接口）
+```
+
+---
+
+## 1. 定位与边界 | Role and Boundaries
+
+### Python 层是什么
+
+- 教学与演示工作流层
 - 研究脚本入口
-- AI / 自动化工具调用接口
-- dataset 与算例运行辅助工具
+- 自动化与批量组织层
+- dataset 与算例运行的辅助编排层
 
-Python 层始终处于 **runtime architecture 的最外层**：
+### Python 层不是什么
+
+- 不是数值内核
+- 不是权威配置契约层
+- 不是 regression 的权威归属层
+- 不是 `examples/` 的镜像目录
+
+### 当前 v0.2.x 的实现状态
+
+当前 `v0.2.x` 中，Python 层是一个**基于 CLI 的过渡性包装层**。
+
+也就是说，当前实际执行路径更接近：
+
+```text
+python -> apps -> api -> core
 ```
-python / apps → api → core
-```
 
-## v0.2.x 状态说明
-
-当前 `v0.2.x` 的 Python 层实现是**基于 CLI 的临时适配/包装**，用于先建立最小可用的教学、研究与自动化工作流入口。
-
-这意味着当前实现路径更接近：
-
-```
-python → apps → api → core
-```
-
-但这**不代表长期架构边界**。
+但这只是阶段性实现方式，不代表长期架构边界。
 
 长期目标仍应与 `docs/ARCHITECTURE.md` 保持一致：
 
+```text
+python -> api -> core
 ```
-python → api → core
-```
 
-也就是说，长期目标是 **`python → api`**，而不是 **`python → apps → api`**。
+### 边界提醒
 
-其中：
-
-- `core/`：数值计算内核
-- `api/`：稳定 C++ API 契约层
-- `apps/`：CLI 执行入口
-- `python/`：工作流与工具层
+- Python 层可以**编排** `run -> export -> validate`
+- 但这不意味着 Python 层拥有 `cases + tests` 的 regression 权威
+- Python 层可以**调用** `validate`
+- 但 `validate_case` 仍然属于围绕 case asset 的验证与门禁机制，而不是 Python 自己发明的新层
 
 ---
 
-## 设计原则
+## 2. 五分钟学习路径 | Five-Minute Path
 
-Python 层是 **non-authoritative layer（非权威层）**。
+如果你第一次接触 `python/`，推荐只做下面四件事。
 
-因此必须遵守以下约束：
+### 第一步：先构建 C++ 可执行程序
 
-1. **不得引入新的语义**
-2. **不得绕过 schema 验证**
-3. **不得引入隐式默认值**
-4. **不得绕过 CLI 边界直接操作核心逻辑**
-
-当前 `v0.2.x` 中，Python 层通过 **CLI 适配层** 调用系统；这是过渡实现，不应被理解为长期正式边界。
-
----
-
-## 当前 v0.2.x 的 CLI 适配实现（过渡态）
-
-下述内容描述的是当前 `v0.2.x` 的实现方式，而不是长期架构承诺。
-
-当前 Python 层主要调用以下三个 CLI：
-
-### `perisci-run`
-
-对应 **B 梁（run beam）**
-
-职责：
-
-- 纯执行
-- 不产生 filesystem 副作用
-- 返回结构化运行结果
-
----
-
-### `perisci-export`
-
-对应 **C 梁（export beam）**
-
-职责：
-
-- 唯一合法 dataset 写入点
-- 在
-```
-output_dir/dataset
-```
-下生成 dataset 结构
-
----
-
-### `perisci-validate`
-
-对应 **validate beam**
-
-职责：
-
-- 验证 dataset manifest 或 dataset 目录
-- 用于 CI / regression testing
-
----
-
-## Python 包结构
-
-Python 层以一个包形式提供：
-```
-python/perisci/
-```
-主要模块包括：
-
-| 模块 | 作用 |
-|-----|------|
-| `run.py` | 封装运行工作流（调用 `perisci-run`） |
-| `export.py` | dataset 导出工具（调用 `perisci-export`） |
-| `validate.py` | 验证工具（调用 `perisci-validate`） |
-| `cli.py` | Python 侧 CLI 封装 |
-| `__main__.py` | 支持 `python -m perisci` 入口 |
-| `__init__.py` | Python 包初始化 |
-
-## 使用方式
-
-当前 `v0.2.x` 的 Python 层本质上是对 `perisci-run`、`perisci-export`、`perisci-validate`
-这三个 CLI 的 Python 包装，因此在使用前建议先完成 C++ 可执行程序构建。
-
-推荐先在仓库根目录执行：
+在仓库根目录执行：
 
 ```powershell
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
 cmake --build build -j
 ```
 
-### 方式一：作为 Python 包调用
+### 第二步：让 Python 找到本地包
 
-适用于：
-
-- 在 Python 脚本中组织工作流
-- 在交互式 Python / Notebook 中试验接口
-- 在自动化脚本里组合 `run -> export -> validate`
-
-如果你在**仓库根目录**下使用，需要先让 Python 能找到 `python/perisci/` 这个包目录：
+仍然在仓库根目录执行：
 
 ```powershell
 $env:PYTHONPATH = "$PWD\python"
 ```
 
-然后启动 Python 解释器：
+### 第三步：运行最小闭环工作流
 
 ```powershell
-python
+python -m perisci run .\cases\case-00-minimal\input.json > .\build\bundle.json
+
+python -m perisci export --bundle .\build\bundle.json --out .\build\py_cli_demo > .\build\export_report.json
+
+python -m perisci validate .\build\py_cli_demo\dataset
 ```
 
-再在 Python 提示符 `>>>` 中输入：
+### 第四步：看懂这三个产物
 
-```python
-from perisci import run_case, export_dataset, validate_case
+- `build/bundle.json`：`run` 的内存态结果包
+- `build/py_cli_demo/dataset/`：`export` 生成的数据集目录
+- 终端里的 validation JSON：`validate` 的结构检查结果
 
-config_json = r'{"schema_version":"1.0.0","case_id":"smoke"}'
+如果这四步你已经能顺下来，说明你已经理解了 Python 层最核心的教学目标：  
+**它不是重新实现求解器，而是把已有入口组织成一个可教学、可脚本化的工作流。**
 
-bundle = run_case(config_json, perisci_run=r"D:\My_Work\Works\20260105_PeriSci\projects\perisci\build\bin\perisci-run.exe",)
+---
 
-report = export_dataset(bundle, r"D:\My_Work\Works\20260105_PeriSci\projects\perisci\build\py_package_demo", perisci_export=r"D:\My_Work\Works\20260105_PeriSci\projects\perisci\build\bin\perisci-export.exe",)
+## 3. 为什么在 Python 层学习闭环 | Why Learn the Loop Here
 
-validation = validate_case(report["dataset_root"], perisci_validate=r"D:\My_Work\Works\20260105_PeriSci\projects\perisci\build\bin\perisci-validate.exe",)
+PeriSci 里有四个相邻但不同的角色：
 
-print(bundle)
-print(report)
-print(validation)
+| 位置 | 主要职责 |
+| --- | --- |
+| `examples/` | 教 C++ API 边界与最小可运行示例 |
+| `python/` | 教如何组织 `run / export / validate` 工作流 |
+| `cases/` | 提供稳定、可复现的 canonical inputs |
+| `tests/` | 使用 canonical cases 承担 regression 与 CI gate |
 
-exit(0)   退出python解释器
+因此：
+
+- 如果你想学 `run_case` / `export_dataset` 的 **C++ API 边界**，先看 `examples/`
+- 如果你想学如何把三步串起来形成 **工作流**，看 `python/`
+- 如果你想看**稳定输入**从哪里来，去 `cases/`
+- 如果你想看**回归权威**落在哪里，去 `tests/`
+
+这也是为什么 `python/README.md` 不应该写成一个新的 `example`，而应该写成一个**工作流教学文档**。
+
+---
+
+## 4. 为什么复用 `case-00-minimal` | Why Reuse `case-00-minimal`
+
+当前 Python 教学文档复用：
+
+```text
+cases/case-00-minimal/input.json
 ```
 
-说明：
+这是刻意的，而不是偷懒。
 
-- `from perisci import ...` 是 **Python 代码**，必须在 Python 解释器里执行，不能直接在 PowerShell 里输入。
-- 上例显式传入了 `build/bin` 下的可执行文件路径，这样最清晰、最稳妥。
-- 如果你已经把这些可执行文件所在目录加入了 `PATH`，则可以省略 `perisci_run=...`、`perisci_export=...`、`perisci_validate=...` 参数。
+原因有三点：
 
-### 方式二：作为命令行调用
+- `case-00-minimal` 已经是仓库里现成的 **最小 canonical case**
+- Python 层这里要教的是**工作流组织**，不是再发明一份新的教学配置
+- 复用 canonical case 可以避免在 `python/` 里再长出一份职责重叠的影子输入
 
-适用于：
+所以在当前阶段，**Python 教程复用 `case-00-minimal` 是合理且推荐的**。
 
-- 直接在终端里运行工作流
-- 编写批处理脚本
+只有当未来 Python 层要讲的是另一类工作流主题，比如参数扫描、批量 case 组织、数据后处理时，才需要引入新的示范输入。
+
+---
+
+## 5. 三个步骤各自产生什么 | What Each Step Produces
+
+Python 层最值得学会的，不只是“怎么执行命令”，而是：  
+**每一步到底产出什么对象，它和三梁/验证机制的关系是什么。**
+
+### 5.1 `run` 产生什么
+
+`run` 对应执行梁（Run Beam）的 Python 包装，最终调用 `perisci-run`。
+
+它产出的是一个 **bundle JSON / Python dict**，大致形状如下：
+
+```json
+{
+  "config_b64": "...",
+  "results": {
+    "status": "success",
+    "message": "...",
+    "notes": ["..."]
+  },
+  "run_report": {}
+}
+```
+
+理解重点：
+
+- `run` 只返回**内存态运行结果**
+- 它**不负责**生成 `dataset/`
+- `config_b64` 用于把输入配置随 bundle 一起传递下去
+- `run_report` 是观测信息位；在当前 `v0.2.x` 阶段可能为空，后续可逐步增强
+
+### 5.2 `export` 产生什么
+
+`export` 对应输出梁（Export Beam）的 Python 包装，最终调用 `perisci-export`。
+
+它产出两类东西：
+
+1. 一个 **export report**
+2. 一个真正落盘的 `dataset/`
+
+`export report` 大致形状如下：
+
+```json
+{
+  "ok": true,
+  "dataset_root": "D:/.../dataset",
+  "message": "..."
+}
+```
+
+理解重点：
+
+- `export` 是**唯一合法的 dataset 固化入口**
+- dataset 的生成职责仍然属于 `export_dataset` / `perisci-export`
+- Python 只是负责把这一步组织进 workflow
+
+### 5.3 `validate` 产生什么
+
+`validate` 对应验证入口的 Python 包装，最终调用 `perisci-validate`。
+
+它返回一个 **validation report**，大致形状如下：
+
+```json
+{
+  "ok": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "info_count": 0,
+  "issues": []
+}
+```
+
+理解重点：
+
+- `validate` 检查的是导出的 `dataset` / `manifest`
+- 它可以被 Python 调用，但**不意味着 regression 职责转移到了 Python**
+- regression 的权威组织仍然在 `cases + tests`
+
+---
+
+## 6. 最常用的两种调用方式 | Two Common Ways to Use It
+
+### 6.1 方式一：作为命令行工作流包装层
+
+适合：
+
+- 直接在终端里跑工作流
+- 写批处理脚本
 - 快速串联 `run / export / validate`
 
-同样建议在**仓库根目录**下执行，并先设置：
-
-```powershell
-$env:PYTHONPATH = "$PWD\python"
-```
-
-你可以先查看帮助：
+先看帮助：
 
 ```powershell
 python -m perisci --help
@@ -200,27 +239,176 @@ python -m perisci export --help
 python -m perisci validate --help
 ```
 
-一个完整的命令行示例如下：
+#### `run`
 
 ```powershell
-python -m perisci run .\cases\case-00-minimal\input.json > .\build\bundle.json
-
-python -m perisci export --bundle .\build\bundle.json --out .\build\py_cli_demo > .\build\export_report.json
-
-python -m perisci validate .\build\py_cli_demo\dataset\manifest.json
+python -m perisci run <config.json>
+python -m perisci run <case-dir>
+python -m perisci run <case-name>
 ```
 
-这三步分别表示：
-
-1. `run`：读取 `input.json`，调用 `perisci-run`，把运行 bundle 输出到 `build/bundle.json`
-2. `export`：读取 bundle，调用 `perisci-export`，把 dataset 导出到 `build/py_cli_demo/dataset`
-3. `validate`：调用 `perisci-validate`，验证导出的 `manifest.json`
-
-如果你当前就在 `python/` 目录下，也可以直接运行：
+例如：
 
 ```powershell
-python -m perisci --help
-python -m perisci run ..\cases\case-00-minimal\input.json
+python -m perisci run case-00-minimal
 ```
 
-但这种情况下，涉及 `cases/`、`build/` 的路径需要改成相对于 `python/` 目录的写法。
+如果当前工作目录是仓库根目录，上面的写法会自动解析到：
+
+```text
+cases/case-00-minimal/input.json
+```
+
+#### `export`
+
+```powershell
+python -m perisci export --bundle .\build\bundle.json --out .\build\py_cli_demo
+```
+
+#### `validate`
+
+```powershell
+python -m perisci validate .\build\py_cli_demo\dataset
+```
+
+这里既可以传 `manifest.json`，也可以直接传 `dataset` 目录。
+
+### 6.2 方式二：作为 Python 包调用
+
+适合：
+
+- 在 Python 脚本中组织工作流
+- 在 Notebook / 交互式 Python 中试验接口
+- 在自动化逻辑里组合多个 case
+
+示例：
+
+```python
+from pathlib import Path
+from perisci import run_case, export_dataset, validate_case
+
+repo_root = Path.cwd()
+config_path = repo_root / "cases" / "case-00-minimal" / "input.json"
+config_json = config_path.read_text(encoding="utf-8")
+
+bundle = run_case(config_json)
+report = export_dataset(bundle, str(repo_root / "build" / "py_package_demo"))
+validation = validate_case(report["dataset_root"])
+
+print(bundle)
+print(report)
+print(validation)
+```
+
+说明：
+
+- `run_case()` 接收的是**权威配置 JSON 文本**
+- `export_dataset()` 接收 bundle，并把 dataset 导出到你指定的目录
+- `validate_case()` 可以接收 `dataset_root` 或 `manifest.json` 路径
+
+如果 Python 找不到 `perisci-run` / `perisci-export` / `perisci-validate`：
+
+- 先确认你已经完成了 C++ 构建
+- Python 会优先从 `PATH` 查找
+- 如果 `PATH` 中没有，它还会尝试查找仓库下的 `build/bin/`
+
+---
+
+## 7. Python 包结构 | Package Layout
+
+```text
+python/
+└─ perisci/
+   ├─ __init__.py
+   ├─ __main__.py
+   ├─ cli.py
+   ├─ run.py
+   ├─ export.py
+   └─ validate.py
+```
+
+| 模块 | 作用 |
+| --- | --- |
+| `run.py` | 对执行梁的薄包装 |
+| `export.py` | 对输出梁的薄包装 |
+| `validate.py` | 对验证入口的薄包装 |
+| `cli.py` | `python -m perisci` 的命令行封装 |
+| `__main__.py` | 模块入口 |
+| `__init__.py` | 对外暴露 `run_case` / `export_dataset` / `validate_case` |
+
+---
+
+## 8. 和其他目录的关系 | Relationship to Other Layers
+
+### 与 `examples/` 的关系
+
+- `examples/` 教 C++ API 的正确使用方式
+- `python/` 教如何组织更高层的工作流
+
+尤其是：
+
+```text
+examples/ex-02-dataset-export
+```
+
+展示的是：
+
+```text
+run_case -> export_dataset -> dataset/
+```
+
+而 `python/` 展示的是：
+
+```text
+run -> export -> validate
+```
+
+两者互补，但不应互相复制。
+
+### 与 `cases/` 的关系
+
+- `cases/` 提供 canonical inputs
+- Python 教程优先复用 canonical case，而不是在 `python/` 里复制一份新输入
+
+### 与 `tests/` 的关系
+
+- `tests/` 承担 regression gate
+- Python 可以调用 `validate`
+- 但 Python 文档的教学闭环不等于测试闭环的权威定义
+
+---
+
+## 9. 常见误解 | Common Misunderstandings
+
+### 误解 1：Python 能调用 `validate`，所以 regression 属于 Python
+
+不对。  
+Python 只是一个**工作流调用层**；regression 的权威仍在 `cases + tests`。
+
+### 误解 2：Python 导出了 dataset，所以 dataset 依赖 Python
+
+不对。  
+dataset 的固化边界仍然是 `export_dataset` / `perisci-export`；Python 只是把它组织起来。
+
+### 误解 3：Python 层应该复制一套 `examples/`
+
+不对。  
+`examples/` 负责 C++ API 教学，`python/` 负责 workflow 教学，职责不同。
+
+### 误解 4：既然能用 `case-00-minimal`，那 Python README 就只是测试说明
+
+也不对。  
+这里复用 `case-00-minimal`，是为了给工作流教学提供**现成、稳定、最小的 canonical input**，而不是把 Python README 变成测试文档。
+
+---
+
+## 10. 下一步看什么 | Where to Go Next
+
+如果你已经理解了本 README，下一步建议按顺序看：
+
+1. `examples/ex-01-config-basics`：理解配置与 `run_case`
+2. `examples/ex-02-dataset-export`：理解 `export_dataset` 为什么是唯一落盘边界
+3. `cases/case-00-minimal`：理解 canonical case 与最小闭环 gate
+4. `docs/ARCHITECTURE.md`：理解 Python 层在整体架构中的位置
+
+这样学下来，`python/` 就不会只是“会敲三条命令”，而会真正变成你理解 PeriSci 工作流分层的入口。
