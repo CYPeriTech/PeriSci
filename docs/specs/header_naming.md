@@ -1,10 +1,10 @@
 # 头文件命名规范 | Header Naming Conventions
 
-> 本文档用于规定 **PeriSci v0.2.x 阶段** 公共头文件的命名规则与语义边界，以确保对外接口在演进过程中保持稳定、清晰且可治理。
-> This document defines naming rules and semantic boundaries for public header files in **PeriSci v0.2.x**, ensuring that external interfaces remain stable, clear, and governable during system evolution.
+> 本文档用于规定 **PeriSci v0.2.x 基线与 v0.3.x+ 阶段** 公共头文件的命名规则与语义边界，以确保对外接口在演进过程中保持稳定、清晰且可治理。
+> This document defines naming rules and semantic boundaries for public header files in the **PeriSci v0.2.x baseline and v0.3.x+ stage**, ensuring that external interfaces remain stable, clear, and governable during system evolution.
 >
-> 在 v0.2.x 阶段，系统架构与模块边界已经建立，公共头文件不再只是骨架占位，而是逐步形成稳定接口层。因此，其命名必须反映明确语义，并避免引入模糊或误导性的概念。
-> In the v0.2.x phase, the system architecture and module boundaries have already been established. Public headers are no longer merely skeleton placeholders, but gradually form a stable interface layer. Therefore, their naming must reflect explicit semantics and avoid introducing vague or misleading concepts.
+> 在 v0.3.x+ 阶段，公共头文件继续承担稳定接口层职责，同时开始承载由真实教学示例牵引出来的可复用 core 能力。因此，其命名必须反映明确语义，并避免引入示例专属、短期或误导性的概念。
+> In the v0.3.x+ stage, public headers continue to form the stable interface layer, and they also begin to carry reusable core capabilities driven by real teaching examples. Therefore, their naming must reflect explicit semantics and avoid example-specific, short-lived, or misleading concepts.
 
 ------
 
@@ -12,11 +12,11 @@
 
 ### 1.1 文档目的 | Purpose
 
-- 明确 v0.2.x 阶段公共头文件的命名原则
+- 明确 v0.2.x 基线与 v0.3.x+ 阶段公共头文件的命名原则
 - 防止头文件命名破坏既有模块边界
 - 避免通过名称引入未经设计讨论的概念
 - 为接口稳定性与未来版本演进提供清晰约束
-- Define naming principles for public headers in v0.2.x
+- Define naming principles for public headers in the v0.2.x baseline and v0.3.x+ stage
 - Prevent header naming from eroding established module boundaries
 - Avoid introducing undeclared concepts through header names
 - Provide clear constraints for interface stability and future evolution
@@ -37,13 +37,13 @@
 公共头文件的命名即构成对外语义承诺。
 Public header names constitute semantic commitments to external users.
 
-在 v0.2.x 阶段，这些承诺应：
+自 v0.2.x 起，并在 v0.3.x+ 中继续适用，这些承诺应：
 
 - 与已建立的模块职责保持一致
 - 反映稳定的接口语义
 - 避免泄露内部实现结构
 
-In v0.2.x, these commitments must:
+Starting from v0.2.x, and still applying in v0.3.x+, these commitments must:
 
 - remain consistent with established module responsibilities
 - reflect stable interface semantics
@@ -62,14 +62,17 @@ In v0.2.x, these commitments must:
 
 ### 3.1 core 模块的职责边界 | Responsibility Boundary
 
-- core 模块仅承载最底层、长期稳定的基础设施语义
-- 不应表达具体物理、数值或求解层概念
-- The core module carries only lowest-level, long-term stable infrastructure
-- It must not express physical, numerical, or solver-level concepts
+- core 模块承载长期稳定、可复用的底层数值基础能力
+- core 可以包含 mesh、material、assembly、boundary、linear_algebra、solver 等跨 examples/cases 复用的基础语义
+- core 不应包含示例专属、case 专属或配置入口专属的语义
+- The core module carries long-term stable and reusable low-level numerical capabilities
+- Core may contain reusable foundational semantics such as `mesh`, `material`, `assembly`, `boundary`, `linear_algebra`, and `solver`
+- Core must not contain example-specific, case-specific, or configuration-entry semantics
 
-### 3.2 v0.2.x 阶段推荐的基础头文件 | Recommended Core Headers in v0.2.x
+### 3.2 v0.2.x 基线与 v0.3.x+ core 头文件 | Core Headers in the v0.2.x Baseline and v0.3.x+
 
-在 v0.2.x 阶段，core 模块的公共头文件应仍然保持最小集合，但允许在基础设施层面逐步形成稳定接口。
+在 v0.2.x 阶段，core 模块的公共头文件保持最小集合，主要承载基础设施语义。
+在 v0.3.x+ 阶段，core 开始接收由真实教学示例牵引出的可复用数值能力，因此允许出现稳定、通用、跨问题复用的数值基础头文件。
 
 典型示例包括：
 
@@ -78,10 +81,17 @@ In v0.2.x, these commitments must:
 - platform.hpp（平台相关定义）
 - types.hpp（基础类型定义）
 - error.hpp（基础错误类型，如需要）
+- mesh.hpp（通用离散对象与简单网格构造）
+- material.hpp（通用材料/参数容器与基础属性表达）
+- assembly.hpp（通用贡献汇总/矩阵向量装配入口）
+- boundary.hpp（边界条件施加的通用工具）
+- linear_algebra.hpp（小型线性代数数据结构与操作）
+- solver.hpp（通用求解器基础能力）
 
-上述头文件仅用于表达基础设施语义，不得引入领域层或求解层概念。
+上述头文件应表达稳定的基础能力，而不是某个示例的完整算法。示例专属名称（例如 `poisson_basic`）不应进入 core。
 
-In v0.2.x, public headers in the core module should still remain minimal, but stable infrastructure interfaces may gradually emerge.
+In v0.2.x, public headers in the core module remain minimal and mainly carry infrastructure semantics.
+In v0.3.x+, core begins to receive reusable numerical capabilities driven by real teaching examples, so stable and problem-independent numerical foundation headers are allowed.
 
 Typical examples include:
 
@@ -90,8 +100,14 @@ Typical examples include:
 - platform.hpp (platform-related definitions)
 - types.hpp (basic type definitions)
 - error.hpp (basic error types, if necessary)
+- mesh.hpp (generic discrete objects and simple mesh construction)
+- material.hpp (generic material/parameter containers and foundational property representation)
+- assembly.hpp (generic contribution accumulation / matrix-vector assembly entry points)
+- boundary.hpp (generic tools for applying boundary conditions)
+- linear_algebra.hpp (small linear algebra data structures and operations)
+- solver.hpp (generic solver foundations)
 
-These headers are limited to infrastructure semantics and must not introduce domain or solver-level concepts.
+These headers should express stable foundational capabilities rather than the full algorithm of one example. Example-specific names such as `poisson_basic` must not enter core.
 
 > 注：上述列表为指导性示例，并非强制穷举；任何新增名称都应接受严格审视。
 > Note: The above list is illustrative, not exhaustive; any additional names require careful scrutiny.
@@ -100,23 +116,21 @@ These headers are limited to infrastructure semantics and must not introduce dom
 
 以下类型的语义通常不属于 core 模块职责，因此不应在 core 的公共头文件中出现：
 
-- mesh.hpp
-- material.hpp
-- solver.hpp
 - config.hpp
 - case.hpp
 - results.hpp
+- run_poisson_basic.hpp
+- poisson_basic.hpp
 
 这些名称通常代表更高层语义，应由上层模块（如 api 或 future domain modules）承担。
 
 The following semantic concepts generally do not belong to the responsibility of the core module and therefore should not appear as public headers in core:
 
-- mesh.hpp
-- material.hpp
-- solver.hpp
 - config.hpp
 - case.hpp
 - results.hpp
+- run_poisson_basic.hpp
+- poisson_basic.hpp
 
 These names typically represent higher-level semantics and should be owned by upper modules such as api or future domain modules.
 
@@ -127,9 +141,9 @@ These names typically represent higher-level semantics and should be owned by up
 ### 4.1 api 模块的语义角色 | Semantic Role
 
 - api 模块用于表达系统对外可见的执行意图与使用接口。
-- 在 v0.2.x 阶段，api 模块逐步形成稳定的用户接口层。
+- 在 v0.3.x+ 阶段，api 模块继续作为 core 的唯一对外调用边界，并承载 examples 与 cases 的不同入口职责。
 - The api module expresses user-visible execution intent and usage interfaces.
-- In the v0.2.x phase, the api module gradually forms a stable user-facing interface layer.
+- In the v0.3.x+ stage, the api module continues to be the only external calling boundary for core, and it carries the different entry responsibilities of examples and cases.
 
 因此，api 模块的公共头文件允许出现描述以下语义的名称：
 

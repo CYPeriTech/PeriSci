@@ -1,12 +1,12 @@
-# API 执行契约规范（v0.2.x 冻结版）
+# API 执行契约规范（v0.2.x 冻结基线，v0.3.x+ 沿用）
 
-# API Execution Contract Specification (v0.2.x Frozen)
+# API Execution Contract Specification (v0.2.x Frozen Baseline, Carried Forward in v0.3.x+)
 
-> 本文档定义 **PeriSci 中核心 API 的执行级契约**，重点冻结 `run_case` 与 `export_dataset` 在 v0.2.x 阶段的职责边界与可执行语义。
+> 本文档定义 **PeriSci 中核心 API 的执行级契约**，重点冻结 `run_case` 与 `export_dataset` 在 v0.2.x 阶段形成的职责边界与可执行语义，并在 v0.3.x+ 阶段继续作为 cases 体系的执行契约基线。
 >
 > 本规范关注的是：**执行边界是否清晰、可审计、不可被误用**，而非功能完备性或数值复杂度。
 
-> This document defines the **execution-level contracts of the core APIs in PeriSci**, with a focus on freezing the responsibility boundaries and executable semantics of `run_case` and `export_dataset` in the v0.2.x stage.
+> This document defines the **execution-level contracts of the core APIs in PeriSci**, with a focus on the responsibility boundaries and executable semantics of `run_case` and `export_dataset` frozen in the v0.2.x stage and carried forward as the cases-system execution baseline in v0.3.x+.
 >
 > This specification is concerned with **whether execution boundaries are clear, auditable, and resistant to misuse**, rather than functional completeness or numerical complexity.
 
@@ -880,8 +880,8 @@ Starting from v0.2.x:
   - must be auditable
   - must be reflected via ADR or version changes
 
-> 本文档整体自 v0.2.0 起作为 **执行契约冻结规范** 生效，其稳定性优先级高于任何单一功能或实现便利性（即不得因短期功能需求而破坏已冻结的执行契约）。  
-> 文中仅在少数条款中出现“在 v0.2.x 阶段”等表述，用于标注这些条款在当前阶段所承诺的**最小保证**（例如确定性、可复现性或副作用约束的最小要求），而不意味着本文档的其他冻结条款可以被弱化、忽略或视为非冻结。 是否在后续版本中对这些阶段性最小保证进行调整、细化或强化，须通过明确的版本升级或 ADR 过程声明，而不得在 v0.2.x 生命周期内以隐式方式变更。
+> 本文档整体自 v0.2.0 起作为 **执行契约冻结基线** 生效，并在 v0.3.x+ 阶段继续作为 cases 体系的执行契约基线；其稳定性优先级高于任何单一功能或实现便利性（即不得因短期功能需求而破坏已冻结的执行契约）。  
+> 文中仅在少数条款中出现“在 v0.2.x 阶段”等表述，用于标注这些条款在 v0.2.x 基线中承诺的**最小保证**（例如确定性、可复现性或副作用约束的最小要求），而不意味着本文档的其他冻结条款可以被弱化、忽略或视为非冻结。是否在 v0.3.x+ 中对这些阶段性最小保证进行调整、细化或强化，须通过明确的版本升级或 ADR 过程声明，而不得以隐式方式变更。
 >
-> This document as a whole takes effect as a **frozen execution contract specification** starting from v0.2.0, and its stability takes precedence over any single feature or implementation convenience (i.e., the frozen execution contract must not be violated for short-term functional demands).  
-> Only a limited number of clauses in this document explicitly use expressions such as “in the v0.2.x stage”; these are used to indicate the **minimum guarantees** promised at the current stage (e.g., minimal requirements for determinism, reproducibility, or side-effect constraints), and do not imply that other frozen clauses in this document may be weakened, ignored, or treated as non-frozen. Whether these stage-specific minimum guarantees are adjusted, refined, or strengthened in subsequent versions must be declared through explicit version upgrades or ADR processes, and must not be altered implicitly within the v0.2.x lifecycle.
+> This document as a whole takes effect as a **frozen execution contract baseline** starting from v0.2.0 and remains the execution-contract baseline for the cases system in v0.3.x+; its stability takes precedence over any single feature or implementation convenience (i.e., the frozen execution contract must not be violated for short-term functional demands).  
+> Only a limited number of clauses in this document explicitly use expressions such as “in the v0.2.x stage”; these are used to indicate the **minimum guarantees** promised by the v0.2.x baseline (e.g., minimal requirements for determinism, reproducibility, or side-effect constraints), and do not imply that other frozen clauses in this document may be weakened, ignored, or treated as non-frozen. Whether these stage-specific minimum guarantees are adjusted, refined, or strengthened in v0.3.x+ must be declared through explicit version upgrades or ADR processes and must not be changed implicitly.

@@ -1,14 +1,14 @@
 # 一致性对照表 | Consistency Matrix
 
-> 本文档用于明确 **PeriSci v0.2.x 阶段** 各核心模块在
+> 本文档用于明确 **PeriSci v0.2.x 基线与 v0.3.x+ 阶段** 各核心模块在
 > **目录结构 / CMake target / 公共头文件路径 / C++ 命名空间**等层面的对应关系。
 >
-> 本表最初形成于 v0.1.x 阶段，在 v0.2.x 中继续维护并扩展，以覆盖 runtime 架构与数值实验体系的新模块。
+> 本表最初形成于 v0.1.x 阶段，在 v0.2.x 中继续维护并扩展；在 v0.3.x+ 中继续作为新增 core/api/examples/cases 能力时的结构一致性基线。
 >
-> This document defines, for **PeriSci v0.2.x**, the correspondence
+> This document defines, for the **PeriSci v0.2.x baseline and v0.3.x+ stage**, the correspondence
 > between **directory layout / CMake targets / public include paths / C++ namespaces** across core modules.
 >
-> The matrix was initially established in v0.1.x and has been extended in v0.2.x to cover new modules introduced by the runtime architecture and numerical experiment system.
+> The matrix was initially established in v0.1.x and extended in v0.2.x; in v0.3.x+ it continues to serve as the structural-consistency baseline for new core/api/examples/cases capabilities.
 
 ---
 
@@ -237,10 +237,10 @@ Before introducing any new module or major directory, check:
 
 ## 5. 演进说明 | Evolution Notes
 
-- 本对照表反映的是 **v0.2.x 阶段的稳定共识**
+- 本对照表反映的是 **v0.2.x 基线与 v0.3.x+ 阶段的稳定共识**
 - 新模块的引入或现有模块职责的变化，应首先更新本表
 - 若变化涉及架构边界，应通过 ADR 正式记录
-- This matrix reflects **stable consensus for v0.2.x**
+- This matrix reflects **stable consensus for the v0.2.x baseline and v0.3.x+ stage**
 - Introduction of new modules or changes in responsibilities should update this table first
 - Architectural boundary changes must be recorded via ADRs
 

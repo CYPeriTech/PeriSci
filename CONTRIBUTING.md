@@ -15,22 +15,24 @@ academia, industry, and the open-source community.
 
 ## 1. 项目阶段说明 | Project Stage
 
-PeriSci 当前处于 **v0.2.x 阶段（接口冻结 / 架构稳定化阶段）**。
+PeriSci 当前处于 **v0.3.0+ 阶段（真实示例牵引 / core 能力生长阶段）**。
 
 在这一阶段：
 
-- 系统主架构与分层边界已基本确立
-- 公共契约正在冻结，并以可复现、可验证为优先目标
+- v0.2.x 已完成三梁执行契约、系统边界与治理规则冻结
+- v0.3.x 通过 `examples/` 牵引真实数值能力进入 `core/`
+- `cases/` 继续围绕可复现、可回归、可治理的 case asset 积累演进
 - 接口与实现仍可能演进，但任何变更都应服从 **正确性、可复现性与设计一致性**
 
 请在贡献前理解：**并非所有 Pull Request 都会被立即合并**，但每一份合理的贡献都会被认真评审。
 
-PeriSci is currently in the **v0.2.x stage (interface-freeze / architectural stabilization stage)**.
+PeriSci is currently in the **v0.3.0+ stage (real-example-driven / core capability growth stage)**.
 
 At this stage:
 
-- The system’s main architecture and layer boundaries have largely been established
-- Public contracts are being frozen, with reproducibility and verifiability as the primary goals
+- The v0.2.x line has completed the freeze of Three-Beam execution contracts, system boundaries, and governance rules
+- The v0.3.x line grows real numerical capabilities in `core/` through `examples/`
+- `cases/` continues to evolve around reproducible, regression-ready, governable case assets
 - APIs and implementations may still evolve, but any change must remain consistent with **correctness, reproducibility, and architectural consistency**
 
 Please note that **not all Pull Requests will be merged immediately**, but every reasonable contribution will be carefully reviewed.
@@ -309,7 +311,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 其中生成的 `compile_commands.json` 是 clangd 获取真实编译信息的关键，且为构建过程中自动生成的编译数据库文件，应由`build/`目录生成并使用，不应提交到版本控制仓库中。
 
-PeriSci uses **single-config Ninja builds** during the v0.1.x phase.
+PeriSci continues to recommend **single-config Ninja builds** in v0.3.x+.
 The generated `compile_commands.json` serves as the authoritative source of compilation flags for clangd，and it is an automatically generated compilation database produced during the build process and should be generated from the `build/` directory; it must not be committed to the version control repository.
 
 ---
@@ -515,13 +517,13 @@ All contributions should follow these principles:
 ### 6.2 命名与编码原则 | Naming and Coding Principles
 
 - 有关目录结构、CMake target、公有头文件路径与 C++ 命名空间之间项目级一致性的约定，请参阅 [docs/specs/consistency_matrix.md](docs/specs/consistency_matrix.md)。
-- 关于 v0.1.x 骨架阶段中 stub 文件的命名、用途与生命周期约定，请参阅 [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md)。
-- 关于 v0.1.x 阶段公共头文件的命名规则与允许范围，以及如何避免通过头文件名称提前承诺未来能力，请参阅 [docs/specs/header_naming.md](docs/specs/header_naming.md)。
+- 关于历史 stub 文件的命名、用途与生命周期约定，以及 v0.3.x+ 中如何逐步替换 stub，请参阅 [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md)。
+- 关于公共头文件的命名规则与允许范围，以及如何避免通过头文件名称提前承诺未来能力，请参阅 [docs/specs/header_naming.md](docs/specs/header_naming.md)。
 - 有关项目级的 C++ 与 CMake 编码原则与约定，请参阅 [docs/CODING_GUIDE.md](docs/CODING_GUIDE.md)。
 - For project-level consistency across directory structure, CMake targets, public include paths, and C++ namespaces, please refer to [docs/specs/consistency_matrix.md](docs/specs/consistency_matrix.md).
-- For naming, usage, and lifecycle conventions of stub files during the v0.1.x skeleton phase, see [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md).
+- For naming, usage, and lifecycle conventions of historical stub files, and for how to replace stubs in v0.3.x+, see [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md).
 - For project-level C++ and CMake coding principles and conventions, please refer to [docs/CODING_GUIDE.md](docs/CODING_GUIDE.md).
-- For naming rules and allowed scopes of public header files during v0.1.x, and for avoiding premature capability commitments through header names, see [docs/specs/header_naming.md](docs/specs/header_naming.md).
+- For naming rules and allowed scopes of public header files, and for avoiding premature capability commitments through header names, see [docs/specs/header_naming.md](docs/specs/header_naming.md).
 
 ---
 

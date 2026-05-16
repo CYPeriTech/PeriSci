@@ -15,7 +15,7 @@
 - 如何调用 `perisci::api::export_dataset`
 - 如何观察生成的 `dataset/` 目录和关键文件
 
-当前 v0.2.x 阶段的 `run_case` 和 `export_dataset` 仍是 stub，因此本示例只展示执行边界与导出边界的连接方式，不展示真实物理结果。
+在当前 v0.3.x+ 阶段，`run_case` 和 `export_dataset` 仍保留 v0.2.x 平台最小执行/导出边界，主要用于 cases 体系的统一入口与资产化契约演示；真实数值教学路径从后续教学型 API 示例（如 `ex-03-poisson-basic`）开始。因此本示例只展示执行边界与导出边界的连接方式，不展示真实物理结果。
 
 ---
 

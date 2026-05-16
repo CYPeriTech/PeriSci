@@ -5,8 +5,8 @@
 
 > **当前开发状态 | Development Status**
 >
-> PeriSci 当前处于 **v0.2.x 稳定化阶段**，重点在于架构边界稳定与契约体系确立。详细阶段说明请参阅 `docs/ROADMAP.md`。
-> PeriSci is currently in the **v0.2.x stabilization stage**, focusing on architectural boundary stabilization and contract enforcement. See `docs/ROADMAP.md` for detailed evolution plans.
+> PeriSci 当前处于 **v0.3.0+ 数值教学示例与核心能力生长阶段**。v0.2.x 已完成三梁执行契约与架构边界冻结，v0.3.x 在此基础上开始建设真实可运行的教学示例、可复用 `core` 数值能力，以及未来可孵化为 case asset 的示例路径。详细阶段说明请参阅 `docs/ROADMAP.md`。
+> PeriSci is currently in the **v0.3.0+ numerical teaching examples and core capability growth stage**. The v0.2.x line completed the freeze of Three-Beam execution contracts and architectural boundaries; v0.3.x builds on that baseline by introducing real runnable teaching examples, reusable `core` numerical capabilities, and example paths that may later mature into case assets. See `docs/ROADMAP.md` for detailed evolution plans.
 
 ---
 
@@ -343,6 +343,8 @@ Version: 0.2.0
 Build: PeriSci (api) v0.2.0
 ```
 
+> 注：上面的版本输出来自当前构建产物中的版本元数据。项目阶段声明以本文开头和 `docs/ROADMAP.md` 的 v0.3.x+ 说明为准。
+
 ---
 
 ### 4) 运行测试 | Run Tests
@@ -467,9 +469,11 @@ This project is released under the **MulanPSL-2.0 License**.
 
 ## 项目状态 | Project Status
 
-PeriSci 当前处于 **早期开发阶段（v0.x）**。
+PeriSci 当前处于 **v0.3.0+ 早期能力生长阶段（v0.x）**。
 
-- 软件架构与接口仍在持续演进中
+- v0.2.x 已完成核心架构契约与执行边界冻结
+- v0.3.x 开始以 examples 牵引真实 `core` 数值能力和未来 case asset 孵化
+- 软件架构与接口仍会在治理规则内持续演进
 - 数值方法与功能模块将逐步完善
 - 但我们承诺：**每一个发布的版本 Tag 都是可复现、可解释、可被信任的**
 
@@ -477,9 +481,11 @@ PeriSci 当前处于 **早期开发阶段（v0.x）**。
 
 ---
 
-PeriSci is currently in an **early development stage (v0.x)**.
+PeriSci is currently in the **v0.3.0+ early capability growth stage (v0.x)**.
 
-- The software architecture and interfaces are under active development
+- The v0.2.x line completed the freeze of core architecture contracts and execution boundaries
+- The v0.3.x line starts growing real `core` numerical capabilities through examples and future case-asset incubation
+- The software architecture and interfaces remain under governed evolution
 - Numerical methods and features will be progressively extended
 - Nevertheless, we commit that **each released version tag is reproducible,
   interpretable, and trustworthy**

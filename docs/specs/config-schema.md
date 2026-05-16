@@ -1,10 +1,11 @@
-# config_schema 规范（v0.2.x 冻结版） 
+# config_schema 规范（v0.2.x 冻结基线，v0.3.x+ 沿用）
 
-# config_schema Specification (v0.2.x Frozen)
+# config_schema Specification (v0.2.x Frozen Baseline, Carried Forward in v0.3.x+)
 
 > 本文档定义 **PeriSci 中 config_schema 的权威地位、结构边界与演进规则**。
 >
 > 自 v0.2.x 起，`config_schema` 被冻结为：**系统中唯一合法的“物理意图（physical intent）表示形式”。**
+> 在 v0.3.x+ 阶段，该冻结规范继续作为 cases 体系与 `run_case(config)` 的权威输入基线；新的数值能力可以扩展 schema，但必须通过明确的规范更新或 ADR 治理。
 >
 > 任何新的物理假设、模型选择或求解/流程控制，若不能被表达为 schema 的一部分，则在架构层面被视为 *不存在*。
 >
@@ -12,6 +13,7 @@
 >of `config_schema` in PeriSci.
 > 
 > Starting from v0.2.x, `config_schema` is frozen as: **the only legitimate representation of physical intent in the system.**
+> In v0.3.x+, this frozen specification remains the authoritative input baseline for the cases system and `run_case(config)`; new numerical capabilities may extend the schema only through explicit specification updates or ADR governance.
 >
 > Any new physical assumption, model choice, or solver/procedure control that cannot be expressed as part of the schema is considered *non-existent* at the architectural level.
 
@@ -103,7 +105,7 @@ config
 说明（v0.2.x 阶段约束）：
 `solver` 分区在 v0.2.x 中仅作为 schema 结构预留，用于表达未来求解策略或求解控制参数。
 
-在当前阶段：
+在 v0.2.x 最小平台基线中：
 - 该分区不是必需字段
 - 系统实现不保证解释或执行 solver 参数
 - v0.2.x 的平台最小闭环（如 case-00-minimal）可以完全不包含 solver 分区
@@ -111,7 +113,7 @@ config
 Note (v0.2.x stage constraint):
 The `solver` section is reserved in the schema structure for future solver strategies or execution control parameters.
 
-In the current stage:
+In the v0.2.x minimal platform baseline:
 - The section is NOT required
 - The system does not guarantee interpretation or execution of solver parameters
 - Minimal platform cases (e.g., case-00-minimal) may omit it entirely.
@@ -668,7 +670,7 @@ To ensure long-term effectiveness of the above non-goals and prohibitions, the s
   - 必须可追溯
   - 必须通过版本或 ADR 体现
 
-> 本文档是 v0.2.x 阶段的 **冻结规范**，其稳定性优先级高于任何单一算例或实现需求。
+> 本文档是 v0.2.x 阶段形成的 **冻结基线规范**，并在 v0.3.x+ 中继续作为 cases/config 体系的权威输入契约；其稳定性优先级高于任何单一算例或实现需求。
 
 Starting from v0.2.x:
 
@@ -679,4 +681,4 @@ Starting from v0.2.x:
   - Must be traceable
   - Must be reflected via versioning or ADR
 
-> This document is the **frozen specification** for the v0.2.x stage, and its stability has higher priority than any individual case or implementation demand.
+> This document is the **frozen baseline specification** established in the v0.2.x stage and remains the authoritative input contract for the cases/config system in v0.3.x+; its stability has higher priority than any individual case or implementation demand.

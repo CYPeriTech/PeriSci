@@ -17,16 +17,15 @@
  * See the Mulan PSL v2 for more details.
  */
 
-#include <perisci/core/solver.hpp>
+#pragma once
+
+#include <perisci/core/assembly.hpp>
+#include <perisci/core/mesh.hpp>
 
 namespace perisci::core
 {
 
-  SolverOutput solve(const SolverInput&)
-  {
-    // v0.2.x stub: provides a linkable symbol without promising physics.
-    return SolverOutput{"failed",
-                        "perisci::core::solve is a v0.2.x stub (no numerical implementation yet)."};
-  }
+  void apply_homogeneous_dirichlet_boundary(ScalarLaplaceSystem& system,
+                                            const StructuredQuadMesh& mesh);
 
 } // namespace perisci::core

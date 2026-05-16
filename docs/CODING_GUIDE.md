@@ -1,6 +1,6 @@
 # 编码指南 | Coding Guide
 
-> **Status**: Draft (v0.1.x)
+> **Status**: Active Draft (v0.3.x+)
 >
 > 本文档定义 PeriSci 项目的**编码层级原则与约定**，重点关注长期可维护性、架构一致性与治理边界。
 >
@@ -8,18 +8,18 @@
 >
 > 除本文档所述的编码原则外，PeriSci 还定义了一份项目级一致性对照表，用于约束目录结构、CMake target、公有头文件路径与 C++ 命名空间之间的对应关系。详见 [docs/specs/consistency_matrix.md](docs/specs/consistency_matrix.md)。
 >
-> 对于 v0.1.x 骨架阶段中临时 stub 实现的命名规范、内容约束与生命周期管理，项目定义了专门的阶段性规范文档。详见 [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md)。
+> 对于历史 stub 实现的命名规范、内容约束、生命周期管理，以及 v0.3.x+ 中逐步替换 stub 的要求，项目定义了专门规范文档。详见 [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md)。
 >
-> PeriSci 在 v0.1.x 阶段对公共头文件的命名设定了专门的项目级规范，用于约束接口语义的暴露范围，避免通过名称提前承诺未来能力。详见 [docs/specs/header_naming.md](docs/specs/header_naming.md)。
+> PeriSci 对公共头文件的命名设定了专门的项目级规范，用于约束接口语义的暴露范围，避免通过名称提前承诺未来能力。详见 [docs/specs/header_naming.md](docs/specs/header_naming.md)。
 >
 > This document defines the *project-level coding principles and conventions* for PeriSci.
 > It focuses on long-term maintainability, architectural consistency, and governance boundaries.
 >
 > In addition to the coding principles described here, PeriSci defines a project-level consistency matrix covering directory layout, CMake targets, public include paths, and C++ namespaces. See [docs/specs/consistency_matrix.m](docs/specs/consistency_matrix.m) for details.
 >
-> PeriSci defines a dedicated phase-specific specification for naming, content constraints, and lifecycle management of temporary stub implementations during the v0.1.x skeleton phase. See [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md) for details.
+> PeriSci defines a dedicated specification for naming, content constraints, lifecycle management of historical stubs, and their gradual replacement in v0.3.x+. See [docs/specs/stub_conventions.md](docs/specs/stub_conventions.md) for details.
 >
-> PeriSci defines a dedicated project-level specification for public header naming during v0.1.x, to constrain exposed interface semantics and avoid premature capability commitments through naming. See [docs/specs/header_naming.md](docs/specs/header_naming.md) for details.
+> PeriSci defines a dedicated project-level specification for public header naming, to constrain exposed interface semantics and avoid premature capability commitments through naming. See [docs/specs/header_naming.md](docs/specs/header_naming.md) for details.
 
 ------
 
@@ -104,14 +104,205 @@ Recommended order:
 
 Each group should be separated by a blank line.
 
-### 3.4 命名约定 | Naming Conventions
+### 3.4 命名约定（v0.3.x+）| Naming Conventions for v0.3.x+
 
-- 类型（类、结构体）：`PascalCase`
-- 函数与变量：`snake_case`
-- 常量：`kConstantName` 或 `UPPER_CASE`
-- Types (classes, structs): `PascalCase`
-- Functions and variables: `snake_case`
-- Constants: `kConstantName` or `UPPER_CASE`
+从 v0.3.x 开始，PeriSci 进入真实 `core/api/examples/cases` 能力生长阶段。
+命名规则不再只是骨架阶段的临时风格，而是长期可读性、教学一致性与开源协作的基础约束。
+
+Starting from v0.3.x, PeriSci enters the stage where real `core/api/examples/cases`
+capabilities begin to grow. Naming conventions are no longer temporary skeleton
+style choices; they are baseline constraints for readability, teaching consistency,
+and open-source collaboration.
+
+#### 3.4.1 C++ 符号命名 | C++ Symbol Naming
+
+| 对象 | 规则 | 示例 |
+| --- | --- | --- |
+| 命名空间 | `lowercase` | `perisci::core`, `perisci::api` |
+| 类型 / `struct` / `class` | `UpperCamelCase` | `Mesh`, `FiniteElementSpace`, `GridFunction`, `LinearSystem` |
+| 函数 / 自由函数 | `lower_snake_case` | `make_structured_quad_mesh`, `conjugate_gradient` |
+| 成员函数 | `lower_snake_case` | `num_dofs`, `residual_norm` |
+| 局部变量 | `lower_snake_case` | `cells_per_axis`, `residual_norm` |
+| 成员变量 | `lower_snake_case` | `num_cells`, `center_value` |
+| 普通 C++ 常量 / `constexpr` 变量 | `lower_snake_case` | `gauss_point`, `relative_tolerance` |
+| 宏常量 / 编译开关 | `UPPER_CASE` | `PERISCI_USE_EXPERIMENTAL_FEATURE` |
+| 枚举类型 | `UpperCamelCase` | `Status`, `ElementType` |
+| 枚举值 | `lower_snake_case` | `success`, `partial`, `failed` |
+
+普通 C++ 常量、`constexpr` 变量和数值参数常量与普通变量采用相同的
+`lower_snake_case` 规则。PeriSci 不采用 `kConstantName` 作为默认常量命名风格；
+`UPPER_CASE` 仅保留给宏常量、预处理器符号和编译开关。
+
+这个约定的核心考虑是：在有限元、近场动力学和耦合模型代码中，许多常量本质上是数学参数。
+例如 `young_modulus`、`poisson_ratio`、`relative_tolerance`、`time_step`。
+它们使用 `lower_snake_case` 更接近公式和教学叙事，也避免在数值表达中引入不必要的工程前缀。
+
+Ordinary C++ constants, `constexpr` variables, and numerical parameter constants
+follow the same `lower_snake_case` rule as ordinary variables. PeriSci does not
+use `kConstantName` as the default constant naming style; `UPPER_CASE` is reserved
+for macro constants, preprocessor symbols, and compile-time feature switches.
+
+The rationale is that many constants in finite element, peridynamics, and coupled
+modeling code are mathematical parameters. Names such as `young_modulus`,
+`poisson_ratio`, `relative_tolerance`, and `time_step` read more naturally in
+teaching code and numerical formulas than engineering-prefixed alternatives.
+
+#### 3.4.2 文件、target 与可执行文件命名 | File, Target, and Executable Naming
+
+| 对象 | 规则 | 示例 |
+| --- | --- | --- |
+| C++ 头文件 | `lower_snake_case.hpp` | `linear_algebra.hpp`, `finite_element_space.hpp` |
+| C++ 源文件 | `lower_snake_case.cpp` | `linear_algebra.cpp`, `assembly.cpp` |
+| CMake target | `perisci_<feature>` | `perisci_poisson_basic` |
+| 可执行文件输出名 | `perisci-<feature>` | `perisci-poisson-basic` |
+| example 目录 | `ex-XX-keyword` | `ex-03-poisson-basic` |
+| case 目录 | `case-XX-keyword` | `case-01-poisson-2d-basic` |
+
+#### 3.4.3 core 命名原则 | core Naming Principles
+
+`core/` 中的名称必须表达可复用数值能力，而不是表达某个具体 example。
+
+Names in `core/` must express reusable numerical capabilities, not individual examples.
+
+推荐方向：
+
+```text
+mesh
+finite_element_space
+grid_function
+assembly
+linear_algebra
+solver
+boundary
+```
+
+避免方向：
+
+```text
+poisson_basic
+poisson_error
+poisson_refinement
+```
+
+也就是说，`ex-03-poisson-basic`、`ex-04-poisson-error` 和
+`ex-05-poisson-refinement` 应复用同一组 core 能力，而不是在 core 中各自形成同名实现文件。
+
+In other words, `ex-03-poisson-basic`, `ex-04-poisson-error`, and
+`ex-05-poisson-refinement` should reuse the same core capabilities instead of
+creating example-named implementation files in `core`.
+
+#### 3.4.4 风格来源 | Style Sources
+
+PeriSci 的命名风格综合吸收两类经验：
+
+- 类型名吸收 MFEM 的清晰对象语言，例如 `Mesh`、`FiniteElementSpace`、`GridFunction`；
+- 函数名吸收 deal.II 的可读流程表达，例如 `make_grid`、`setup_system`、`assemble_system`。
+
+因此，PeriSci 的总体风格是：
+
+```text
+类型像 MFEM 一样语义直接；
+函数像 deal.II 一样 lower_snake_case、清楚可读；
+examples 和 cases 的目录按教学与资产职责命名；
+core 按可复用数值能力命名。
+```
+
+PeriSci naming draws from both MFEM and deal.II:
+
+- type names follow MFEM-like clear object language, e.g. `Mesh`,
+  `FiniteElementSpace`, and `GridFunction`;
+- function names follow deal.II-like readable workflow language, e.g. `make_grid`,
+  `setup_system`, and `assemble_system`.
+
+The resulting project style is:
+
+```text
+types are semantically direct like MFEM;
+functions are lower_snake_case and readable like deal.II;
+examples and cases are named by teaching and asset responsibilities;
+core is named by reusable numerical capabilities.
+```
+
+### 3.5 注释与文档语言规则（v0.3.x+）| Comment and Documentation Language Rules
+
+PeriSci 同时服务两个目标：中文教学友好，以及面向开源生态的长期协作。
+因此，代码注释、示例说明和架构规范不采用同一种语言策略，而是按职责分层。
+
+PeriSci serves two goals at the same time: Chinese-first teaching accessibility
+and long-term collaboration in an open-source ecosystem. Therefore, code comments,
+example explanations, and architecture specifications follow different language
+rules according to their responsibilities.
+
+#### 3.5.1 C++ 代码注释 | C++ Code Comments
+
+C++ 源文件和头文件中的注释应以英文为主。
+
+C++ source and header comments should be English-first.
+
+推荐：
+
+```cpp
+// Apply homogeneous Dirichlet boundary conditions.
+```
+
+不推荐在每一条代码注释中机械地中英文双写。代码注释应短、清楚、贴近实现，
+用于解释局部意图、边界条件或不容易直接从代码读出的数值处理。
+
+Avoid mechanically duplicating every code comment in both Chinese and English.
+Code comments should be short, clear, and close to the implementation. They should
+explain local intent, boundary conditions, or numerical details that are not
+obvious from the code itself.
+
+#### 3.5.2 公共 API 与长期概念 | Public APIs and Long-Term Concepts
+
+当注释定义 PeriSci 长期概念、架构边界或项目特有术语时，可以采用中英文并列，
+但应保持克制，避免把代码文件变成完整教程。
+
+When comments define long-term PeriSci concepts, architectural boundaries, or
+project-specific terminology, bilingual wording may be used, but it should be
+used sparingly. Source files should not become full tutorials.
+
+适用场景包括：
+
+- 三梁 / Three-Beam execution structure；
+- 四核 / Four-Core numerical structure；
+- `examples -> api -> core` 与 `cases -> run_case -> core` 的边界；
+- public API 的稳定语义说明。
+
+Typical cases include:
+
+- Three-Beam execution structure;
+- Four-Core numerical structure;
+- `examples -> api -> core` and `cases -> run_case -> core` boundaries;
+- stable semantics of public APIs.
+
+#### 3.5.3 examples README | examples README Files
+
+`examples/*/README.md` 应采用中文优先，以服务教学、学习路径和中文用户理解。
+必要时可以保留英文术语、API 名称、数学符号和命令行文本。
+
+`examples/*/README.md` should be Chinese-first to support teaching, learning
+paths, and Chinese readers. English terms, API names, mathematical notation, and
+command-line text may be retained when appropriate.
+
+#### 3.5.4 架构与规范文档 | Architecture and Specification Documents
+
+`docs/` 中涉及长期架构、契约、治理、版本、规范和 ADR 的文档，原则上应采用中英文并列。
+这样既保留中文语义，又逐步稳定英文概念，方便后续开源协作、引用和评审。
+
+Documents under `docs/` that define long-term architecture, contracts, governance,
+versioning, specifications, or ADRs should generally be bilingual. This preserves
+Chinese semantics while gradually stabilizing English terminology for future
+open-source collaboration, citation, and review.
+
+#### 3.5.5 推荐分层 | Recommended Layering
+
+```text
+C++ source/header comments      English-first
+public API concept comments     English-first, bilingual when defining long-term PeriSci concepts
+examples README                 Chinese-first
+architecture/spec docs          bilingual Chinese + English
+```
 
 ------
 

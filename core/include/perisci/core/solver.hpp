@@ -19,9 +19,11 @@
 
 #pragma once
 
+#include <perisci/core/linear_algebra.hpp>
 #include <perisci/core/material.hpp>
 #include <perisci/core/mesh.hpp>
 #include <string>
+#include <vector>
 
 namespace perisci::core
 {
@@ -49,5 +51,22 @@ namespace perisci::core
   };
 
   SolverOutput solve(const SolverInput& in);
+
+  struct ConjugateGradientControl
+  {
+    int max_iterations = 500;
+    double relative_tolerance = 1.0e-10;
+  };
+
+  struct ConjugateGradientResult
+  {
+    std::vector<double> solution;
+    int iterations = 0;
+    double residual_norm = 0.0;
+  };
+
+  ConjugateGradientResult conjugate_gradient(const DenseMatrix& matrix,
+                                             const std::vector<double>& rhs,
+                                             const ConjugateGradientControl& control);
 
 } // namespace perisci::core
