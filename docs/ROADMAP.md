@@ -4,49 +4,51 @@
 
 ## 0. 当前开发状态 | Current Development Status
 
-### 当前阶段：v0.2.x（三梁执行结构冻结阶段）| Current Phase: v0.2.x (Three-Beam Execution Structure Freeze Stage)
+### 当前阶段：v0.3.0+（真实示例牵引与 core 能力生长阶段）| Current Phase: v0.3.0+ (Real-Example-Driven Core Capability Growth Stage)
 
-PeriSci 当前处于 **v0.2.x 三梁执行结构阶段**。  
-PeriSci is currently in the **v0.2.x Three-Beam Execution Structure stage**.
+PeriSci 当前处于 **v0.3.0+ 真实示例牵引与 core 能力生长阶段**。  
+PeriSci is currently in the **v0.3.0+ real-example-driven core capability growth stage**.
 
-这一阶段的核心目标不是扩展功能数量，而是：
+v0.2.x 已完成三梁执行契约、系统边界与治理结构冻结；这些内容继续作为 v0.3.x+ 的契约基线存在。  
+v0.3.x 的核心目标不是推翻 v0.2.x，而是在其上开始引入真实、可运行、可教学、可复用的数值能力。
 
-> 冻结三梁执行契约、明确系统边界、稳定治理结构。
+The v0.2.x line completed the freeze of Three-Beam execution contracts, system
+boundaries, and governance structure; these remain the contract baseline for
+v0.3.x+. The goal of v0.3.x is not to replace v0.2.x, but to build real,
+runnable, teachable, and reusable numerical capabilities on top of it.
 
-The core objective of this stage is not to expand feature capabilities, but to:
+#### v0.2.x 已结束的阶段职责 | Completed v0.2.x Responsibilities
 
-> Freeze the Three-Beam execution contracts, clarify system boundaries, and stabilize the governance structure.
-
-#### 已完成内容 | Completed Items
-
-- Core / API 分层结构冻结  
-- 三梁执行结构建立（配置梁 / 执行梁 / 输出梁）  
-- CMake 依赖方向稳定（api → core）  
-- CTest 自动契约门禁建立  
-- `dataset_spec` 与 `manifest` 最小规范确立  
+- Core / API 分层结构冻结
+- 三梁执行结构建立（配置梁 / 执行梁 / 输出梁）
+- CMake 依赖方向稳定（api → core）
+- CTest 自动契约门禁建立
+- `dataset_spec` 与 `manifest` 最小规范确立
 - 版本治理对齐（CMake / version.hpp / 构建输出）
 
-- Core / API layered structure frozen  
-- Three-Beam execution structure established (Config / Run / Export Beams)  
-- Stable CMake dependency direction (api → core)  
-- CTest-based automated contract gates established  
-- Minimal specification for `dataset_spec` and `manifest` defined  
+- Core / API layered structure frozen
+- Three-Beam execution structure established (Config / Run / Export Beams)
+- Stable CMake dependency direction (api → core)
+- CTest-based automated contract gates established
+- Minimal specification for `dataset_spec` and `manifest` defined
 - Version governance aligned (CMake / version.hpp / build outputs)
 
-#### 明确不包含 | Explicitly Not Included
+#### v0.3.x+ 当前阶段职责 | Current v0.3.x+ Responsibilities
 
-- 具备物理意义的算例资产（计划于 v0.3 引入）  
-- 完整物理求解器能力  
-- 性能优化与并行能力  
-- 生产级 CAE 功能体系  
+- 以 `examples/` 牵引真实数值能力进入 `core/`
+- 建设可复用的 mesh / assembly / boundary / solver / linear_algebra 等基础能力
+- 保持 examples 与 cases 的入口分工：examples 使用教学型 API，cases 使用 `run_case(config)`
+- 将教学示例逐步孵化为可治理的 case asset
+- 开始形成 FEM / PeriFEM 统一装配与求解语言
 
-- Physically meaningful case assets (planned for v0.3)  
-- Complete physical solver capabilities  
-- Performance optimization and parallel execution  
-- Production-grade CAE functionality  
+- Use `examples/` to drive real numerical capabilities into `core/`
+- Build reusable foundations such as mesh, assembly, boundary, solver, and linear algebra
+- Preserve the entry distinction: examples use teaching-oriented APIs, cases use `run_case(config)`
+- Gradually incubate teaching examples into governable case assets
+- Start forming a unified FEM / PeriFEM assembly and solution vocabulary
 
-v0.2.x 是一个 **结构治理稳定里程碑**，而不是能力扩展版本。  
-v0.2.x is a **structural governance stabilization milestone**, rather than a capability expansion release.
+v0.3.x+ 是一个 **能力生长与算例孵化阶段**，而不是单纯的契约冻结阶段。  
+v0.3.x+ is a **capability growth and case incubation stage**, not merely a contract-freeze stage.
 
 ---
 
@@ -189,19 +191,25 @@ The evolution of PeriSci is not driven by “feature accumulation”, but judged
 
 ---
 
-### v0.3.x（算例资产起点阶段）| v0.3.x (Case Asset Initiation Stage)
+### v0.3.x+（当前：教学示例牵引与 core 能力生长阶段）| v0.3.x+ (Current: Teaching-Example Driven Core Capability Growth)
 
 #### 阶段定位 | Positioning
 
 - 从“契约成立”过渡到“能力被真实使用并反向验证”
-- 算例资产首次成为系统的一等公民
+- examples 首先承担教学与 core 能力打磨职责
+- cases 继续承担可复现算例资产积累职责
 - Transition from “contracts established” to “capabilities being genuinely exercised and validated”
-- Case assets become first-class citizens of the system
+- `examples` first carry teaching and core-capability incubation responsibilities
+- `cases` continue to carry reproducible case-asset accumulation responsibilities
 
 #### 阶段目标 | Goals
 
 - 让系统可教学、可验证、可复现、可回归
+- 通过真实教学示例逐步沉淀 mesh / assembly / boundary / solver / linear_algebra 等 core 通用能力
+- 保持 examples 与 cases 的入口职责分离：examples 使用教学型 API，cases 使用 `run_case(config)`
 - Make the system teachable, verifiable, reproducible, and regression-testable
+- Gradually consolidate reusable core capabilities such as `mesh`, `assembly`, `boundary`, `solver`, and `linear_algebra` through real teaching examples
+- Keep the entry responsibilities of examples and cases separate: examples use teaching-oriented APIs, while cases use `run_case(config)`
 
 #### 核心里程碑 | Core Milestones
 

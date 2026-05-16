@@ -15,26 +15,15 @@
 #
 # See the Mulan PSL v2 for more details.
 
-add_library(perisci_api STATIC
-  src/api_stub.cpp
-  src/config_schema_stub.cpp
-  src/run_case_stub.cpp
-  src/run_poisson_basic.cpp
-  src/export_dataset_stub.cpp
-  src/validate_case_stub.cpp
-  src/run_report_stub.cpp
+add_executable(perisci_poisson_basic
+  poisson_basic.cpp
 )
 
-target_compile_features(perisci_api PUBLIC cxx_std_17)
+target_compile_features(perisci_poisson_basic PUBLIC cxx_std_17)
 
-target_include_directories(perisci_api
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+target_link_libraries(perisci_poisson_basic
+  PRIVATE
+    perisci_api
 )
 
-target_link_libraries(perisci_api
-  PUBLIC
-    perisci_core
-)
-
-set_target_properties(perisci_api PROPERTIES OUTPUT_NAME "perisci_api")
+set_target_properties(perisci_poisson_basic PROPERTIES OUTPUT_NAME "perisci-poisson-basic")

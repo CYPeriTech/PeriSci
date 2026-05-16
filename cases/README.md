@@ -25,7 +25,7 @@ cases/case-00-minimal
 - 不追求物理正确性与数值精度
 - 主要用于验证 `run_case → export_dataset → validate_case` 最小闭环是否可用，并验证基于配置契约的执行链路已经贯通
 
-因此，在 v0.2.x 阶段，`case-00-minimal` 的 `expected.json` 可以保持为“结构/状态类门禁”（例如 status 不得失败），并逐步演进为更强的结构校验与可观测性字段校验。
+因此，`case-00-minimal` 作为 v0.2.x 平台 smoke baseline，其 `expected.json` 可以保持为“结构/状态类门禁”（例如 status 不得失败）；在当前 v0.3.x+ 阶段，新的 case asset 应逐步加入更强的结构校验、可观测性字段校验与数值阈值。
 
 ---
 
@@ -45,9 +45,9 @@ cases/case-00-minimal
 - 参与 canonical 表示与 config_hash 计算
 - 修改 input 等价于改变“问题定义”
 
-> v0.2.x 阶段为了支持平台 smoke gate（如 `case-00-minimal`），允许最小配置仅包含 `meta` 分区。  
+> v0.2.x 基线为了支持平台 smoke gate（如 `case-00-minimal`），允许最小配置仅包含 `meta` 分区。  
 > `meta` 用于标识与追踪（如 `schema_version`、`config_id`），不得影响数值行为。  
-> 当未来引入严格 schema 校验时，必须确保该最小输入仍然合法（详见 config-schema 的 v0.2.x 最小配置条款）。
+> 当未来引入严格 schema 校验时，必须确保该最小输入仍然合法（详见 config-schema 的 v0.2.x 最小配置基线条款）。
 
 ---
 
@@ -120,6 +120,37 @@ README 内容应保持稳定、结构化、可长期引用。
 ---
 
 ## 4. 执行关系
+
+## 4.0 cases 的 API 入口原则（v0.3.x 引入）
+
+`cases/` 是标准算例资产层，其入口职责与 `examples/` 不同。
+
+标准算例必须遵循：
+
+- case 不包含实现代码；
+- case 不直接 include、调用或依赖 `perisci/core/*`；
+- case 的数值执行统一通过 `api::run_case(config)` 完成；
+- `run_case(config)` 是 case asset 进入数值执行的唯一入口；
+- `input.json` 是 case 的权威配置载体，必须符合当前有效的 `config_schema`；
+- `expected.json` 只定义通过标准，不参与执行；
+- `export_dataset` 是结果资产化的唯一边界。
+
+因此，case 的基本职责是：
+
+```text
+用稳定 config 复现 core 能力，而不是展开教学过程或承载实现逻辑。
+```
+
+与 `examples/` 的区别是：
+
+```text
+examples -> teaching-oriented API -> core
+cases    -> run_case(config)       -> core
+```
+
+二者可以共享同一套 `core/` 数值能力，但都必须通过 `api/` 进入 `core/`。
+
+---
 
 标准流程：
 

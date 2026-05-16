@@ -1,4 +1,4 @@
-# PeriSci Hello (v0.2.0)
+# PeriSci Hello（平台最小示例）
 
 这是 PeriSci 的最小可运行示例，用于验证：
 - `core` 可以编译成库
@@ -40,6 +40,8 @@ Hello, PeriSci!
 Version: 0.2.0
 Build: PeriSci (api) v0.2.0
 ```
+
+> 注：该示例输出中的版本号来自当前构建的版本元数据；文档层面的项目阶段以仓库根 README 和 `docs/ROADMAP.md` 中的 v0.3.x+ 阶段声明为准。
 
 ## 运行测试（推荐）
 

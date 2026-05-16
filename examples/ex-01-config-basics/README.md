@@ -15,7 +15,7 @@
 - 如何调用 `perisci::api::run_case`
 - 如何观察 `RunResults` 中的 `status`、`message` 和 `notes`
 
-当前 v0.2.x 阶段的 `run_case` 仍是 stub，因此本示例不展示真实物理求解，也不承诺数值正确性。
+在当前 v0.3.x+ 阶段，`run_case` 仍保留 v0.2.x 平台最小执行边界，主要服务 cases 体系的统一入口；真实数值教学路径从后续教学型 API 示例（如 `ex-03-poisson-basic`）开始。因此本示例不展示真实物理求解，也不承诺数值正确性。
 
 ---
 

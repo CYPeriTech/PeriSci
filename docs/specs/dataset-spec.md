@@ -1689,10 +1689,10 @@ The following are **NOT included in the freeze scope**:
 
 ## 10. 溯源与可追溯性保障（冻结）| Provenance and Traceability Guarantees (Frozen)
 
-> 本章节定义 数据集 在当前阶段（v0.2.x）必须满足的**溯源 与可追溯性保障**，以确保其在未来可以**无歧义演进为完整算例资产**（如可审计研究案例、复现数值实验包或治理对象）。
+> 本章节定义数据集在 v0.2.x 基线中已经建立、并在当前 v0.3.x+ 阶段继续适用的**溯源与可追溯性保障**，以确保其可以**无歧义演进为完整算例资产**（如可审计研究案例、复现数值实验包或治理对象）。
 > 本节条款若被违反则视为破坏性治理违规，必须提升主版本号。
 
-> This section defines the provenance and traceability guarantees that a dataset MUST satisfy at the current stage (v0.2.x), in order to ensure that it can, in the future, unambiguously evolve into a complete case asset (e.g., an auditable research case, a reproducible numerical experiment package, or a governance object).
+> This section defines the provenance and traceability guarantees established in the v0.2.x baseline and still required in the current v0.3.x+ stage, ensuring that a dataset can unambiguously evolve into a complete case asset (e.g., an auditable research case, a reproducible numerical experiment package, or a governance object).
 > Violation of any clause in this section SHALL constitute a destructive governance violation and MUST increment the Major version.
 
 ---

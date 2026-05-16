@@ -22,6 +22,7 @@
 #include <perisci/api/config_schema.hpp>
 #include <perisci/api/export_dataset.hpp>
 #include <perisci/api/run_case.hpp>
+#include <perisci/api/run_poisson_basic.hpp>
 #include <perisci/api/types.hpp>
 #include <string>
 

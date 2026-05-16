@@ -16,10 +16,13 @@
 # See the Mulan PSL v2 for more details.
 
 add_library(perisci_core STATIC
+  src/assembly.cpp
+  src/boundary.cpp
   src/core_stub.cpp
-  src/mesh_stub.cpp
+  src/linear_algebra.cpp
+  src/mesh.cpp
   src/material_stub.cpp
-  src/solver_stub.cpp
+  src/solver.cpp
 )
 
 target_compile_features(perisci_core PUBLIC cxx_std_17)

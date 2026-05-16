@@ -1,10 +1,12 @@
 # Stub 约定与生命周期规范 | Stub Conventions and Lifecycle
 
-> 本文档规定 **PeriSci v0.2.x 阶段** 中 stub 文件的命名、用途与生命周期管理规则。
+> 本文档规定 **PeriSci v0.2.x 基线与 v0.3.x+ 阶段** 中 stub 文件的命名、用途与生命周期管理规则。
 > Stub 在 PeriSci 中被视为一种 **受控的临时工程工具**，仅用于在特定开发阶段维持结构完整性，而不应成为长期实现的一部分。
+> 自 v0.3.x+ 起，stub 不再是新增 core 能力的常规实现方式；真实教学示例牵引出的可复用能力应逐步沉淀为正式实现。
 >
-> This document defines the naming, usage, and lifecycle rules for stub files in **PeriSci v0.2.x**.
+> This document defines the naming, usage, and lifecycle rules for stub files in the **PeriSci v0.2.x baseline and v0.3.x+ stage**.
 > In PeriSci, stubs are treated as **controlled temporary engineering tools** used to maintain structural completeness during development, and must not become long-term implementations.
+> Starting from v0.3.x+, stubs are no longer the normal way to introduce new core capabilities; reusable capabilities driven by real teaching examples should become real implementations.
 
 ------
 
@@ -14,14 +16,14 @@
 
 本规范的目标是：
 
-- 明确 **stub 在 v0.2.x 阶段的合法使用场景**
+- 明确 **stub 在 v0.2.x 基线与 v0.3.x+ 阶段的合法使用和退出规则**
 - 防止临时实现演变为长期技术债
 - 确保 stub 不会掩盖真实实现缺失
 - 为 stub 的引入、审查与移除提供统一规则
 
 The goals of this specification are to:
 
-- Define **legitimate use cases of stubs during v0.2.x**
+- Define **legitimate use and retirement rules for stubs in the v0.2.x baseline and v0.3.x+ stage**
 - Prevent temporary implementations from becoming technical debt
 - Ensure stubs do not hide missing real implementations
 - Provide unified rules for stub introduction, review, and removal
@@ -100,6 +102,30 @@ They are allowed only in **explicit, controlled, short-lived development situati
 
 ------
 
+### 2.3 v0.3.x+ Capability Growth Phase
+
+在 **v0.3.x+ 阶段**，PeriSci 已经进入真实数值教学示例牵引 core 能力生长的阶段：
+
+- 新增的可复用数值能力应优先形成正式 core 实现
+- 既有 stub 在相关能力被触及时应被替换、收敛或显式说明保留原因
+- examples 和 cases 可以继续通过 API 使用 core，但不应依赖未说明语义的长期 stub
+
+因此，v0.3.x+ 的默认判断是：
+
+**真实能力优先，stub 只能作为短期过渡例外。**
+
+In **v0.3.x+**, PeriSci enters a stage where real numerical teaching examples drive the growth of core capabilities:
+
+- New reusable numerical capabilities should become real core implementations by default
+- Existing stubs should be replaced, reduced, or explicitly justified when the related capability is touched
+- `examples` and `cases` may continue to use `core` through `api`, but should not depend on long-lived stubs with unclear semantics
+
+The default v0.3.x+ rule is therefore:
+
+**real capability first; stubs only as short-lived transitional exceptions.**
+
+------
+
 ## 3. 什么是 Stub | What Is a Stub
 
 ### 3.1 Stub 的定义 | Definition
@@ -138,8 +164,8 @@ A stub must **not** be used as:
 
 ## 4. Stub 使用条件 | Conditions for Using Stubs
 
-在 v0.2.x 阶段，引入 stub **必须满足至少一个条件**：
-During the v0.2.x phase, introducing a stub **MUST satisfy at least one of the following conditions**:
+在 v0.2.x 基线与 v0.3.x+ 阶段，引入 stub **必须满足至少一个条件**，并在 v0.3.x+ 中说明退出路径：
+During the v0.2.x baseline and v0.3.x+ stage, introducing a stub **MUST satisfy at least one of the following conditions**, and v0.3.x+ stubs should also document their retirement path:
 
 ### 4.1 架构占位 | Architectural Placeholder
 
@@ -262,7 +288,7 @@ Ambiguous naming is prohibited:
 
 ### 7.1 生命周期原则 | Lifecycle Principles
 
-在 v0.2.x 中：
+自 v0.2.x 起，并在 v0.3.x+ 中继续适用：
 
 ```
 stub = 短期工程工具
@@ -274,7 +300,7 @@ stub = 短期工程工具
 introduce → review → replace → remove
 ```
 
-In **v0.2.x**:
+Starting from **v0.2.x**, and still applying in **v0.3.x+**:
 
 ```
 stub = short-term engineering tool

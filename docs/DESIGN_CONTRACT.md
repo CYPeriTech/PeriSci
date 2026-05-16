@@ -43,7 +43,7 @@
 在 PeriSci 的契约与架构治理中，“冻结”“最小保证”“演进预留”并非相互排斥的三种状态，而是对同一规则在不同治理维度上的强调。
 
 - **冻结（Freeze）**约束的是规则的变更方式：被冻结的契约在当前版本生命周期内不得因短期功能需求或实现便利性而被破坏；任何修改都必须通过显式的版本升级或 ADR 等可审计的治理路径完成。冻结并不意味着规则永不演进，而是禁止隐式、临时或无记录的破坏性变更。
-- **最小保证（Minimum Guarantee）**约束的是当前阶段所承诺的行为下限：在给定版本阶段（例如 v0.2.x），规范中明确声明的“最小保证”表示系统在最保守条件下至少应满足的确定性、可复现性、完整性或副作用约束；最小保证是阶段性的强度承诺，而非对最终能力上限的限定。
+- **最小保证（Minimum Guarantee）**约束的是某一版本阶段所承诺的行为下限：在给定版本阶段（例如 v0.2.x 基线或当前 v0.3.x+），规范中明确声明的“最小保证”表示系统在最保守条件下至少应满足的确定性、可复现性、完整性或副作用约束；最小保证是阶段性的强度承诺，而非对最终能力上限的限定。
 - **演进预留（Evolution Reserve）**约束的是未来升级的合法路径：规范中对阶段性表述、可选增强或未来可能加强之处的明确标注，用于为后续版本提高标准、细化语义或引入新模式预留空间；任何此类演进必须通过版本升级或 ADR 显式声明，而不得在当前冻结版本中隐式发生。
 
 上述三者可同时适用于同一条规则： 冻结保证规则在当前版本内的稳定性， 最小保证明确当前阶段对外承诺的行为下限， 演进预留确保未来升级具有清晰、可审计且不破坏信任的路径。
@@ -51,7 +51,7 @@
 In PeriSci’s contract and architectural governance, “Freeze,” “Minimum Guarantee,” and “Evolution Reserve” are not mutually exclusive states, but rather different emphases on the same rule across distinct governance dimensions.
 
 - **Freeze** constrains _how_ a rule may be changed: A frozen contract must not be violated within the current version lifecycle for short-term functional demands or implementation convenience. Any modification must be carried out through explicit, auditable governance paths such as version upgrades or ADRs. Freeze does not imply that a rule can never evolve; rather, it prohibits implicit, ad hoc, or unrecorded breaking changes.
-- **Minimum Guarantee** constrains the _behavioral lower bound_ promised at the current stage: For a given version stage (e.g., v0.2.x), the “minimum guarantee” explicitly stated in the specification defines the least level of determinism, reproducibility, integrity, or side-effect constraints that the system must satisfy under conservative assumptions. A minimum guarantee is a stage-specific commitment of strength, not a limitation on the system’s ultimate capabilities.
+- **Minimum Guarantee** constrains the _behavioral lower bound_ promised by a given version stage: For a given version stage (e.g., the v0.2.x baseline or the current v0.3.x+ stage), the “minimum guarantee” explicitly stated in the specification defines the least level of determinism, reproducibility, integrity, or side-effect constraints that the system must satisfy under conservative assumptions. A minimum guarantee is a stage-specific commitment of strength, not a limitation on the system’s ultimate capabilities.
 - **Evolution Reserve** constrains the _legitimate path of future upgrades_: Explicit markings of stage-specific wording, optional enhancements, or areas expected to be strengthened in future versions are intended to reserve space for raising standards, refining semantics, or introducing new modes in later releases. Any such evolution must be explicitly declared through version upgrades or ADRs, and must not occur implicitly within the current frozen version.
 
 These three aspects may simultaneously apply to the same rule: Freeze ensures the rule’s stability within the current version, Minimum Guarantee defines the behavioral lower bound promised at the present stage, and Evolution Reserve ensures that future upgrades proceed through clear, auditable, and trust-preserving paths.
@@ -73,8 +73,8 @@ These three aspects may simultaneously apply to the same rule: Freeze ensures th
 本系统中所有参与**治理、契约、溯源与冻结判定体系**的结构化对象，必须具有**唯一的规范化表示**。
 All structured objects that participate in the system’s **governance, contract, provenance, and freeze-determination framework** **MUST** have a **unique canonical representation**.
 
-在 v0.2.x 阶段，该规范化表示**统一采用 JSON 作为唯一权威形式（canonical JSON）**。
-During the v0.2.x phase, this canonical representation **uniformly adopts JSON as the sole authoritative form (canonical JSON)**.
+自 v0.2.x 起，并在 v0.3.x+ 中继续适用，该规范化表示**统一采用 JSON 作为唯一权威形式（canonical JSON）**。
+Starting from v0.2.x, and still applying in v0.3.x+, this canonical representation **uniformly adopts JSON as the sole authoritative form (canonical JSON)**.
 
 canonical JSON 作为规范化表示，适用于但不限于：
 
@@ -123,7 +123,7 @@ The **mandatory applicability of canonical representation is strictly limited to
 **Code Governance**: All case assets that enter the governance, contract, provenance, and freeze-determination framework **MUST be able to uniquely and unambiguously identify the computation code on which their generation depends**.
 The code body itself **MUST NOT be required nor assumed to be represented in canonical JSON**; code governance SHALL be achieved through **canonical metadata and immutable references**.
 
-在 v0.2.x 阶段，代码治理的**最小强制保证**为：
+自 v0.2.x 起，并在 v0.3.x+ 中继续适用，代码治理的**最小强制保证**为：
 
 - 必须记录可唯一定位代码状态的 **`code_version`**（例如提交哈希、不可变标签或等价标识；说明：code_version 用于唯一定位生成算例所依赖的代码状态，是代码治理与溯源的核心锚点）；
 - 必须显式声明该代码状态是否存在未提交修改（例如 `dirty: true/false`）；
@@ -141,7 +141,7 @@ The code body itself **MUST NOT be required nor assumed to be represented in can
 - ❌ 不得要求或假定执行期计算代码本体具有 canonical JSON 表示；
 - ❌ 不得在缺失代码版本信息的情况下将结果视为可冻结、可复用的算例资产。
 
-During the v0.2.x phase, the **minimum mandatory guarantees** for code governance are:
+Starting from v0.2.x, and still applying in v0.3.x+, the **minimum mandatory guarantees** for code governance are:
 
 - A **`code_version`** that uniquely identifies the code state MUST be recorded (e.g., commit hash, immutable tag, or equivalent identifier；Note: `code_version` is used to uniquely identify the code state on which a case depends for its generation, and serves as a core anchor for code governance and provenance);
 - The presence or absence of uncommitted modifications in the working directory MUST be explicitly declared (e.g., `dirty: true/false`);
@@ -174,7 +174,7 @@ PeriSci 的长期治理基础由三类“不可替代要素”构成：
 - **结构作用路径**：**三梁 → 四核 → 算例资产**
 - **治理反馈路径**：**算例资产 → 反向约束四核与三梁**
 
-在当前 **v0.2.0** 阶段，围绕这一长期结构闭环，PeriSci 已经形成一个最小工程治理闭环：
+在 **v0.2.0** 阶段，围绕这一长期结构闭环，PeriSci 已经形成一个最小工程治理闭环；在当前 **v0.3.x+** 阶段，该闭环继续作为 case asset 治理基线，并开始承载真实数值教学示例向算例资产演进的需求：
 
 - **`run -> export -> validate -> regression`**
 
@@ -183,7 +183,7 @@ PeriSci 的长期治理基础由三类“不可替代要素”构成：
 - `run` 与 `export` 分别对应三梁中的 **执行梁（Run Beam / `run_case`）** 与 **输出梁（Export Beam / `export_dataset`）**；
 - `validate` / `regression` 属于围绕三梁与算例资产运行的**验证与门禁机制**；
 - 它们用于检查输出是否满足执行契约、溯源、结构与质量要求，并将 canonical cases 纳入可重复的回归体系；
-- 该闭环**运行于三梁执行结构之上**，并不改变三梁作为系统执行契约结构的地位，而是其在当前阶段的最小工程化落地形式。
+- 该闭环**运行于三梁执行结构之上**，并不改变三梁作为系统执行契约结构的地位，而是其自 v0.2.0 起形成、并在 v0.3.x+ 中继续扩展的最小工程化落地形式。
 
 PeriSci is built upon three non-substitutable foundational elements:
 
@@ -196,7 +196,7 @@ Together, these form PeriSci’s long-term structural loop:
 - **Structural flow**: **Three-Beams → Four-Cores → Case Assets**
 - **Governance feedback**: **Case Assets → constrain Four-Cores and Three-Beams in return**
 
-At the current **v0.2.0** stage, PeriSci has established a minimal engineering governance loop built on top of this structure:
+At the **v0.2.0** stage, PeriSci established a minimal engineering governance loop built on top of this structure; in the current **v0.3.x+** stage, this loop continues as the case-asset governance baseline and begins to support the evolution of real numerical teaching examples into case assets:
 
 - **`run -> export -> validate -> regression`**
 
@@ -944,8 +944,8 @@ To make the Three-Beam execution structure operational in practice, the followin
 - **规范化表示（Canonical Representation）**：用于治理、语义差异比较、哈希、溯源与冻结判定的唯一、稳定表示形式
   **Canonical Representation**: the unique, stable representation used for governance, semantic diff, hashing, provenance binding, and freeze determination
 
-- **canonical JSON**：在 v0.2.x 阶段采用的规范化表示具体形式
-  **canonical JSON**: the concrete canonical representation format adopted in v0.2.x
+- **canonical JSON**：自 v0.2.x 起采用、并在 v0.3.x+ 中继续适用的规范化表示具体形式
+  **canonical JSON**: the concrete canonical representation format adopted from v0.2.x onward and still used in v0.3.x+
 
 - **规范表示红线（Canonical Red Line）**：规范化表示的强制适用边界；执行期数据内容（如 结果(results)）不得被 canonical
   **Canonical Red Line**: the applicability boundary of canonical representation; execution-time data contents must not be canonicalized

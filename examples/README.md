@@ -220,6 +220,22 @@ ex-00-hello 是环境验证示例（Quickstart Example）。
 
 ---
 
+## 6.1 README 语言规则
+
+`examples/*/README.md` 应采用中文优先，用于服务教学、学习路径和中文用户理解。
+
+可以保留英文术语、API 名称、数学符号、命令行文本和文件路径，例如：
+
+- `run_poisson_basic(config)`
+- `run_case(config)`
+- `export_dataset`
+- `DenseMatrix`
+- `cmake --build build`
+
+示例 C++ 源码中的代码注释则遵循项目级编码规范：以英文为主，避免在每条注释中机械地中英文双写。
+
+---
+
 ## 7. 示例的演进路径
 
 推荐采用以下演进模式：
@@ -317,3 +333,59 @@ cases 是：
 - pre-case：具备稳定输入与验证条件，可升级为 case
 
 该标注用于指导示例向 case 的演进路径，不影响编号体系。
+
+## 12. 示例与 cases 的 API 入口规则（v0.3.x 引入）
+
+从 v0.3.x 开始，`examples/` 与 `cases/` 的入口职责必须明确区分。
+
+### 12.1 examples 的入口职责
+
+`examples/` 围绕教学目标组织代码，用于展示方法过程、解释数值阶段、打磨未来可复用的 core 能力。
+
+示例必须遵循：
+
+- 示例只能通过 `api/` 调用 `core/` 能力；
+- 示例不得直接 include 或调用 `perisci/core/*`；
+- 示例不以 `run_case(config)` 作为默认入口；
+- 示例可以使用面向教学的 API 入口，以便清楚展示 FEM、PeriFEM、近场动力学或耦合模型中的关键流程；
+- 示例中的配置对象只服务教学和探索，不是 canonical case config，也不定义冻结的 `config_schema` 语义。
+
+换言之，示例的任务是：
+
+```text
+通过 API 学习 core 能力，而不是通过 run_case 固化算例资产。
+```
+
+### 12.2 cases 的入口职责
+
+`cases/` 围绕算例资产积累目标组织，用于稳定复现、回归测试、数据集生成和长期治理。
+
+标准算例必须遵循：
+
+- case 不包含实现代码；
+- case 保存稳定输入、期望指标、说明和溯源信息；
+- case 的执行统一通过 `api::run_case(config)` 完成；
+- `run_case(config)` 是标准算例资产进入数值执行的唯一入口；
+- case config 是可治理、可冻结、可回归的输入语义载体。
+
+换言之，标准算例的任务是：
+
+```text
+通过 run_case(config) 复现 core 能力，而不是展开教学过程。
+```
+
+### 12.3 二者的共同边界
+
+`examples/` 与 `cases/` 可以共享同一套 `core/` 数值能力，但二者都只能通过 `api/` 进入 `core/`。
+
+```text
+examples -> teaching-oriented API -> core
+cases    -> run_case(config)       -> core
+```
+
+这一区分是为了同时保证：
+
+- examples 的教学可读性；
+- cases 的算例资产稳定性；
+- core 的隔离性与可复用性；
+- api 作为唯一正式入口的架构边界。

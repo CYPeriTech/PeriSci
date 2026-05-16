@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <string>
 #include <vector>
@@ -43,5 +44,47 @@ namespace perisci::core
     // Informative only; does not participate in governance.
     std::string description;
   };
+
+  struct RectangularDomain
+  {
+    double x_min = 0.0;
+    double x_max = 1.0;
+    double y_min = 0.0;
+    double y_max = 1.0;
+  };
+
+  struct StructuredQuadMeshConfig
+  {
+    int dimension = 2;
+    int cells_per_axis = 8;
+    RectangularDomain domain;
+  };
+
+  struct MeshNode2D
+  {
+    double x = 0.0;
+    double y = 0.0;
+    bool is_boundary = false;
+  };
+
+  struct Quad4Cell
+  {
+    // Q1 node ordering: lower-left, lower-right, upper-right, upper-left.
+    std::array<int, 4> node_ids{};
+  };
+
+  struct StructuredQuadMesh
+  {
+    int dimension = 2;
+    int cells_per_axis = 0;
+    RectangularDomain domain;
+    std::vector<MeshNode2D> nodes;
+    std::vector<Quad4Cell> cells;
+
+    int node_id(int i, int j) const;
+    int center_node_id() const;
+  };
+
+  StructuredQuadMesh make_structured_quad_mesh(const StructuredQuadMeshConfig& config);
 
 } // namespace perisci::core

@@ -555,6 +555,34 @@ Together, they serve one core purpose:
 - They are the primary learning entry for students and new users
 - Examples must strictly use the `api` contract and must not bypass it
 
+**v0.3.x 入口规则 | v0.3.x Entry Rule**
+
+- `examples/` 围绕教学目标组织代码，用于打磨方法表达、展示数值过程与解释核心概念。
+- `examples/` 必须通过 `api/` 调用 `core/` 能力，不得直接 include 或调用 `core/`。
+- `examples/` 不以 `run_case(config)` 作为默认入口；教学示例可以使用专门的、非冻结的 API 教学入口，以便清楚展示方法流程与四核结构。
+- `examples/` 中出现的配置对象仅为教学与探索服务，不得被视为 canonical case config，也不得作为冻结的 `config_schema` 语义来源。
+- `cases/` 围绕算例资产积累目标组织，只保存稳定输入、期望指标、说明与溯源信息，不包含实现代码。
+- `cases/` 的执行必须统一通过 `api::run_case(config)` 完成；`run_case` 再受控地驱动 `core/`。
+- 因此，`examples/` 与 `cases/` 可以共享同一套 `core/` 数值能力，但二者只能通过 `api/` 进入 `core/`，且入口职责不同：`examples` 服务教学，`cases` 服务资产化与回归。
+
+- `examples/` organize code around teaching goals, method incubation, visible numerical
+  workflows, and explanation of core concepts.
+- `examples/` must access `core/` capabilities only through `api/`; they must not
+  include or call `core/` directly.
+- `examples/` do not use `run_case(config)` as their default entry point. Teaching
+  examples may use dedicated, non-frozen API teaching entry points when this makes
+  the numerical workflow and Four-Core structure easier to learn.
+- Configuration objects used inside `examples/` are instructional and exploratory;
+  they must not be treated as canonical case configs or as frozen semantic sources
+  for `config_schema`.
+- `cases/` organize around case-asset accumulation: stable inputs, expected metrics,
+  notes, and provenance, with no implementation code.
+- `cases/` must be executed uniformly through `api::run_case(config)`, which then
+  drives `core/` in a controlled way.
+- Therefore, `examples/` and `cases/` may share the same `core` numerical capabilities,
+  but both enter `core` only via `api`; their entry responsibilities differ:
+  `examples` serve teaching, while `cases` serve assetization and regression.
+
 ---
 
 ##### tests/ —— 架构的“可验证约束” | **Verifiable Constraints of the Architecture**
@@ -931,6 +959,22 @@ Examples verify:
 - Whether new users can complete basic tasks
 
 Examples must remain runnable at all times.
+
+**v0.3.x 补充原则 | v0.3.x Additional Principle**
+
+`examples/` 与 `cases/` 都不得直接访问 `core/`，但它们的 API 入口职责不同：
+
+- `examples/` 使用面向教学的 API 入口来展示方法流程、数值阶段和四核结构；它们不以 `run_case(config)` 作为默认入口。
+- `cases/` 使用统一的 `api::run_case(config)` 入口来保证标准算例资产的执行一致性、可回归性与可追踪性。
+
+Both `examples/` and `cases/` must not access `core/` directly, but their API entry
+responsibilities differ:
+
+- `examples/` use teaching-oriented API entry points to expose method workflows,
+  numerical stages, and the Four-Core structure; they do not use `run_case(config)`
+  as the default entry point.
+- `cases/` use the unified `api::run_case(config)` entry point to guarantee
+  consistent, regression-ready, and traceable execution of canonical case assets.
 
 ---
 

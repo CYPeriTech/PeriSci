@@ -1,4 +1,4 @@
-# case-00-minimal（v0.2.x → v0.3.x 过渡算例）
+# case-00-minimal（v0.2.x 平台基线 / v0.3.x+ smoke gate）
 
 本目录是 PeriSci 的 **最小算例资产（case asset）**，用于验证平台的基本执行闭环：
 
@@ -44,7 +44,7 @@
 
 回归门禁规则。
 
-在 v0.2.x 阶段，本算例仅要求：
+作为 v0.2.x 平台基线，并在 v0.3.x+ 中继续作为 smoke gate，本算例仅要求：
 
 status 不得为 failed
 
